@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+    
+<!-- Google API Key = AIzaSyBS6Ca0PFx3eydXjgD17aQogUFe8jeOfqg -->
+
+    <head>
+        
+        <!-- Use utf-8 encoding -->
+        <meta charset="utf-8">
+        
+        <!-- Link the Cascading StyleSheet for Page1 -->
+        <link rel="stylesheet" href="Page1.css">
+        
+        <title> Page 1 </title>
+    
+    </head>
+    
+    
+    <body>
+    
+        <!-- Div element to put everything else inside -->
+        <div id="container">
+
+
+            <!-- Div element for the Header -->
+            <div id="header">
+                <h2> Dublin Bus Travel Time Estimation </h2>
+            </div>
+
+            <!-- Found online, have used it before for WebApp Assignment2 -->
+            <!--The div element for the map -->
+            <div id="map"></div>
+                <script>
+                // Initialize and add the map
+                function initMap() {
+                    // The location of Dublin
+                    var Dublin = {lat: 53.3351, lng: -6.2493};
+                    // The map, centered at Dublin
+                    var map = new google.maps.Map(
+                      document.getElementById('map'), {zoom: 10, center: Dublin});
+                  // The marker, positioned at Dublin
+                  var marker = new google.maps.Marker({position: Dublin, map: map});
+                }
+                </script>
+                <!--Load the API from the specified URL
+                * The async attribute allows the browser to render the page while the API loads
+                * The key parameter will contain your own API key (which is not needed for this tutorial)
+                * The callback parameter executes the initMap() function
+                -->
+                <script async defer
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBS6Ca0PFx3eydXjgD17aQogUFe8jeOfqg&callback=initMap">
+                </script>
+        
+            <!-- Div element for the box of inputs according to Dan's mockup -->
+            <div id="InputBox">
+
+                <form>
+
+                    Start:
+                    <input type = "text" name="Start">
+                    <br>
+
+                    Destination:
+                    <input type = "text" name = "Destination" class="InputBoxDestination">
+                    <br>
+
+                    Date:
+                    <input type = "Date" name="Date">
+
+                    Time:
+                    <input type ="Time" name="Time">
+                    <br>
+
+                    <input type="Submit" name="Submit" value="Submit">
+
+                </form>
+
+            </div>
+    
+            <!-- Div element for the form of Search Results and Details buttons -->
+            <div id="SearchResults">
+
+                <form>
+
+                    <input type="Submit" name="SearchResults" value="Search Results">
+                    <br>
+
+                    <input type="Submit" name="Details" value="Details">
+
+                </form>
+
+            </div>
+
+            <!-- Div element for the Weather Information -->    
+            <div id="WeatherInformation">
+
+                <h3> Weather Information </h3>
+
+
+
+            </div>
+            
+        </div>
+
+    </body>
+</html>

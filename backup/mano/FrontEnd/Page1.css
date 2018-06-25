@@ -1,0 +1,30 @@
+#map {
+        width : 40%;
+        height: 350px;
+        float:left;
+        margin-right:15px;
+}
+
+
+#InputBox {
+    
+    float:middle;
+}
+
+
+#SearchResults {
+    
+    margin-top: 50px;
+    
+}
+
+#WeatherInformation{
+    
+    margin-top:200px;
+    float:middle;
+}
+
+.InputBoxDestination {
+    
+    float: middle;
+}
