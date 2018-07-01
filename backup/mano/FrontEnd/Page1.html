@@ -2,6 +2,8 @@
 <html lang="en">
     
 <!-- Google API Key = AIzaSyBS6Ca0PFx3eydXjgD17aQogUFe8jeOfqg -->
+<!-- AccuWeather API Key = em8jLMl8jkAqrLiuJM0BCBQEoxHfJAJq -->
+
 
     <head>
         
@@ -23,36 +25,41 @@
         <!-- Bootstrap CDN for CSS, found on getbootstrap.com -->
         <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
         
-        
-             
+            
     </head>
     
-    
     <body>
-    
-        <!-- Div element to put everything else inside -->
-        <div id="container">
-
-            <!-- Div element for the Header -->
-            <div class="jumbotronHEADER">
-                <h2> Dublin Bus Travel Time Estimation </h2>
-            </div>
+        
+        <!-- Row to bind map and inputbox -->
+        <div class="containsAll">
             
-            <div class=row> 
+                <!-- Free weather widget from Accuweather -->
+                <a href="https://www.accuweather.com/en/ie/dublin/207931/weather-forecast/207931" class="aw-widget-legal">
+                <!--
+                By accessing and/or using this code snippet, you agree to AccuWeather’s terms and conditions (in English) which can be found at https://www.accuweather.com/en/free-weather-widgets/terms and AccuWeather’s Privacy Statement (in English) which can be found at https://www.accuweather.com/en/privacy.
+                --></a>
+                <div id="awcc1530486484590" class="aw-widget-current"  data-locationkey="207931" data-unit="c" data-language="en-us" data-useip="false" data-uid="awcc1530486484590"></div>
+                <script type="text/javascript" src="https://oap.accuweather.com/launch.js"></script>
+            
+            <!-- Row to keep map and input on the same line -->
+            <div class="row">
+                
+                
                 <!-- Found online, have used it before for WebApp Assignment2 -->
                 <!--The div element for the map -->
-                <div id="map" class="col-lg-5 col-md-6 col-sm-12 col-xs-12"></div>
+                <div id="map"></div>
+
                     <script>
-                    // Initialize and add the map
-                    function initMap() {
-                        // The location of Dublin
-                        var Dublin = {lat: 53.3351, lng: -6.2493};
-                        // The map, centered at Dublin
-                        var map = new google.maps.Map(
-                          document.getElementById('map'), {zoom: 10, center: Dublin});
-                      // The marker, positioned at Dublin
-                      //var marker = new google.maps.Marker({position: Dublin, map: map});
-                    }
+                        // Initialize and add the map
+                        function initMap() {
+                                // The location of Dublin
+                                var Dublin = {lat: 53.3351, lng: -6.2493};
+                                // The map, centered at Dublin
+                                var map = new google.maps.Map(
+                                  document.getElementById('map'), {zoom: 10, center: Dublin});
+                              // The marker, positioned at Dublin
+                              //var marker = new google.maps.Marker({position: Dublin, map: map});
+                            }
                     </script>
                     <!--Load the API from the specified URL
                     * The async attribute allows the browser to render the page while the API loads
@@ -60,82 +67,79 @@
                     * The callback parameter executes the initMap() function
                     -->
                     <script async defer
-                    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBS6Ca0PFx3eydXjgD17aQogUFe8jeOfqg&callback=initMap">
+                        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBS6Ca0PFx3eydXjgD17aQogUFe8jeOfqg&callback=initMap">
                     </script>
 
-                <!-- Div element for the box of inputs according to Dan's mockup -->
-                <div id="inputBox" class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                    
                     <!-- Placeholder for the input form -->
-                    <div id="placeholderForForm">
+                    <div class="boxInput" col-lg-3 col-md-6 col-sm-12 col-xs-12>
+                
+                        <!-- Div element for the box of inputs according to Dan's mockup -->
+                        <div class="jumbotronInput">
+
+                            <form class="inputForm">
+
+                                <label>Start:<span style="display:inline-block; width:48px;"></span></label>
+                                <input type = "text" name="Start" class="inputFormElement">
+                                <br>
+
+                                <label>Destination:</label>
+                                <input type = "text" name = "Destination" class="inputFormElement">
+                                <br><br>
+
+                                <!-- Row to hold date and time -->
+                                <div id="dateAndTime" class="row">
+                                    <label>Date</label><span style="display:inline-block; width:10px;"></span>
+                                    <input type = "Date" name="Date" class="inputFormElement">
+                                    <span style="display:inline-block; width:48px;"></span>
+                                    <label>Time</label><span style="display:inline-block; width:10px;"></span>
+                                    <input type ="Time" name="Time" class="inputFormElement">
+                                </div>
+                                <br>
+
+                                <!-- Putting the submit button in the right place -->
+                                <span style="display:inline-block; width:80px;"></span>
+                                <input type="Submit" name="Submit" value="Submit" class="inputFormElement">
+
+                            </form>
+                        </div>
+
+
+                        <!-- Div element for the form of Search Results and Details buttons -->
+
                         
-                        <form class="inputForm">
+                            <div class="boxDetails">
+                                <form>
+                                    
+                                    <span style="display:inline-block; width:80px;"></span>
+                                    <input type="Submit" name="SearchResults" value="Search Results">
+                                    <br><br>
+                                    
+                                    <span style="display:inline-block; width:80px;"></span>
+                                    <input type="Submit" name="Details" value="Details">
 
-                            <label>Start:<span style="display:inline-block; width:48px;"></span></label>
-                            <input type = "text" name="Start" class="inputFormElement">
-                            <br>
-
-                            <label>Destination:</label>
-                            <input type = "text" name = "Destination" class="inputFormElement">
-                            <br><br>
-
-                            <!-- Row to hold date and time -->
-                            <div id="dateAndTime" class="row">
-                                <label>Date</label><span style="display:inline-block; width:10px;"></span>
-                                <input type = "Date" name="Date" class="inputFormElement">
-                                <span style="display:inline-block; width:48px;"></span>
-                                <label>Time</label><span style="display:inline-block; width:10px;"></span>
-                                <input type ="Time" name="Time" class="inputFormElement">
+                                </form>
                             </div>
-                            <br>
-
-                            <!-- Putting the submit button in the right place -->
-                            <span style="display:inline-block; width:60px;"></span>
-                            <input type="Submit" name="Submit" value="Submit" class="inputFormElement">
-
-                        </form>
+                        
                     </div>
-                
-
-                <!-- Div element for the form of Search Results and Details buttons -->
-                <div class="jumbotronDETAILS">    
-                    <div id="SearchResults">
-
-                        <form>
-
-                            <input type="Submit" name="SearchResults" value="Search Results">
-                            <br><br>
-
-                            <input type="Submit" name="Details" value="Details">
-
-                        </form>
-
-                    </div>
-                
-                </div>
                 </div>
             </div>
-            
-            <!-- Div element for the Weather Information --> 
-            <div class="jumbotronWEATHER">
-            <div id="WeatherInformation">
+    
+    
+    
+    
+        
+        <!-- Bootstrap CDN for JQuery, found on getbootstrap.com  -->    
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> 
+    
+        <!-- Bootstrap CDN for Javascript, found on getbootstrap.com -->
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>  
+                 
+        
+    </body>
 
-                <h3> Weather Information </h3>
-                
-            </div>
-            </div>
+               
             
             
-        </div>
-    
-    <!-- Bootstrap CDN for JQuery, found on getbootstrap.com  -->    
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> 
-    
-    <!-- Bootstrap CDN for Javascript, found on getbootstrap.com -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>    
         
     
-    </body>
     
-    
-</html>
