@@ -33,13 +33,13 @@
         <!-- Row to bind map and inputbox -->
         <div class="containsAll">
             
-                <!-- Free weather widget from Accuweather -->
-                <a href="https://www.accuweather.com/en/ie/dublin/207931/weather-forecast/207931" class="aw-widget-legal">
-                <!--
-                By accessing and/or using this code snippet, you agree to AccuWeather’s terms and conditions (in English) which can be found at https://www.accuweather.com/en/free-weather-widgets/terms and AccuWeather’s Privacy Statement (in English) which can be found at https://www.accuweather.com/en/privacy.
-                --></a>
-                <div id="awcc1530486484590" class="aw-widget-current"  data-locationkey="207931" data-unit="c" data-language="en-us" data-useip="false" data-uid="awcc1530486484590"></div>
-                <script type="text/javascript" src="https://oap.accuweather.com/launch.js"></script>
+            <!-- Free weather widget from Accuweather -->
+            <a href="https://www.accuweather.com/en/ie/dublin/207931/weather-forecast/207931" class="aw-widget-legal">
+            <!--
+            By accessing and/or using this code snippet, you agree to AccuWeather’s terms and conditions (in English) which can be found at https://www.accuweather.com/en/free-weather-widgets/terms and AccuWeather’s Privacy Statement (in English) which can be found at https://www.accuweather.com/en/privacy.
+            --></a>
+            <div id="awcc1530486484590" class="aw-widget-current"  data-locationkey="207931" data-unit="c" data-language="en-us" data-useip="false" data-uid="awcc1530486484590"></div>
+            <script type="text/javascript" src="https://oap.accuweather.com/launch.js"></script>
             
             <!-- Row to keep map and input on the same line -->
             <div class="row">
@@ -76,27 +76,181 @@
                         <!-- Div element for the box of inputs according to Dan's mockup -->
                         <div class="jumbotronInput">
 
+                            <!-- The form -->
                             <form class="inputForm">
-
+                                
+                                <!-- Start -->
                                 <label>Start:<span style="display:inline-block; width:48px;"></span></label>
                                 <input type = "text" name="Start" class="inputFormElement">
                                 <br>
-
+                                
+                                <!-- Destination -->
                                 <label>Destination:</label>
                                 <input type = "text" name = "Destination" class="inputFormElement">
                                 <br><br>
+                                
+                                <!-- Dropdown for the bus routes. Routes found on Dublin Bus site -->
+                                <select name="routes" value="Select Route">
+                                    <option value="Choose Route">Choose Route</option>
+                                    <option value="1">1</option>
+                                    <option value="4">4</option>
+                                    <option value="7">7</option>
+                                    <option value="7a">7A</option>
+                                    <option value="7b">7B</option>
+                                    <option value="7d">7D</option>
+                                    <option value="7n">7N</option>
+                                    <option value="9">9</option>
+                                    <option value="11">11</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="15a">15A</option>
+                                    <option value="15B">15B</option>
+                                    <option value="15D">15D</option>
+                                    <option value="15N">15N</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="17Α">17Α</option>
+                                    <option value="18">18</option>
+                                    <option value="25">25</option>
+                                    <option value="25Α">25Α</option>
+                                    <option value="25Β">25Β</option>
+                                    <option value="25D">25D</option>
+                                    <option value="25N">25N</option>
+                                    <option value="25Χ">25Χ</option>
+                                    <option value="26">26</option>
+                                    <option value="27">27</option>
+                                    <option value="27A">27A</option>
+                                    <option value="27B">27B</option>
+                                    <option value="27X">27</option>
+                                    <option value="29A">29A</option>
+                                    <option value="29N">29N</option>
+                                    <option value="31A">31A</option>
+                                    <option value="31B">31B</option>
+                                    <option value="31D">31D</option>
+                                    <option value="31N">31N</option>
+                                    <option value="32">32</option>
+                                    <option value="32X">32X</option>
+                                    <option value="33">33</option>
+                                    <option value="33A">33A</option>
+                                    <option value="33B">33B</option>
+                                    <option value="33D">33D</option>
+                                    <option value="33N">33N</option>
+                                    <option value="33X">33X</option>
+                                    <option value="37">37</option>
+                                    <option value="38">38</option>
+                                    <option value="38A">38A</option>
+                                    <option value="38B">38B</option>
+                                    <option value="39">39</option>
+                                    <option value="39A">39A</option>
+                                    <option value="39N">39N</option>
+                                    <option value="39X">39X</option>
+                                    <option value="40">40</option>
+                                    <option value="40B">40B</option>
+                                    <option value="40D">40D</option>
+                                    <option value="41">41</option>
+                                    <option value="41B">41B</option>
+                                    <option value="41C">41C</option>
+                                    <option value="41N">41N</option>
+                                    <option value="41X">41X</option>
+                                    <option value="42">42</option>
+                                    <option value="42D">42D</option>
+                                    <option value="42N">42N</option>
+                                    <option value="43">43</option>
+                                    <option value="44">44</option>
+                                    <option value="44B">44B</option>
+                                    <option value="45A">45A</option>
+                                    <option value="46A">46A</option>
+                                    <option value="46E">46E</option>
+                                    <option value="46N">46N</option>
+                                    <option value="47">47</option>
+                                    <option value="49">49</option>
+                                    <option value="49N">49N</option>
+                                    <option value="51D">51D</option>
+                                    <option value="51X">51X</option>
+                                    <option value="53">53</option>
+                                    <option value="54A">54A</option>
+                                    <option value="56A">56A</option>
+                                    <option value="59">59</option>
+                                    <option value="61">61</option>
+                                    <option value="63">63</option>
+                                    <option value="65">65</option>
+                                    <option value="65B">65B</option>
+                                    <option value="66">66</option>
+                                    <option value="66A">66A</option>
+                                    <option value="66B">66B</option>
+                                    <option value="66N">66N</option>
+                                    <option value="66X">66X</option>
+                                    <option value="67">67</option>
+                                    <option value="67N">67N</option>
+                                    <option value="67X">67X</option>
+                                    <option value="68A">68A</option>
+                                    <option value="68X">68X</option>
+                                    <option value="69">69</option>
+                                    <option value="69N">69N</option>
+                                    <option value="69X">69X</option>
+                                    <option value="70">70</option>
+                                    <option value="70D">70D</option>
+                                    <option value="70N">70N</option>
+                                    <option value="75">75</option>
+                                    <option value="76">76</option>
+                                    <option value="76A">76A</option>
+                                    <option value="77A">77A</option>
+                                    <option value="77N">77N</option>
+                                    <option value="77X">77X</option>
+                                    <option value="79A">79A</option>
+                                    <option value="83">83</option>
+                                    <option value="84A">84A</option>
+                                    <option value="84N">84N</option>
+                                    <option value="84X">84X</option>
+                                    <option value="88N">88N</option>
+                                    <option value="90">90</option>
+                                    <option value="102">102</option>
+                                    <option value="104">104</option>
+                                    <option value="111">111</option>
+                                    <option value="114">114</option>
+                                    <option value="116">116</option>
+                                    <option value="118">118</option>
+                                    <option value="120">120</option>
+                                    <option value="122">122</option>
+                                    <option value="123">123</option>
+                                    <option value="130">130</option>
+                                    <option value="140">140</option>
+                                    <option value="142">142</option>
+                                    <option value="145">145</option>
+                                    <option value="150">150</option>
+                                    <option value="151">151</option>
+                                    <option value="161">161</option>
+                                    <option value="184">184</option>
+                                    <option value="185">185</option>
+                                    <option value="220">220</option>
+                                    <option value="236">236</option>
+                                    <option value="238">238</option>
+                                    <option value="239">239</option>
+                                    <option value="270">270</option>
+                                    <option value="747">747</option>
+                                    <option value="757">757</option>
+   
+                                </select>
+                                <br><br>
+                                
+                                <!-- Dropdown for the bus Route -->
 
                                 <!-- Row to hold date and time -->
                                 <div id="dateAndTime" class="row">
+                                    
+                                    <!-- Date -->
                                     <label>Date</label><span style="display:inline-block; width:10px;"></span>
                                     <input type = "Date" name="Date" class="inputFormElement">
                                     <span style="display:inline-block; width:48px;"></span>
+                                    
+                                    <!-- Time -->
                                     <label>Time</label><span style="display:inline-block; width:10px;"></span>
                                     <input type ="Time" name="Time" class="inputFormElement">
                                 </div>
                                 <br>
 
-                                <!-- Putting the submit button in the right place -->
+                                <!-- Submit -->
                                 <span style="display:inline-block; width:80px;"></span>
                                 <input type="Submit" name="Submit" value="Submit" class="inputFormElement">
 
@@ -104,10 +258,11 @@
                         </div>
 
 
-                        <!-- Div element for the form of Search Results and Details buttons -->
+                            <!-- Div element for the form of Search Results and Details buttons -->
 
                         
                             <div class="boxDetails">
+                                
                                 <form>
                                     
                                     <span style="display:inline-block; width:80px;"></span>
@@ -118,6 +273,7 @@
                                     <input type="Submit" name="Details" value="Details">
 
                                 </form>
+                                
                             </div>
                         
                     </div>
