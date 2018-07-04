@@ -1,0 +1,20 @@
+2018-07-04 10:04:10,877:ERROR:STDERR:Traceback (most recent call last):
+2018-07-04 10:04:10,877:ERROR:STDERR:  File "run.py", line 66, in <module>
+2018-07-04 10:04:10,878:ERROR:STDERR:main()
+2018-07-04 10:04:10,878:ERROR:STDERR:  File "run.py", line 58, in main
+2018-07-04 10:04:10,878:ERROR:STDERR:webserver_func()
+2018-07-04 10:04:10,878:ERROR:STDERR:  File "run.py", line 26, in webserver_func
+2018-07-04 10:04:10,879:ERROR:STDERR:ms.start_django()
+2018-07-04 10:04:10,879:ERROR:STDERR:  File "/home/student/MSDP/src/msdp/mysite/start.py", line 19, in start_django
+2018-07-04 10:04:10,879:ERROR:STDERR:sl = StreamToLogger(stdout_logger, logging.INFO)
+2018-07-04 10:04:10,879:ERROR:STDERR:NameError
+2018-07-04 10:04:10,880:ERROR:STDERR::
+2018-07-04 10:04:10,880:ERROR:STDERR:name 'StreamToLogger' is not defined
+2018-07-04 10:12:58,412:INFO:STDOUT:stop service
+2018-07-04 10:13:02,840:INFO:STDOUT:stop service
+2018-07-04 10:15:26,156:INFO:STDOUT:stop service
+2018-07-04 10:15:34,399:INFO:STDOUT:stop service
+2018-07-04 10:17:28,370:INFO:STDOUT:stop service
+2018-07-04 10:17:40,664:INFO:STDOUT:stop service
+2018-07-04 10:22:34,008:INFO:STDOUT:stop service
+2018-07-04 10:37:54,081:INFO:STDOUT:stop service

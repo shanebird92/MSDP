@@ -1,0 +1,14 @@
+2018-07-04 10:37:45,839:ERROR:STDERR:Traceback (most recent call last):
+2018-07-04 10:37:45,839:ERROR:STDERR:  File "start.py", line 53, in <module>
+2018-07-04 10:37:45,839:ERROR:STDERR:main()
+2018-07-04 10:37:45,839:ERROR:STDERR:  File "start.py", line 46, in main
+2018-07-04 10:37:45,840:ERROR:STDERR:start_django()
+2018-07-04 10:37:45,840:ERROR:STDERR:  File "start.py", line 27, in start_django
+2018-07-04 10:37:45,840:ERROR:STDERR:subprocess.call([command], shell=True)
+2018-07-04 10:37:45,840:ERROR:STDERR:  File "/usr/lib/python3.5/subprocess.py", line 559, in call
+2018-07-04 10:37:45,841:ERROR:STDERR:return p.wait(timeout=timeout)
+2018-07-04 10:37:45,841:ERROR:STDERR:  File "/usr/lib/python3.5/subprocess.py", line 1658, in wait
+2018-07-04 10:37:45,842:ERROR:STDERR:(pid, sts) = self._try_wait(0)
+2018-07-04 10:37:45,842:ERROR:STDERR:  File "/usr/lib/python3.5/subprocess.py", line 1608, in _try_wait
+2018-07-04 10:37:45,843:ERROR:STDERR:(pid, sts) = os.waitpid(self.pid, wait_flags)
+2018-07-04 10:37:45,843:ERROR:STDERR:KeyboardInterrupt
