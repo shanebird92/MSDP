@@ -23,7 +23,11 @@ class StreamToLogger(object):
 
 
 def webserver_func():
-    ms.start_django()
+    base_path = os.path.dirname(os.path.realpath(__file__))
+    shellcmd = "/".join([base_path, 'mysite/manage.py'])
+    command = ["/usr/bin/python", shellcmd, "runserver", "0.0.0.0:8000"]
+    process = subprocess.Popen(command, stdout=subprocess.PIPE)
+    stdout, stderr = process.communicate()
 
 def webserver_stop():
     command = "ps ax|grep 8000 |awk '{print $1}' |xargs kill -9"
@@ -55,6 +59,7 @@ def main():
     if fpid!=0:
         sys.exit(0)
     if sys.argv[1] == 'start':
+        print("Start Django service now...")
         webserver_func()
     elif sys.argv[1] == 'stop':
         webserver_stop()
