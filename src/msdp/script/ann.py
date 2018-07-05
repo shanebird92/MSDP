@@ -46,7 +46,7 @@ class Ann:
         except Exception as e:
             if self.__debug:
                 print("Warning: Line {} {}".format(line, str(e)))
-            return 0.0
+            return 0
 
         stops_a = []
         inputFeatures_a = []
@@ -76,7 +76,9 @@ class Ann:
             model_file = model_file_a
             station_number = len(stops_a)
             inputFeatures = inputFeatures_a
-            plannedTimeArray = self.get_mean_timetable(df_a, start_location, targetTime)
+            plannedTimeArray = self.get_mean_timetable(df_a,
+                                                       start_location,
+                                                       targetTime)
 
             if len(plannedTimeArray) == station_number:
                 plannedTime_first = plannedTimeArray[0]
@@ -84,7 +86,8 @@ class Ann:
                 plannedTime_start = plannedTimeArray[start_location]
                 plannedTime_stop = plannedTimeArray[stop_location]
             else:
-                print("Can not get mean planned arrival time from time table!")
+                print("ERROR NOTICE: Can not get mean planned "
+                      "arrival time from time table!")
                 plannedTime_first = df_a[df_a.columns[0]].iloc[1]
                 plannedTime_end = df_a[df_a.columns[-1]].iloc[1]
                 plannedTime_start = df_a[df_a.columns[start_location]].iloc[1]
@@ -94,7 +97,9 @@ class Ann:
             model_file = model_file_b
             station_number = len(stops_b)
             inputFeatures = inputFeatures_b
-            plannedTimeArray = self.get_mean_timetable(df_b, start_location, targetTime)
+            plannedTimeArray = self.get_mean_timetable(df_b,
+                                                       start_location,
+                                                       targetTime)
 
             if len(plannedTimeArray) == station_number:
                 plannedTime_first = plannedTimeArray[0]
@@ -102,7 +107,8 @@ class Ann:
                 plannedTime_start = plannedTimeArray[start_location]
                 plannedTime_stop = plannedTimeArray[stop_location]
             else:
-                print("Can not get mean planned arrival time from time table!")
+                print("ERROR NOTICE: Can not get mean planned "
+                      "arrival time from time table!")
                 plannedTime_first = df_b[df_b.columns[0]].iloc[1]
                 plannedTime_end = df_b[df_b.columns[-1]].iloc[1]
                 plannedTime_start = df_b[df_b.columns[start_location]].iloc[1]
@@ -110,8 +116,14 @@ class Ann:
         else:
             return 0
 
-        pkl_file = open(model_file, 'rb')
-        new_clf = pickle.load(pkl_file)
+        try:
+            pkl_file = open(model_file, 'rb')
+            new_clf = pickle.load(pkl_file)
+        except Exception as e:
+            if self.__debug:
+                print("Warning: Line {} {}".format(line, str(e)))
+            return 0
+
         predictions = new_clf.predict([inputFeatures])
     
         pred_full_time = predictions[0][1] - predictions[0][0]
