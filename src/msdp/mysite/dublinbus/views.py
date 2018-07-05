@@ -5,6 +5,7 @@ from django.http import HttpResponse
 # Create your views here.
 from django.core.cache import cache # This is the memcache cache.
 from django.db import connections, transaction
+from django.views.decorators.csrf import csrf_exempt,csrf_protect
 
 def myflush():
     # This works as advertised on the memcached cache:
@@ -23,4 +24,17 @@ def test(request):
 def flush(request):
     myflush()
     return HttpResponse("Hello, world. You're at the flush index.")
+
+
+@csrf_exempt
+def form_input(request):
+    if request.method=='POST':
+        start=request.POST.get('Start')
+        end=request.POST.get('End')
+        time=request.POST.get('Time')
+        print(start,end,time)
+    return HttpResponse('yes')
+    
+
+
 

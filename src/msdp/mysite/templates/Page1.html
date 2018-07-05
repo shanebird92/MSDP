@@ -28,6 +28,8 @@
         <!-- Bootstrap CDN for CSS, found on getbootstrap.com -->
         <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
         
+        <!-- Bootstrap CDN for JQuery, found on getbootstrap.com  -->    
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
             
     </head>
     
@@ -84,12 +86,12 @@
                                 
                                 <!-- Start -->
                                 <label>Start:<span style="display:inline-block; width:48px;"></span></label>
-                                <input type = "text" name="Start" class="inputFormElement">
+                                <input type = "text" name="Start" class="inputFormStart">
                                 <br>
                                 
                                 <!-- Destination -->
                                 <label>Destination:</label>
-                                <input type = "text" name = "Destination" class="inputFormElement">
+                                <input type = "text" name = "Destination" class="inputFormEnd">
                                 <br><br>
                                 
                                 <!-- Dropdown for the bus routes. Routes found on Dublin Bus site -->
@@ -249,13 +251,14 @@
                                     
                                     <!-- Time -->
                                     <label>Time</label><span style="display:inline-block; width:10px;"></span>
-                                    <input type ="Time" name="Time" class="inputFormElement">
+                                    <input type ="Time" name="Time" class="inputFormTime">
                                 </div>
                                 <br>
 
                                 <!-- Submit -->
                                 <span style="display:inline-block; width:80px;"></span>
-                                <input type="Submit" name="Submit" value="Submit" class="inputFormElement">
+                                <input type="Submit" name="Submit" value="Submit" class="inputForm0">
+                                <button id="inputForm" value="Submit">Submit</button>
 
                             </form>
                         </div>
@@ -283,12 +286,35 @@
                 </div>
             </div>
     
-    
+        <script>
+        $(function(){
+            $(".inputForm").submit(function(evt){
+                evt.preventDefault();
+                sub();
+            });
+        });
+        function sub()
+            {
+                var start=$(".inputFormStart").val();
+                var end=$(".inputFormEnd").val();
+                var time=$(".inputFormTime").val();
+                var timenumber=time.split(":");
+                var seconds=Number(timenumber[0])*60*60+Number(timenumber[1])*60;
+                data_to_backend = {'Start':start,'End':end,'Time':seconds}; 
+                
+                $.post("/dublinbus/form_input/", data_to_backend, function(data){
+                })
+                .fail(function() {
+                    alert( "Connection fail, please refresh the website." );
+                });
+                
+            }
+        </script>
     
     
         
-        <!-- Bootstrap CDN for JQuery, found on getbootstrap.com  -->    
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> 
+
+
     
         <!-- Bootstrap CDN for Javascript, found on getbootstrap.com -->
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>  
