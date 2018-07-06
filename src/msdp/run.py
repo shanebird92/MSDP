@@ -25,7 +25,7 @@ class StreamToLogger(object):
 def webserver_func():
     base_path = os.path.dirname(os.path.realpath(__file__))
     shellcmd = "/".join([base_path, 'mysite/manage.py'])
-    command = ["/usr/bin/python", shellcmd, "runserver", "0.0.0.0:8000"]
+    command = ["/usr/bin/python3", shellcmd, "runserver", "0.0.0.0:8000"]
     process = subprocess.Popen(command, stdout=subprocess.PIPE)
     stdout, stderr = process.communicate()
 
