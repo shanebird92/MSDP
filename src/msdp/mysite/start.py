@@ -4,7 +4,7 @@ import subprocess
 def start_django():
     base_path = os.path.dirname(os.path.realpath(__file__))
     shellcmd = "/".join([base_path, 'manage.py'])
-    command = ["/usr/bin/python3", shellcmd, "runserver", "0.0.0.0:8000"]
+    command = ["python3", shellcmd, "runserver", "0.0.0.0:8000"]
 
     # First method to run the command in python
     process = subprocess.Popen(command, stdout=subprocess.PIPE)
