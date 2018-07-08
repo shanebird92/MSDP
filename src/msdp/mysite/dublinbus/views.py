@@ -18,8 +18,8 @@ def myflush():
 def index(request):
     return render_to_response("Page1.html")
 
-def test(request):
-    return render_to_response("index.html")
+def analytics(request):
+    return render_to_response("Page2.html")
 
 def flush(request):
     myflush()

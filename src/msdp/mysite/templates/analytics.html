@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+<link rel="stylesheet" type="text/css" href="{% static "analytics.css" %}">
+    <meta charset="UTF-8">
+    <title>POST Params</title>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      var arrtime_data = {{arrtime_rows|safe}};
+      var arr_tripid = '{{arr_trip_id}}';
+      var arr_date = '{{arr_date}}';
+      //window.alert(arr_date);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable(arrtime_data);
+
+        var options = {
+          title: 'Trip ' + arr_tripid + ' Performance on ' + arr_date,
+          curveType: 'function',
+          legend: { position: 'bottom' }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+        chart.draw(data, options);
+      }
+    </script>
+<script src="{% static "jquery-3.3.1.min.js" %}"></script>
+<script type="text/javascript">
+ jQuery(document).ready(function($){
+	$('.scroll_top').click(function(){$('html,body').animate({scrollTop: '0px'}, 800);}); 
+	$('.scroll_a').click(function(){$('html,body').animate({scrollTop:$('.a').offset().top}, 800);});
+	$('.scroll_bottom').click(function(){$('html,body').animate({scrollTop:$('.bottom').offset().top}, 800);});
+ });
+$('#goToBottom').click(function(){
+  var WH = $(window).height();  
+  var SH = $('body').prop("scrollHeight");
+  $('html, body').animate({
+    scrollTop: $('#endOfPage').offset().top
+  }, 1000);
+}); 
+</script>
+
+
+
+</head>
+<body>
+<div>
+<div class="header">
+<img src="{% static "data-analytics.jpg" %}" alt="Header image" style='height: 100%; width: 100%; object-fit: contain' >
+</div>
+<div style="width:1200px; height: 1000px;">
+<form method="post" action="/analytics/">
+    Month:<input type="text" name="month"/>
+    Line:<input type="text" name="lineid"/>
+<input type="image" src="{% static "search-button.png" %}" alt="Submit" align="middle" width="48" height="48">
+</form>
+    <table>
+        <tbody>
+        <tr><td>{{date}}</td></tr>
+        {% for row in rows%}
+        <tr><td>{{row.TripId}}</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+<form method="post" action="/analytics_get_lines/">
+  Month:<input type="text" name="month"/>
+<input type="image" src="{% static "search-button.png" %}" alt="Submit" align="middle" width="48" height="48">
+</form>
+    <table>
+        <tbody>
+        <tr><td>{{my_date}}</td></tr>
+        <tr><td>{{line_rows}}</td></tr>
+        </tbody>
+    </table>
+
+<div>
+<form method="post" action="/analytics_get_available_days/">
+  TripId:<input type="text" name="tripid"/>
+<input type="image" src="{% static "search-button.png" %}" alt="Submit" align="middle" width="48" height="48">
+</form>
+    <table>
+        <tbody>
+        <tr><td>{{trip_id}}</td></tr>
+        <tr><td>{{date_rows}}</td></tr>
+        </tbody>
+    </table>
+</div>
+<HR style="border:3 double #987cb9" width="100%" color=#987cb9 SIZE=3>
+<div>
+<form method="post" action="/analytics_get_arrivaltime/">
+  TripId:<input type="text" name="tripid"/>
+  Date:<input type="text" name="date"/>
+<input type="image" id="goToBottom"  src="{% static "search-button.png" %}" alt="Submit" align="middle" width="48" height="48">
+</form>
+    <table>
+        <tbody>
+        <tr><td>{{arr_trip_id}}&nbsp;{{arr_date}}</td></tr>
+        <tr><td>{{arrtime_rows}}</td></tr>
+        <div id="curve_chart" style="width: 900px; height: 500px"> </div>
+        </tbody>
+    </table>
+</div>
+</div>
+<div id="endOfPage">&nbsp;</div>
+</body>
+
+</html>
