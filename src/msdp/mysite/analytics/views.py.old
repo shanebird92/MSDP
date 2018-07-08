@@ -1,0 +1,50 @@
+from django.shortcuts import render
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
+from django.views.generic import View
+from .models import Analytics as AnalyticsModel
+from .forms import AnalyticsForm
+from msdp.script import sqlquery
+
+# Create your views here.
+class Analytics(View):
+    template_name = 'analytics.html'
+
+    def __init__(self):
+        self.__users = None
+
+    def get(self, request):
+        user_list = []
+        form_user = AnalyticsForm()
+        users = AnalyticsModel.objects.all()[:50]
+        LineId = ''
+        Month = 0
+
+        my = sqlquery.Sqlquery()
+        #users = my.get_tripids_by_line(LineId, Month)
+        '''
+        count = 0
+        trips = []
+        for user in users:
+            trips.append(user)
+            if count % 40 == 0 and count != 0:
+                user_list.append({'TripId': trips})
+                trips = []
+            count += 1
+          '''  
+        #print(user_list)
+        return render(request, self.template_name, {
+            'title': 'Tripid List',
+            'user_list': user_list,
+            'form_user': form_user,
+            'LineId' : users
+        })
+
+    def post(self, request):
+        form_user = AnalyticsForm(request.POST)
+        if form_user.is_valid():
+            #self.__users = form_user.cleaned_data('post')
+            form_user.save()
+            #print(form_user)
+            #form_user.save()
+            return HttpResponseRedirect('/analytics/')

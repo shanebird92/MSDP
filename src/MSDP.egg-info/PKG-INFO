@@ -1,0 +1,31 @@
+Metadata-Version: 1.1
+Name: MSDP
+Version: 0.0.post0.dev30+g08dae82.dirty
+Summary: Add a short description here!
+Home-page: http://...
+Author: Peng Ye
+Author-email: peng.ye@ucdconnect.ie
+License: mit
+Description: ====
+        MSDP
+        ====
+        
+        
+        Add a short description here!
+        
+        
+        Description
+        ===========
+        
+        A longer description of your project goes here...
+        
+        
+        Note
+        ====
+        
+        This project has been set up using PyScaffold 3.0.1. For details and usage
+        information on PyScaffold see http://pyscaffold.org/.
+        
+Platform: any
+Classifier: Development Status :: 4 - Beta
+Classifier: Programming Language :: Python

@@ -1,0 +1,5 @@
+
+[console_scripts]
+# script_name = msdp.module:function
+# For example:
+# fibonacci = msdp.skeleton:run
