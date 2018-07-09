@@ -31,8 +31,8 @@
     
     <body class="bg-secondary">
         
-        <!-- Row to bind map and inputbox -->
-        <div>
+        <!-- Container -->
+        <div id="containsAll">
             
             <!-- Free weather widget from Accuweather -->
             <a href="https://www.accuweather.com/en/ie/dublin/207931/weather-forecast/207931" class="aw-widget-legal">
@@ -70,27 +70,30 @@
                     <script async defer
                         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBS6Ca0PFx3eydXjgD17aQogUFe8jeOfqg&callback=initMap">
                     </script>
-
+                    
+                    <!-- Jumbotron to hold the form -->
+                    <div class="jumbotron bg-primary border border-light pt-1 pb-1">
+                    
                      <!-- The FORM -->
                      <form class="bg-infoml-5">
                                 
                         <!-- Start -->
                         <div class="form-group p-2">
                             <label for="start" class="text-light blockquote">Start:</label>
-                            <input id="start" type="text" class="float-right text-secondary" placeholder="Start Bus Stop ID">
+                            <input id="start" type="text" class="float-none text-dark form-control" placeholder="Start Bus Stop ID">
                         </div>
                                 
                         <!-- Destination -->
                         <div class="form-group p-2">
-                            <label for="destination" class="text-light blockquote" >Dest:</label>
-                            <input id="destination" type = "text" class="text-secondary" placeholder="Destination Bus Stop ID">
+                            <label for="destination" class="text-light blockquote" >Destination:</label>
+                            <input id="destination" type = "text" class="float-none text-dark form-control" placeholder="Destination Bus Stop ID">
                         </div>
                                
                         <!-- Date -->
                         <div class="form-group p-2">
                             <label for="date" class="text-light blockquote">Date:</label>
                             <span style="display:inline-block; width:2rem;"></span>
-                            <input type="date" id = "date"  class="float-none text-secondary">
+                            <input type="date" id = "date"  class="float-none text-dark form-control">
                         </div> 
                            
                            
@@ -98,13 +101,13 @@
                         <div class="form-group p-2"> 
                             <label for="time" class="text-light blockquote">Time:</label>
                             <span style="display:inline-block; width:3rem;"></span>
-                            <input type ="time" id="time" class="float-none text-light">
+                            <input type ="time" id="time" class="float-none text-dark form-control">
                         </div>
-                                
+                            
+                        <!-- Dropdown for the bus routes. Routes found on Dublin Bus site -->    
                         <div class="form-group p-2">
-                        <!-- Dropdown for the bus routes. Routes found on Dublin Bus site -->
                             <span style="display:inline-block; width:3rem;"></span>
-                            <select class="text-light">
+                            <select class="text-dark form-control" placeholder="Select Rou">
                                 <option selected>Choose Route</option>
                                 <option value="1">1</option>
                                 <option value="4">4</option>
@@ -251,26 +254,37 @@
                         <!-- Submit -->
                         <div class="form-group p-2">
                             <span style="display:inline-block; width:3rem;"></span>
-                            <button id="submit" value="Submit" class="text-light btn btn-active">Submit</button>
+                            <button id="submit" value="Submit" class="text-dark btn btn-active btn btn-light">Submit</button>
                             <!-- <button id="submit" value="Submit" class="text-light btn btn-active">Submit</button> -->                     
                         </div>
-                        
-                         <!-- Search Results -->          
-                        <div class="form-group p-2">
-                            <span style="display:inline-block; width:3rem;"></span>
-                            <input type="Submit" name="SearchResults" value="Search Results" class="text-light btn btn-active" >
-                        </div>
-
-                        <!-- Details -->            
-                         <div class="form-group p-2">
-                             <span style="display:inline-block; width:3rem;"></span>
-                             <input type="Submit" name="Details" value="Details" class="text-light btn btn-active">
-                        </div>
+                    
                            
-
-
                     </form>
-                       
+                    </div>
+                    
+                    <!-- Jumbotron to hold Search Results and Details -->
+                    <div class="jumbotron bg-primary pt-1 pb-1 border border-light">
+                    
+                    <!-- Keep Search Results and Details in the same row -->
+                        <div class="row">
+                           
+                           <!-- Form for Search Results and Details -->
+                            <form id="searchresultsDetails">
+                                
+                                 <!-- Search Results -->          
+                                <div class="form-group p-2">
+                                    <span style="display:inline-block; width:1rem;"></span>
+                                    <input type="Submit" name="SearchResults" value="Search Results" class="mt-5 text-dark btn btn-active btn btn-light" >
+                                </div>
+
+                                <!-- Details -->            
+                                <div class="form-group p-2">
+                                    <span style="display:inline-block; width:3rem;"></span>
+                                    <input type="Submit" name="Details" value="Details" class="text-dark btn btn-active btn btn-light">
+                                </div>
+                            </form>
+                        </div>
+                    </div>  
                 </div>
 
             </div>
