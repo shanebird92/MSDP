@@ -72,7 +72,7 @@
                     </script>
 
                      <!-- The FORM -->
-                     <form class="bg-info ml-5">
+                     <form class="bg-infoml-5">
                                 
                         <!-- Start -->
                         <div class="form-group p-2">
@@ -251,10 +251,11 @@
                         <!-- Submit -->
                         <div class="form-group p-2">
                             <span style="display:inline-block; width:3rem;"></span>
-                            <input type="Submit" id="submit" value="Submit" class="text-light btn btn-active">
+                            <button id="submit" value="Submit" class="text-light btn btn-active">Submit</button>
+                            <!-- <button id="submit" value="Submit" class="text-light btn btn-active">Submit</button> -->                     
                         </div>
-                         
-                        <!-- Search Results -->          
+                        
+                         <!-- Search Results -->          
                         <div class="form-group p-2">
                             <span style="display:inline-block; width:3rem;"></span>
                             <input type="Submit" name="SearchResults" value="Search Results" class="text-light btn btn-active" >
@@ -267,6 +268,7 @@
                         </div>
                            
 
+
                     </form>
                        
                 </div>
@@ -278,20 +280,22 @@
     <!-- Script Variables need to change or script will not work, class needs to change (maybe id or name?) @Dan Zhu -->
         <script>
         $(function(){
-            $(".inputForm").submit(function(evt){
+            $(".bg-infoml-5").submit(function(evt){
                 evt.preventDefault();
+                alert(1);
                 sub();
             });
         });
         function sub()
             {
-                var start=$(".inputFormStart").val();
-                var end=$(".inputFormEnd").val();
-                var time=$(".inputFormTime").val();
+                var start=$("#start").val();
+                var end=$("#destination").val();
+                var time=$("#time").val();
+                alert(start);
                 var timenumber=time.split(":");
                 var seconds=Number(timenumber[0])*60*60+Number(timenumber[1])*60;
                 data_to_backend = {'Start':start,'End':end,'Time':seconds}; 
-                
+
                 $.post("/dublinbus/form_input/", data_to_backend, function(data){
                 })
                 .fail(function() {

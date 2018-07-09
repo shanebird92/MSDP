@@ -6,6 +6,10 @@
     
 }
 
+body {
+    background-image: url(./img/backgroundimg.jpg);
+    background-size: cover;
+}
 .aw-widget-current {
     
     text-align: center;
