@@ -83,11 +83,10 @@ class Analytics(View):
         Date = request.POST.get('date','')
         lines = self.__my.get_arrivaltime_from_tripid_and_date(TripId, Date)
         columns = ['Station NO.', 'PlannedArrTime', 'ActualArrTime']
-        lines.insert(0,columns)
-        print(lines)
-        test = json.dumps(lines)
         if len(lines) == 0:
             return self.get(request)
+        lines.insert(0,columns)
+        test = json.dumps(lines)
         return render(request, self.template_name, {
             'arrtime_rows': test,
             'arr_trip_id': TripId,

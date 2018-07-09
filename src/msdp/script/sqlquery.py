@@ -4,9 +4,9 @@ import datetime
 class Sqlquery:
     def __init__(self):
         try:
-            self.__conn = MySQLdb.connect(host = "127.0.0.1",
-                                          user = "root",
-                                          passwd="MSDPUCD",
+            self.__conn = MySQLdb.connect(host = "137.43.49.51",
+                                          user = "student",
+                                          passwd="MSDPUCD1234",
                                           db = "SummerProject")
         except Exception as e:
             print(str(e))
