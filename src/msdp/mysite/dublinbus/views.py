@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.http import HttpResponse
+from msdp.script import ann
 
 # Create your views here.
 from django.core.cache import cache # This is the memcache cache.
@@ -18,9 +19,6 @@ def myflush():
 def index(request):
     return render_to_response("Page1.html")
 
-def analytics(request):
-    return render_to_response("Page2.html")
-
 def flush(request):
     myflush()
     return HttpResponse("Hello, world. You're at the flush index.")
@@ -29,12 +27,16 @@ def flush(request):
 @csrf_exempt
 def form_input(request): 
     if request.method=='POST':
-        start=request.POST.get('Start')
-        end=request.POST.get('End')
-        time=request.POST.get('Time')
-        reply = '{},{},{}'.format(start,end,time)
-    return HttpResponse(reply)
-    
-
-
-
+        start=int(request.POST.get('Start'))
+        end=int(request.POST.get('End'))
+        time=int(request.POST.get('Time'))
+        # start = 1316, end = 1660
+        my = ann.Ann(start, end, time)
+        results = my.get_all_prediction()
+        routes = []
+        for row in results:
+            route = {}
+            route['line'] = row[0]
+            route['traveltime'] = row[1]
+            routes.append(route)
+        return HttpResponse(routes)

@@ -141,8 +141,14 @@ class Ann:
         endID = self.__endid
         json_file = '{}/stops.json'.format(self.__data_path)
         all_lines = json.loads(open(json_file).read())
-        startID_lines = all_lines[str(startID)]
-        endID_lines = all_lines[str(endID)]
+        if str(startID) in all_lines.keys():
+            startID_lines = all_lines[str(startID)]
+        else:
+            return []
+        if str(endID) in all_lines.keys():
+            endID_lines = all_lines[str(endID)]
+        else:
+            return []
         lines = set(startID_lines)&set(endID_lines)
         new_lines = []
         for line in lines:
@@ -160,7 +166,8 @@ class Ann:
 
 def main():
     #my = Ann(1864,335,34200,DEBUG=True)
-    my = Ann(1913,1660,72000)
+    #my = Ann(6112,1867,24200)
+    my = Ann(1913,1660,72000, DEBUG=True)
     print(my.get_all_prediction())
 
     #lines = get_lines(1913,1660)
@@ -169,6 +176,7 @@ def main():
     #print(prediction('39A', 1913, 1660, 34200))
     #print(prediction('39A', 1864, 335, 34200))
     #print(prediction('39A', 6112, 1867, 24200))
+    print(my.prediction('39A'))
 
 if __name__ == '__main__':
     main()
