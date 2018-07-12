@@ -30,8 +30,13 @@ def form_input(request):
         start=int(request.POST.get('Start'))
         end=int(request.POST.get('End'))
         time=int(request.POST.get('Time'))
-        # start = 1316, end = 1660
-        my = ann.Ann(start, end, time)
+
+        # Default values for Rain and Sun
+        # 1 is rain/sun, 0 is non-rain or non-run
+        rain = 0
+        sun = 0
+        # start = 1913, end = 1660
+        my = ann.Ann(start, end, time, rain, sun)
         results = my.get_all_prediction()
         routes = []
         for row in results:

@@ -4,12 +4,14 @@ import pandas as pd
 import numpy as np
 
 class Ann:
-    def __init__(self, startID, endID, targetTime, DEBUG=False):
+    def __init__(self, startID, endID, targetTime, rain, sun, DEBUG=False):
         self.__data_path = os.path.dirname(os.path.abspath(__file__)) + "/../../../data"
         self.__startid = startID
         self.__endid = endID
         self.__targettime = targetTime
         self.__debug = DEBUG
+        self.__rain = rain
+        self.__sun = sun
 
     @staticmethod
     def get_mean_timetable(df, start_location, target_time):
@@ -123,7 +125,8 @@ class Ann:
             if self.__debug:
                 print("Warning: Line {} {}".format(line, str(e)))
             return 0
-
+        inputFeatures.append(self.__sun)
+        inputFeatures.append(self.__rain)
         predictions = new_clf.predict([inputFeatures])
     
         pred_full_time = predictions[0][1] - predictions[0][0]
@@ -165,18 +168,21 @@ class Ann:
         return results
 
 def main():
-    #my = Ann(1864,335,34200,DEBUG=True)
-    #my = Ann(6112,1867,24200)
-    my = Ann(1913,1660,72000, DEBUG=True)
+    #my = Ann(1864,335,34200,0,0,DEBUG=True)
+    #my = Ann(6112,1867,24200,0,0)
+    my = Ann(1913,1660,72000,0,1, DEBUG=True)
+    print(my.get_all_prediction())
+    my = Ann(1913,1660,72000,0,0, DEBUG=True)
+    print(my.get_all_prediction())
+    my = Ann(1913,1660,72000,1,1, DEBUG=True)
+    print(my.get_all_prediction())
+    my = Ann(1913,1660,72000,1,0, DEBUG=True)
     print(my.get_all_prediction())
 
-    #lines = get_lines(1913,1660)
-    #for oneLine in lines:
-    #    print(prediction(oneLine[0], 1913, 1660, 34200)) 
     #print(prediction('39A', 1913, 1660, 34200))
     #print(prediction('39A', 1864, 335, 34200))
     #print(prediction('39A', 6112, 1867, 24200))
-    print(my.prediction('39A'))
+    #print(my.prediction('39A'))
 
 if __name__ == '__main__':
     main()
