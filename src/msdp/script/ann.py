@@ -16,8 +16,79 @@ class Ann:
     @staticmethod
     def get_mean_timetable(df, start_location, target_time):
         station_column = '{}_P'.format(str(start_location).zfill(3))
-        mean_array = df[abs(df[station_column]-target_time) == min(abs(df[station_column]-target_time))].mean()
+        mean_array = df[abs(df[station_column]-target_time) == \
+            min(abs(df[station_column]-target_time))].mean()
         return mean_array.values
+
+    def new_prediction(self, line, direction=''):
+        '''
+	    optimized prediction method with particular direction	
+        '''
+        startID = self.__startid
+        endID = self.__endid
+        targetTime = self.__targettime
+        if len(direction) == 0:
+            return self.prediction(line)
+        else:
+            try:
+                if direction == '0':
+                    model_file = self.__data_path + "/{}_a_2017_06.clf".format(line)
+                    time_table_file = self.__data_path + "/{}_a_timeTable.csv".format(line) 
+                elif direction == '1':
+                    model_file = self.__data_path + "/{}_b_2017_06.clf".format(line)
+                    time_table_file = self.__data_path + "/{}_b_timeTable.csv".format(line) 
+                df = pd.read_csv(time_table_file, index_col=0)
+            except Exception as e:
+                if self.__debug:
+                    print("Warning: Line {} {}".format(line, str(e)))
+                return 0
+
+            stops = []
+            inputFeatures = []
+            for column in df.columns:
+                stops.append(df[column].loc[0])
+                inputFeatures.append(df[column].iloc[1])
+            stop_location = stops.index(endID)
+            start_location = stops.index(startID)
+            pairs = stop_location - start_location
+
+            station_number = len(stops)
+            plannedTimeArray = self.get_mean_timetable(df,
+                                                       start_location,
+                                                       targetTime)
+
+            if len(plannedTimeArray) == station_number:
+                plannedTime_first = plannedTimeArray[0]
+                plannedTime_end = plannedTimeArray[-1]
+                plannedTime_start = plannedTimeArray[start_location]
+                plannedTime_stop = plannedTimeArray[stop_location]
+            else:
+                print("ERROR NOTICE: Can not get mean planned "
+                      "arrival time from time table!")
+                plannedTime_first = df[df.columns[0]].iloc[1]
+                plannedTime_end = df[df.columns[-1]].iloc[1]
+                plannedTime_start = df[df.columns[start_location]].iloc[1]
+                plannedTime_stop = df[df.columns[stop_location]].iloc[1]
+
+        try:
+            pkl_file = open(model_file, 'rb')
+            new_clf = pickle.load(pkl_file)
+        except Exception as e:
+            if self.__debug:
+                print("Warning: Line {} {}".format(line, str(e)))
+            return 0
+        inputFeatures.append(self.__sun)
+        inputFeatures.append(self.__rain)
+        predictions = new_clf.predict([inputFeatures])
+    
+        pred_full_time = predictions[0][1] - predictions[0][0]
+        planned_full_time = plannedTime_end - plannedTime_first
+        planned_pairs_time = plannedTime_stop - plannedTime_start
+        pred_pairs_time = pred_full_time * planned_pairs_time / planned_full_time
+
+        return pred_pairs_time
+
+
 
     def prediction(self, line):
         '''
@@ -164,7 +235,7 @@ class Ann:
             print("Searching from bus lines table: ", lines)
         results = []
         for oneLine in lines:
-            results.append([oneLine[0], self.prediction(oneLine[0])])
+            results.append([oneLine[0], self.new_prediction(oneLine[0], oneLine[1])])
         return results
 
 def main():
@@ -178,11 +249,7 @@ def main():
     print(my.get_all_prediction())
     my = Ann(1913,1660,72000,1,0, DEBUG=True)
     print(my.get_all_prediction())
-
-    #print(prediction('39A', 1913, 1660, 34200))
-    #print(prediction('39A', 1864, 335, 34200))
-    #print(prediction('39A', 6112, 1867, 24200))
-    #print(my.prediction('39A'))
+    print(my.prediction('39'))
 
 if __name__ == '__main__':
     main()
