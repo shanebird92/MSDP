@@ -27,13 +27,13 @@ def flush(request):
 
 
 @csrf_exempt
-def form_input(request):
+def form_input(request): 
     if request.method=='POST':
         start=request.POST.get('Start')
         end=request.POST.get('End')
         time=request.POST.get('Time')
-        print(start,end,time)
-    return HttpResponse('yes')
+        reply = '{},{},{}'.format(start,end,time)
+    return HttpResponse(reply)
     
 
 
