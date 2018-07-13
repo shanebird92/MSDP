@@ -270,13 +270,13 @@
                            
                            <!-- Form for Search Results and Details -->
                             <form id="searchresultsDetails">
-                                
+                                <div id='routes'>Result area</div>
                                  <!-- Search Results -->          
                                 <div class="form-group p-2">
                                     <span style="display:inline-block; width:1rem;"></span>
                                     <input type="Submit" name="SearchResults" value="Search Results" class="mt-5 text-dark btn btn-active btn btn-light" >
                                 </div>
-
+                                
                                 <!-- Details -->            
                                 <div class="form-group p-2">
                                     <span style="display:inline-block; width:3rem;"></span>
@@ -309,7 +309,8 @@
                 data_to_backend = {'Start':start,'End':end,'Time':seconds}; 
 
                 $.post("/dublinbus/form_input/", data_to_backend, function(data){
-                    alert(data);
+                    data=JSON.parse(data); 
+                    document.getElementById('routes').innerHTML = JSON.stringify(data);
                 })
                 .fail(function() {
                     alert( "Connection fail, please refresh the website." );

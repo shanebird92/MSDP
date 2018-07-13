@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.http import HttpResponse
 from msdp.script import ann
+import json
 
 # Create your views here.
 from django.core.cache import cache # This is the memcache cache.
@@ -44,4 +45,9 @@ def form_input(request):
             route['line'] = row[0]
             route['traveltime'] = row[1]
             routes.append(route)
-        return HttpResponse(routes)
+        json_routes=json.dumps(routes)
+        return HttpResponse(json_routes)
+        #return render(request,'Page1.html',{'Routes':json.dumps(routes)})
+    else:
+        return 1
+
