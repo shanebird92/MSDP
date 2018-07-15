@@ -1,23 +1,19 @@
-#map {
-    width: 50%;
-    height: 40rem; 
-    margin-left: 6.3rem;
-    margin-right: 5rem;
-    
-}
-
 body {
     background-image: url(./img/backgroundimg.jpg);
     background-size: cover;
 }
-.aw-widget-current {
+
+#map {
+    width: 100%;
+    position: fixed;
+    height: 40rem; 
     
+}
+
+.navbar {
+    border-bottom: #008ed6 3px solid;
+    opacity: 0.8;
     text-align: center;
-    margin-bottom: 2rem;
-    margin-top: 1rem;
-    margin-left: 5rem;
-    margin-right: 5rem;
-    
 }
 
 .routes{

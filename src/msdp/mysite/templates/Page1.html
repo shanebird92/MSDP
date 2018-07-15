@@ -20,7 +20,11 @@
         <meta name="viewport" content="width = device-width, initial-scale = 1">
            
         <title> Page 1 </title>
-           
+        
+        <!-- Get Font Awesome -->
+        
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+        
         <!-- Bootstrap CDN for CSS, found on getbootstrap.com -->
         <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
         
@@ -29,27 +33,41 @@
             
     </head>
     
-    <body class="bg-secondary">
+    <body>
+        
+        <!-- Navigation Bar -->
+        
+        <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+            
+            <div class="container">
+            
+               <a href="http://localhost:8000/dublinbus/" class="navbar-brand"> <strong>Team DPSM</strong> </a> 
+                
+                <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                    
+                </button>
+         
+            </div>
+            
+        </nav>
+        
         
         <!-- Container -->
-        <div id="containsAll">
+        <div class="container">
             
-            <!-- Free weather widget from Accuweather -->
-            <a href="https://www.accuweather.com/en/ie/dublin/207931/weather-forecast/207931" class="aw-widget-legal">
-            <!--
-            By accessing and/or using this code snippet, you agree to AccuWeather’s terms and conditions (in English) which can be found at https://www.accuweather.com/en/free-weather-widgets/terms and AccuWeather’s Privacy Statement (in English) which can be found at https://www.accuweather.com/en/privacy.
-            --></a>
-            <div id="awcc1530486484590" class="aw-widget-current"  data-locationkey="207931" data-unit="c" data-language="en-us" data-useip="false" data-uid="awcc1530486484590"></div>
-            <script type="text/javascript" src="https://oap.accuweather.com/launch.js"></script>
             
             <!-- Row to keep map and input on the same line -->
-            <div class="row" col-xl-3 col-lg-3 col-md-6 col-sm-12 col-xs-12>
-               
+            <div class="row m-5 p-5">
                 
+                <div class = "col-xl-12 d-xl-block d-flex col-lg-12 d-lg-block d-flex">
+               
+
                 <!-- Found online, have used it before for WebApp Assignment2 -->
                 <!--The div element for the map -->
-                <div id="map"></div>
-
+                
+                <div id="map" class="border"></div>
+                
+                    
                     <script>
                         // Initialize and add the map
                         function initMap() {
@@ -270,7 +288,15 @@
                            
                            <!-- Form for Search Results and Details -->
                             <form id="searchresultsDetails">
-                                <div id='routes'>Result area</div>
+                                <div id='routes'></div>
+                                 
+                                  <!-- Free weather widget from Accuweather -->
+                                <a href="https://www.accuweather.com/en/ie/dublin/207931/weather-forecast/207931" class="aw-widget-legal">
+                                <!--
+                                By accessing and/or using this code snippet, you agree to AccuWeather’s terms and conditions (in English) which can be found at https://www.accuweather.com/en/free-weather-widgets/terms and AccuWeather’s Privacy Statement (in English) which can be found at https://www.accuweather.com/en/privacy.
+                                --></a>
+                                <div id="awcc1530486484590" class="aw-widget-current"  data-locationkey="207931" data-unit="c" data-language="en-us" data-useip="false" data-uid="awcc1530486484590"></div>
+                                <script type="text/javascript" src="https://oap.accuweather.com/launch.js"></script>
                                  <!-- Search Results -->          
                                 <div class="form-group p-2">
                                     <span style="display:inline-block; width:1rem;"></span>
@@ -284,14 +310,19 @@
                                 </div>
                             </form>
                         </div>
-                    </div>  
+                    </div>
                 </div>
-
+                
+                
+            <!-- Close main row -->    
             </div>
+            
+        <!-- Close Container -->    
+        </div>
+        
                 
    <!-- End of Body, Script area -->         
     
-    <!-- Script Variables need to change or script will not work, class needs to change (maybe id or name?) @Dan Zhu -->
         <script>
         $(function(){
             $(".bg-infoml-5").submit(function(evt){
@@ -337,6 +368,8 @@
         <!-- Bootstrap CDN for Javascript, found on getbootstrap.com -->
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>  
                  
+        <!-- Get Current year for copyright -->
+        <script> $('#year').text(new Date().getFullYear());</script>
         
     </body>
 </html>
