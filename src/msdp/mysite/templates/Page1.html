@@ -309,14 +309,29 @@
                 data_to_backend = {'Start':start,'End':end,'Time':seconds}; 
 
                 $.post("/dublinbus/form_input/", data_to_backend, function(data){
-                    data=JSON.parse(data); 
-                    document.getElementById('routes').innerHTML = JSON.stringify(data);
+                    data=JSON.parse(data);
+                    str=showRoutes(data);
+                    document.getElementById('routes').innerHTML = str;
                 })
                 .fail(function() {
                     alert( "Connection fail, please refresh the website." );
                 });
                 
             }
+            
+        function showRoutes(json){
+                var str='';
+                for (var i in json) {
+                    str+="<div class='route-div'>"+"<div><img src='/static/icon/bus.png'>"+json[i]['line']+'</div>'+Math.round(json[i]['traveltime'])+' min'+'</div><br>';
+                }
+                return str;
+            }
+    
+        function createDiv(len){
+            
+        }
+
+
         </script>
     
         <!-- Bootstrap CDN for Javascript, found on getbootstrap.com -->
