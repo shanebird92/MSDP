@@ -55,6 +55,8 @@ class Analytics(View):
             return self.get_available_days(request)
         elif self.method == 'get_arrivaltime':
             return self.get_arrivaltime(request)
+        elif self.method == 'get_stoppointids':
+            return self.get_stoppointids(request)
 
     def get_lines(self, request):
         Month = request.POST.get('month','')
@@ -66,6 +68,17 @@ class Analytics(View):
         return render(request, self.template_name, {
             'line_rows': lines,
             'my_date' : my_date
+        })
+
+    def get_stoppointids(self, request):
+        line = request.POST.get('lineid','')
+        a_stoppointids = self.__my.get_stoppointid_by_line(line, 1)
+        b_stoppointids = self.__my.get_stoppointid_by_line(line, 2)
+        if len(a_stoppointids) == 0 and len(b_stoppointids) == 0:
+            return self.get(request)
+        return render(request, self.template_name, {
+            'direction_a': a_stoppointids,
+            'direction_b': b_stoppointids
         })
 
     def get_available_days(self, request):

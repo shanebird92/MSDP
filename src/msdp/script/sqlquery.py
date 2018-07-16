@@ -197,22 +197,47 @@ class Sqlquery:
         self.__conn.commit()
         x.close()       
         return rows
+
+    def get_stoppointid_by_line(self, line, direction):
+        try:
+            x = self.__conn.cursor()
+            x.execute("SELECT distinct ProgrNumber, StopPointId FROM SummerProject.RT_LeaveTimesTrips_2017_06 where LineId='{}' and Direction={} order by ProgrNumber".format(line, direction))
+        except Exception as e:
+            print(str(e))
+            return ''
+        row = x.fetchone()
+        count = 0
+        lines = {}
+        while row is not None:
+            #print(row)
+            count += 1
+            if row[0] in lines.keys():
+                lines[row[0]].append(row[1])
+            else:
+                lines[row[0]]=[row[1]]
+                
+            row = x.fetchone()
+        print("{} rows.".format(count))
+        self.__conn.commit()
+        x.close()       
+        return lines
     
 def main():
     my = Sqlquery()
     #my.test()
     #array = my.get_tripids_by_line('39A', '6')
-    array = my.get_lines_by_tripid('5012600')
-    print(array)
+    #array = my.get_lines_by_tripid('5012600')
+    #print(array)
     #my.get_available_days_by_month(5)
     #array = my.get_available_days_by_line_and_month('39A', 6)
     #array = my.get_available_days_by_tripid_and_month('5012600', 7)
     #array = my.get_available_days_by_tripid('5012600')
     #my.get_data_from_tripid_and_date(5117245, '2017-06-01')
     #array = my.get_arrivaltime_from_tripid_and_date(5012600, '2017-06-02')
-    array = my.get_arrivaltime_from_tripid_and_date(4591857, '2017-05-12')
-    print(array)
+    #array = my.get_arrivaltime_from_tripid_and_date(4591857, '2017-05-12')
     #my.get_date_from_tripid_and_month(5012600,6)
+    array = my.get_stoppointid_by_line('39A', 1)
+    print(array)
 
 if __name__ == '__main__':
     main()

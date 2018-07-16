@@ -25,4 +25,5 @@ urlpatterns = [
     path('analytics_get_lines/', AnalyticsViews.Analytics.as_view(method='get_lines')),
     path('analytics_get_available_days/', AnalyticsViews.Analytics.as_view(method='get_available_days')),
     path('analytics_get_arrivaltime/', AnalyticsViews.Analytics.as_view(method='get_arrivaltime')),
+    path('analytics_get_stoppointids/', AnalyticsViews.Analytics.as_view(method='get_stoppointids')),
 ]

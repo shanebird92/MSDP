@@ -24,6 +24,13 @@ class Ann:
         '''
 	    optimized prediction method with particular direction	
         '''
+        pred_report = {}
+        pred_report['line'] = line
+        pred_report['travelTime'] = 0
+        pred_report['startTime'] = 0
+        pred_report['pairStops'] = []
+        pred_report['pairArrTime'] = []
+
         startID = self.__startid
         endID = self.__endid
         targetTime = self.__targettime
@@ -41,22 +48,25 @@ class Ann:
             except Exception as e:
                 if self.__debug:
                     print("Warning: Line {} {}".format(line, str(e)))
-                return 0
+                return pred_report
 
             stops = []
             inputFeatures = []
             for column in df.columns:
+                # Get all stopPointIDs from planned time table file
                 stops.append(df[column].loc[0])
+                # Get all stations' planned arrival time from planned time table file
                 inputFeatures.append(df[column].iloc[1])
             stop_location = stops.index(endID)
             start_location = stops.index(startID)
             pairs = stop_location - start_location
 
             station_number = len(stops)
+            # Getting the plannted Time Table arrary from first station to last station
             plannedTimeArray = self.get_mean_timetable(df,
                                                        start_location,
                                                        targetTime)
-
+            
             if len(plannedTimeArray) == station_number:
                 plannedTime_first = plannedTimeArray[0]
                 plannedTime_end = plannedTimeArray[-1]
@@ -76,19 +86,26 @@ class Ann:
         except Exception as e:
             if self.__debug:
                 print("Warning: Line {} {}".format(line, str(e)))
-            return 0
+            return pred_report
         inputFeatures.append(self.__sun)
         inputFeatures.append(self.__rain)
         predictions = new_clf.predict([inputFeatures])
     
+        # get the predicted bus setup time
+        pred_start_time = predictions[0][0]
+
         pred_full_time = predictions[0][1] - predictions[0][0]
         planned_full_time = plannedTime_end - plannedTime_first
         planned_pairs_time = plannedTime_stop - plannedTime_start
         pred_pairs_time = pred_full_time * planned_pairs_time / planned_full_time
 
-        return pred_pairs_time
+        # Create a dict for storing all information from prediction
+        pred_report['travelTime'] = pred_pairs_time
+        pred_report['startTime'] = pred_start_time
+        pred_report['pairStops'] = stops[start_location:(stop_location+1)]
+        pred_report['pairArrTime'] = inputFeatures[start_location:(stop_location+1)]
 
-
+        return pred_report
 
     def prediction(self, line):
         '''
@@ -100,9 +117,16 @@ class Ann:
 				from start station, it is seconds
                                 to midnight
         - Return Value:
-		The seconds taken from start station to end station,
-                based on ANN prediction
+                dictionary including travelTime, startTime, paired stops and paired arrival time
         '''
+        # create a dict to store predicting information
+        pred_report = {}
+        pred_report['line'] = line
+        pred_report['travelTime'] = 0
+        pred_report['startTime'] = 0
+        pred_report['pairStops'] = []
+        pred_report['pairArrTime'] = []
+
         startID = self.__startid
         endID = self.__endid
         targetTime = self.__targettime
@@ -149,6 +173,7 @@ class Ann:
             model_file = model_file_a
             station_number = len(stops_a)
             inputFeatures = inputFeatures_a
+            stops = stops_a
             plannedTimeArray = self.get_mean_timetable(df_a,
                                                        start_location,
                                                        targetTime)
@@ -170,6 +195,7 @@ class Ann:
             model_file = model_file_b
             station_number = len(stops_b)
             inputFeatures = inputFeatures_b
+            stops = stops_b
             plannedTimeArray = self.get_mean_timetable(df_b,
                                                        start_location,
                                                        targetTime)
@@ -187,7 +213,7 @@ class Ann:
                 plannedTime_start = df_b[df_b.columns[start_location]].iloc[1]
                 plannedTime_stop = df_b[df_b.columns[stop_location]].iloc[1]
         else:
-            return 0
+            return pred_report
 
         try:
             pkl_file = open(model_file, 'rb')
@@ -195,7 +221,7 @@ class Ann:
         except Exception as e:
             if self.__debug:
                 print("Warning: Line {} {}".format(line, str(e)))
-            return 0
+            return pred_report
         inputFeatures.append(self.__sun)
         inputFeatures.append(self.__rain)
         predictions = new_clf.predict([inputFeatures])
@@ -205,7 +231,11 @@ class Ann:
         planned_pairs_time = plannedTime_stop - plannedTime_start
         pred_pairs_time = pred_full_time * planned_pairs_time / planned_full_time
 
-        return pred_pairs_time
+        pred_report['travelTime'] = pred_full_time
+        pred_report['startTime'] = predictions[0][0]
+        pred_report['pairStops'] = stops[start_location:(stop_location+1)]
+        pred_report['pairArrTime'] = inputFeatures[start_location:(stop_location+1)]
+        return pred_report
 
     def get_lines(self):
         '''
@@ -235,21 +265,27 @@ class Ann:
             print("Searching from bus lines table: ", lines)
         results = []
         for oneLine in lines:
-            results.append([oneLine[0], self.new_prediction(oneLine[0], oneLine[1])])
+            results.append(self.new_prediction(oneLine[0], oneLine[1]))
         return results
 
 def main():
     #my = Ann(1864,335,34200,0,0,DEBUG=True)
     #my = Ann(6112,1867,24200,0,0)
+    '''
     my = Ann(1913,1660,72000,0,1, DEBUG=True)
     print(my.get_all_prediction())
     my = Ann(1913,1660,72000,0,0, DEBUG=True)
     print(my.get_all_prediction())
     my = Ann(1913,1660,72000,1,1, DEBUG=True)
     print(my.get_all_prediction())
-    my = Ann(1913,1660,72000,1,0, DEBUG=True)
     print(my.get_all_prediction())
     print(my.prediction('39'))
+    '''
+    my = Ann(1913,1660,72000,1,0, DEBUG=True)
+    #my = Ann(328,1805,72000,0,1, DEBUG=True)
+    #my = Ann(328,7162,72000,0,1, DEBUG=True)
+    #print(my.prediction('39A'))
+    print(my.get_all_prediction())
 
 if __name__ == '__main__':
     main()

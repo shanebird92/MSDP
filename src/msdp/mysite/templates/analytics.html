@@ -77,6 +77,19 @@ $('#goToBottom').click(function(){
         <tr><td>{{line_rows}}</td></tr>
         </tbody>
     </table>
+<div>
+<form method="post" action="/analytics_get_stoppointids/">
+  LineId:<input type="text" name="lineid"/>
+<input type="image" src="{% static "search-button.png" %}" alt="Submit" align="middle" width="48" height="48">
+</form>
+    <table>
+        <tbody>
+        <tr><td>{{direction_a}}</td></tr>
+        <tr><td>{{direction_b}}</td></tr>
+        </tbody>
+    </table>
+</div>
+
 
 <div>
 <form method="post" action="/analytics_get_available_days/">
