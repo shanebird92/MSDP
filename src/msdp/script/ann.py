@@ -269,6 +269,7 @@ class Ann:
         return results
 
 def main():
+    # update file from UCD vm
     #my = Ann(1864,335,34200,0,0,DEBUG=True)
     #my = Ann(6112,1867,24200,0,0)
     '''
