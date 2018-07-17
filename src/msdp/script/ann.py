@@ -15,6 +15,7 @@ class Ann:
 
     @staticmethod
     def get_mean_timetable(df, start_location, target_time):
+        df = df.drop(df.index[0]) 
         station_column = '{}_P'.format(str(start_location).zfill(3))
         mean_array = df[abs(df[station_column]-target_time) == \
             min(abs(df[station_column]-target_time))].mean()
@@ -47,7 +48,7 @@ class Ann:
                 df = pd.read_csv(time_table_file, index_col=0)
             except Exception as e:
                 if self.__debug:
-                    print("Warning: Line {} {}".format(line, str(e)))
+                    print("WARNING: Line {} {}".format(line, str(e)))
                 return pred_report
 
             stops = []
@@ -59,6 +60,14 @@ class Ann:
                 inputFeatures.append(df[column].iloc[1])
             stop_location = stops.index(endID)
             start_location = stops.index(startID)
+
+            # Make sure the sequence from start to stop is in logical order
+            if stop_location <= start_location:
+                if self.__debug:
+                    print("WARNING: Reversed sequence from A to B in line {}".format(line))
+                pred_report['travelTime'] = -1
+                return pred_report
+
             pairs = stop_location - start_location
 
             station_number = len(stops)
@@ -73,19 +82,23 @@ class Ann:
                 plannedTime_start = plannedTimeArray[start_location]
                 plannedTime_stop = plannedTimeArray[stop_location]
             else:
-                print("ERROR NOTICE: Can not get mean planned "
-                      "arrival time from time table!")
+                if self.__debug:
+                    print("WARNING: Can not get mean planned "
+                          "arrival time covering all stations from time table!")
+                return pred_report
+                '''
                 plannedTime_first = df[df.columns[0]].iloc[1]
                 plannedTime_end = df[df.columns[-1]].iloc[1]
                 plannedTime_start = df[df.columns[start_location]].iloc[1]
                 plannedTime_stop = df[df.columns[stop_location]].iloc[1]
+                '''
 
         try:
             pkl_file = open(model_file, 'rb')
             new_clf = pickle.load(pkl_file)
         except Exception as e:
             if self.__debug:
-                print("Warning: Line {} {}".format(line, str(e)))
+                print("WARNING: Line {} {}".format(line, str(e)))
             return pred_report
         inputFeatures.append(self.__sun)
         inputFeatures.append(self.__rain)
@@ -142,7 +155,7 @@ class Ann:
 
         except Exception as e:
             if self.__debug:
-                print("Warning: Line {} {}".format(line, str(e)))
+                print("WARNING: Line {} {}".format(line, str(e)))
             return 0
 
         stops_a = []
@@ -168,7 +181,7 @@ class Ann:
             sequence_b = stop_location - start_location
 
 
-        if sequence_a > sequence_b:
+        if sequence_a > sequence_b and sequence_a > 0:
             pairs = sequence_a
             model_file = model_file_a
             station_number = len(stops_a)
@@ -184,13 +197,13 @@ class Ann:
                 plannedTime_start = plannedTimeArray[start_location]
                 plannedTime_stop = plannedTimeArray[stop_location]
             else:
-                print("ERROR NOTICE: Can not get mean planned "
-                      "arrival time from time table!")
-                plannedTime_first = df_a[df_a.columns[0]].iloc[1]
-                plannedTime_end = df_a[df_a.columns[-1]].iloc[1]
-                plannedTime_start = df_a[df_a.columns[start_location]].iloc[1]
-                plannedTime_stop = df_a[df_a.columns[stop_location]].iloc[1]
-        elif sequence_b > sequence_a:
+                if self.__debug:
+                    print("WARNING: Can not get mean planned "
+                          "arrival time convering all stations from time table!")
+                pred_report['travelTime'] = -1
+                return pred_report
+
+        elif sequence_b > sequence_a and sequence_b > 0:
             pairs = sequence_b
             model_file = model_file_b
             station_number = len(stops_b)
@@ -206,12 +219,12 @@ class Ann:
                 plannedTime_start = plannedTimeArray[start_location]
                 plannedTime_stop = plannedTimeArray[stop_location]
             else:
-                print("ERROR NOTICE: Can not get mean planned "
-                      "arrival time from time table!")
-                plannedTime_first = df_b[df_b.columns[0]].iloc[1]
-                plannedTime_end = df_b[df_b.columns[-1]].iloc[1]
-                plannedTime_start = df_b[df_b.columns[start_location]].iloc[1]
-                plannedTime_stop = df_b[df_b.columns[stop_location]].iloc[1]
+                if self.__debug:
+                    print("WARNING: Can not get mean planned "
+                          "arrival time convering all stations from time table!")
+                pred_report['travelTime'] = -1
+                return pred_report
+
         else:
             return pred_report
 
@@ -220,7 +233,7 @@ class Ann:
             new_clf = pickle.load(pkl_file)
         except Exception as e:
             if self.__debug:
-                print("Warning: Line {} {}".format(line, str(e)))
+                print("WARNING: Line {} {}".format(line, str(e)))
             return pred_report
         inputFeatures.append(self.__sun)
         inputFeatures.append(self.__rain)
@@ -231,7 +244,7 @@ class Ann:
         planned_pairs_time = plannedTime_stop - plannedTime_start
         pred_pairs_time = pred_full_time * planned_pairs_time / planned_full_time
 
-        pred_report['travelTime'] = pred_full_time
+        pred_report['travelTime'] = pred_pairs_time
         pred_report['startTime'] = predictions[0][0]
         pred_report['pairStops'] = stops[start_location:(stop_location+1)]
         pred_report['pairArrTime'] = inputFeatures[start_location:(stop_location+1)]
@@ -281,12 +294,13 @@ def main():
     print(my.get_all_prediction())
     print(my.prediction('39'))
     '''
-    #my = Ann(1913,1660,72000,1,0, DEBUG=True)
+    my = Ann(1913,1660,3600,1,0, DEBUG=True)
     #my = Ann(328,7162,72000, 0,1, DEBUG=True)
     #my = Ann(328,1805,72000,0,1, DEBUG=True)
-    my = Ann(328,7162,72000,0,1, DEBUG=True)
-    #print(my.prediction('39A'))
+    #my = Ann(7162,328,36000,0,1,DEBUG=True)
+    #my = Ann(328, 7162,36000,0,1,DEBUG=True)
     print(my.get_all_prediction())
+    print(my.prediction('39A'))
 
 if __name__ == '__main__':
     main()

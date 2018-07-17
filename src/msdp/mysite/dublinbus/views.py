@@ -42,8 +42,11 @@ def form_input(request):
         routes = []
         for row in results:
             route = {}
-            route['line'] = row[0]
-            route['traveltime'] = row[1]
+            route['line'] = row['line']
+            route['traveltime'] = row['travelTime']
+            route['starttime'] = row['startTime']
+            route['pairarrtime'] = row['pairArrTime']
+            route['pairstops'] = row['pairStops']
             routes.append(route)
         json_routes=json.dumps(routes)
         return HttpResponse(json_routes)
