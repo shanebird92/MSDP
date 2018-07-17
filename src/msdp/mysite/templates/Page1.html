@@ -201,7 +201,7 @@
                 var end=$("#destination").val();
                 var time=$("#time").val();
                 var timenumber=time.split(":");
-                var seconds=Number(timenumber[0])*60*60+Number(timenumber[1])*60;
+                var seconds=Number(timenumber[0])/60 - Number(timenumber[1])/60;
                 data_to_backend = {'Start':start,'End':end,'Time':seconds}; 
 
                 $.post("/dublinbus/form_input/", data_to_backend, function(data){
