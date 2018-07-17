@@ -269,7 +269,6 @@ class Ann:
         return results
 
 def main():
-    # update file from UCD vm
     #my = Ann(1864,335,34200,0,0,DEBUG=True)
     #my = Ann(6112,1867,24200,0,0)
     '''
@@ -283,9 +282,9 @@ def main():
     print(my.prediction('39'))
     '''
     #my = Ann(1913,1660,72000,1,0, DEBUG=True)
-    my = Ann(328,7162,72000, 0,1, DEBUG=True)
+    #my = Ann(328,7162,72000, 0,1, DEBUG=True)
     #my = Ann(328,1805,72000,0,1, DEBUG=True)
-    #my = Ann(328,7162,72000,0,1, DEBUG=True)
+    my = Ann(328,7162,72000,0,1, DEBUG=True)
     #print(my.prediction('39A'))
     print(my.get_all_prediction())
 
