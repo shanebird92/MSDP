@@ -125,26 +125,26 @@
                     </script>
                     
                     <!-- Jumbotron to hold the form -->
-                    <div class="jumbotron bg-primary border border-light pt-1 pb-1">
+                    <div class="jumbotron bg-primary border border-white pt-1 pb-1">
                     
                      <!-- The FORM -->
                      <form class="bg-infoml-5">
                                 
                         <!-- Start -->
                         <div class="form-group p-2">
-                            <label for="start" class="text-light blockquote">Start:</label>
+                            <label for="start" class="text-white blockquote">Start:</label>
                             <input id="start" type="text" class="float-none text-dark form-control" placeholder="Start Bus Stop ID">
                         </div>
                                 
                         <!-- Destination -->
                         <div class="form-group p-2">
-                            <label for="destination" class="text-light blockquote" >Destination:</label>
+                            <label for="destination" class="text-white blockquote" >Destination:</label>
                             <input id="destination" type = "text" class="float-none text-dark form-control" placeholder="Destination Bus Stop ID">
                         </div>
                                
                         <!-- Date -->
                         <div class="form-group p-2">
-                            <label for="date" class="text-light blockquote">Date:</label>
+                            <label for="date" class="text-white blockquote">Date:</label>
                             <span style="display:inline-block; width:2rem;"></span>
                             <input type="date" id = "date"  class="float-none text-dark form-control">
                         </div> 
@@ -152,7 +152,7 @@
                            
                         <!-- Time -->
                         <div class="form-group p-2 mb-5"> 
-                            <label for="time" class="text-light blockquote">Time:</label>
+                            <label for="time" class="text-white blockquote">Time:</label>
                             <span style="display:inline-block; width:3rem;"></span>
                             <input type ="time" id="time" class="float-none text-dark form-control">
                         </div>
@@ -171,13 +171,39 @@
                     </div>
                     
                     <!-- Jumbotron to hold Search Results and Details -->
-                    <div class="jumbotron bg-primary pt-1 pb-1 border border-light">
+                    <div class="jumbotron bg-primary pt-1 pb-1 border border-white">
                     
                         <div id='routes'>Result area</div>
                                 
                     </div>  
                 </div>
-
+                
+            
+                <!-- Footer for the application -->
+                <footer id="main-footer" class=" mb-0 bg-dark text-white fixed-bottom">
+                    
+                    <div class="container">
+                    
+                        <div class="row text-center">
+                        
+                            <div class="col-md-6 ml-auto">
+                            
+                            <p class="lead">
+                            
+                                Copyright &copy; <span id="year"></span>
+                                
+                            </p>
+                            
+                            
+                            </div>
+                        
+                        </div>
+                    
+                    </div>
+            
+                </footer>
+            
+    
             </div>
         
         
@@ -223,10 +249,19 @@
                 return str;
             }
         </script>
-    
+        
         <!-- Bootstrap CDN for Javascript, found on getbootstrap.com -->
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>  
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous">
+        </script>  
                  
+        
+        <!-- Get current year -->
+        
+        <script>
+        
+        $('#year').text(new Date().getFullYear());
+        
+        </script>
         
     </body>
 </html>

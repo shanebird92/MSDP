@@ -3,6 +3,10 @@
     height: 40rem; 
     margin-left: 6.3rem;
     margin-right: 5rem;
+    border:10px double gold;
+    -moz-box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+    box-sizing:border-box;
     
 }
 
