@@ -246,7 +246,7 @@
                 var findRoute=false;
                 for (var i in json) {
                     if (parseInt(json[i]['traveltime'])>0){
-                        str+="<div class='route-div' style='border:#FFFFFF 1px ridge; margin-bottom:-14%; padding:0;'>"+"<div class='route-div-detail'><img src='/static/icon/bus.png'>"+json[i]['line']+'</div>'+'Arrival: '+converToHour(parseInt(json[i]['pairarrtime'][0]))+'<br>'+'To Dest.: '+Math.round(json[i]['traveltime']/60)+' min'+'</div><br>';
+                        str+="<div class='route-div' style='border:#FFFFFF 1px ridge; margin-bottom:-14%; padding:0;'>"+"<div class='route-div-detail'><img src='/static/icon/bus.png'>"+json[i]['line']+'</div>'+'Next Bus: '+converToHour(parseInt(json[i]['pairarrtime'][0]))+'<br>'+'Time to Dest: '+Math.round(json[i]['traveltime']/60)+' min'+'</div><br>';
                         findRoute=true;
                     }
                 }
