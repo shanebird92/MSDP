@@ -17,8 +17,12 @@ class Ann:
     def get_mean_timetable(df, start_location, target_time):
         df = df.drop(df.index[0]) 
         station_column = '{}_P'.format(str(start_location).zfill(3))
+        df = df[(df[station_column] >= target_time)]
+        mean_array = df[(df[station_column]-target_time) == min(df[station_column]-target_time)].mean()
+        '''
         mean_array = df[abs(df[station_column]-target_time) == \
             min(abs(df[station_column]-target_time))].mean()
+        '''
         return mean_array.values
 
     def new_prediction(self, line, direction=''):
@@ -35,14 +39,20 @@ class Ann:
         startID = self.__startid
         endID = self.__endid
         targetTime = self.__targettime
-        if len(direction) == 0:
+
+        # Make sure the target time is in logical clock time(00:00~24:00)
+        if targetTime < 0 or targetTime > 86400:
+            pred_report['startTime'] = -1
+            return pred_report
+
+        if len(str(direction)) == 0:
             return self.prediction(line)
         else:
             try:
-                if direction == '0':
+                if str(direction) == '0':
                     model_file = self.__data_path + "/{}_a_2017_06.clf".format(line)
                     time_table_file = self.__data_path + "/{}_a_timeTable.csv".format(line) 
-                elif direction == '1':
+                elif str(direction) == '1':
                     model_file = self.__data_path + "/{}_b_2017_06.clf".format(line)
                     time_table_file = self.__data_path + "/{}_b_timeTable.csv".format(line) 
                 df = pd.read_csv(time_table_file, index_col=0)
@@ -52,14 +62,18 @@ class Ann:
                 return pred_report
 
             stops = []
-            inputFeatures = []
             for column in df.columns:
                 # Get all stopPointIDs from planned time table file
                 stops.append(df[column].loc[0])
-                # Get all stations' planned arrival time from planned time table file
-                inputFeatures.append(df[column].iloc[1])
-            stop_location = stops.index(endID)
-            start_location = stops.index(startID)
+            # make sure both endID and startID are existed in stops list
+            if endID in stops:
+                stop_location = stops.index(endID)
+            else:
+                return pred_report
+            if startID in stops:
+                start_location = stops.index(startID)
+            else:
+                return pred_report
 
             # Make sure the sequence from start to stop is in logical order
             if stop_location <= start_location:
@@ -75,7 +89,10 @@ class Ann:
             plannedTimeArray = self.get_mean_timetable(df,
                                                        start_location,
                                                        targetTime)
-            
+            inputFeatures = []
+            for i in range(len(df.columns)):
+                # Get all stations' planned arrival time from planned time table file
+                inputFeatures.append(plannedTimeArray[i])
             if len(plannedTimeArray) == station_number:
                 plannedTime_first = plannedTimeArray[0]
                 plannedTime_end = plannedTimeArray[-1]
@@ -86,12 +103,6 @@ class Ann:
                     print("WARNING: Can not get mean planned "
                           "arrival time covering all stations from time table!")
                 return pred_report
-                '''
-                plannedTime_first = df[df.columns[0]].iloc[1]
-                plannedTime_end = df[df.columns[-1]].iloc[1]
-                plannedTime_start = df[df.columns[start_location]].iloc[1]
-                plannedTime_stop = df[df.columns[stop_location]].iloc[1]
-                '''
 
         try:
             pkl_file = open(model_file, 'rb')
@@ -159,15 +170,12 @@ class Ann:
             return 0
 
         stops_a = []
-        inputFeatures_a = []
         for column in df_a.columns:
             stops_a.append(df_a[column].loc[0])
-            inputFeatures_a.append(df_a[column].iloc[1])
         stops_b = []
         inputFeatures_b = []
         for column in df_b.columns:
             stops_b.append(df_b[column].loc[0])
-            inputFeatures_b.append(df_b[column].iloc[1])
 
         sequence_a = 0
         sequence_b = 0
@@ -185,7 +193,6 @@ class Ann:
             pairs = sequence_a
             model_file = model_file_a
             station_number = len(stops_a)
-            inputFeatures = inputFeatures_a
             stops = stops_a
             plannedTimeArray = self.get_mean_timetable(df_a,
                                                        start_location,
@@ -207,7 +214,6 @@ class Ann:
             pairs = sequence_b
             model_file = model_file_b
             station_number = len(stops_b)
-            inputFeatures = inputFeatures_b
             stops = stops_b
             plannedTimeArray = self.get_mean_timetable(df_b,
                                                        start_location,
@@ -226,6 +232,8 @@ class Ann:
                 return pred_report
 
         else:
+            if sequence_a < 0 or sequence_b < 0:
+                pred_report['travelTime'] = -1
             return pred_report
 
         try:
@@ -235,6 +243,10 @@ class Ann:
             if self.__debug:
                 print("WARNING: Line {} {}".format(line, str(e)))
             return pred_report
+        inputFeatures = []
+        for i in range(station_number):
+            # Get all stations' planned arrival time from planned time table file
+            inputFeatures.append(plannedTimeArray[i])
         inputFeatures.append(self.__sun)
         inputFeatures.append(self.__rain)
         predictions = new_clf.predict([inputFeatures])
@@ -294,13 +306,19 @@ def main():
     print(my.get_all_prediction())
     print(my.prediction('39'))
     '''
-    my = Ann(1913,1660,3600,1,0, DEBUG=True)
+    #my = Ann(769,776,3600,1,0, DEBUG=True)
     #my = Ann(328,7162,72000, 0,1, DEBUG=True)
     #my = Ann(328,1805,72000,0,1, DEBUG=True)
     #my = Ann(7162,328,36000,0,1,DEBUG=True)
     #my = Ann(328, 7162,36000,0,1,DEBUG=True)
-    print(my.get_all_prediction())
+    #my = Ann(7047, 1445,360000,0,1,DEBUG=True)
+    #my = Ann(7047, 1445, 86600,0,1, DEBUG=True)
+    my = Ann(1913,1660,36900,1,0, DEBUG=True)
+    #print(my.get_all_prediction())
+    print(my.new_prediction('39A', '0'))
     print(my.prediction('39A'))
+    #print(my.new_prediction('39A', '0'))
+    #print(my.new_prediction('39A', '1'))
 
 if __name__ == '__main__':
     main()
