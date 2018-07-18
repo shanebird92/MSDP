@@ -246,7 +246,7 @@
                 var findRoute=false;
                 for (var i in json) {
                     if (parseInt(json[i]['traveltime'])>0){
-                        str+="<div class='route-div' style='border:#FFFFFF 1px ridge; margin-bottom:-14%; padding:0;'>"+"<div class='route-div-detail'><img src='/static/icon/bus.png'>"+json[i]['line']+' '+converToHour(parseInt(json[i]['starttime']))+'</div>'+Math.round(json[i]['traveltime']/60)+' min'+'</div><br>';
+                        str+="<div class='route-div' style='border:#FFFFFF 1px ridge; margin-bottom:-14%; padding:0;'>"+"<div class='route-div-detail'><img src='/static/icon/bus.png'>"+json[i]['line']+'  '+converToHour(parseInt(json[i]['pairarrtime'][0]))+'</div>'+Math.round(json[i]['traveltime']/60)+' min'+'</div><br>';
                         findRoute=true;
                     }
                 }
@@ -270,10 +270,11 @@
                 return time;
         }
             
-        $("#route-div-detail").on("click",function(){
-            alert("Yes");
+        $(function(){    
+            $("#route-div-detail").bind("click",function(){
+                alert("Yes");
+            });
         });
-
 
         </script>
         
