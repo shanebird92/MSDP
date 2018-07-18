@@ -314,9 +314,9 @@ def main():
     #my = Ann(7047, 1445,360000,0,1,DEBUG=True)
     #my = Ann(7047, 1445, 86600,0,1, DEBUG=True)
     my = Ann(1913,1660,36900,1,0, DEBUG=True)
-    #print(my.get_all_prediction())
-    print(my.new_prediction('39A', '0'))
-    print(my.prediction('39A'))
+    print(my.get_all_prediction())
+    #print(my.new_prediction('39A', '0'))
+    #print(my.prediction('39A'))
     #print(my.new_prediction('39A', '0'))
     #print(my.new_prediction('39A', '1'))
 
