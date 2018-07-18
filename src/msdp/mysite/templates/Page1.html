@@ -243,11 +243,38 @@
             
         function showRoutes(json){
                 var str='';
+                var findRoute=false;
                 for (var i in json) {
-                    str+="<div class='route-div' style='border:#FFFFFF 1px ridge; margin-bottom:-14%; padding:0;'>"+"<div><img src='/static/icon/bus.png'>"+json[i]['line']+'</div>'+Math.round(json[i]['traveltime'])+' min'+'</div><br>';
+                    if (parseInt(json[i]['traveltime'])>0){
+                        str+="<div class='route-div' style='border:#FFFFFF 1px ridge; margin-bottom:-14%; padding:0;'>"+"<div class='route-div-detail'><img src='/static/icon/bus.png'>"+json[i]['line']+' '+converToHour(parseInt(json[i]['starttime']))+'</div>'+Math.round(json[i]['traveltime']/60)+' min'+'</div><br>';
+                        findRoute=true;
+                    }
                 }
+            
+                if (!findRoute)
+                    str='No bus route!!'
+
                 return str;
             }
+            
+        function converToHour(a){
+                var hours=parseInt(a/3600);
+                var mins=parseInt((a-hours*3600)/60);
+                var time='';
+                if (hours<10)
+                    hours='0'+hours;
+                if (mins<10)
+                    time=hours+':0'+mins;
+                else
+                    time=hours+':'+mins;
+                return time;
+        }
+            
+        $("#route-div-detail").on("click",function(){
+            alert("Yes");
+        });
+
+
         </script>
         
         <!-- Bootstrap CDN for Javascript, found on getbootstrap.com -->
