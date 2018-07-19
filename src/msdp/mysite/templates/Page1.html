@@ -225,10 +225,11 @@
             {
                 var start=$("#start").val();
                 var end=$("#destination").val();
+                var date=$("#date").val();
                 var time=$("#time").val();
                 var timenumber=time.split(":");
                 var seconds=Number(timenumber[0])*60*60 + Number(timenumber[1])*60;
-                data_to_backend = {'Start':start,'End':end,'Time':seconds}; 
+                data_to_backend = {'Start':start,'End':end,'Time':seconds,'Date':date}; 
 
                 $.post("/dublinbus/form_input/", data_to_backend, function(data){
                     data=JSON.parse(data);
