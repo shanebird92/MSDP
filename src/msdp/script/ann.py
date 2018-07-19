@@ -35,10 +35,12 @@ class Ann:
         pred_report['startTime'] = 0
         pred_report['pairStops'] = []
         pred_report['pairArrTime'] = []
+        pred_report['locations'] = []
 
         startID = self.__startid
         endID = self.__endid
         targetTime = self.__targettime
+
 
         # Make sure the target time is in logical clock time(00:00~24:00)
         if targetTime < 0 or targetTime > 86400:
@@ -48,6 +50,9 @@ class Ann:
         if len(str(direction)) == 0:
             return self.prediction(line)
         else:
+            # Open file mapping stopPointID and locations
+            latlong_json_file = '{}/stop_latlong.json'.format(self.__data_path)
+            all_locations = json.loads(open(latlong_json_file).read())
             try:
                 if str(direction) == '0':
                     model_file = self.__data_path + "/{}_a_2017_06.clf".format(line)
@@ -75,6 +80,15 @@ class Ann:
             else:
                 return pred_report
 
+            # Collect lat and lng for each passed stations
+            locations = []
+            for stop in stops[start_location:(stop_location+1)]:
+                stopid = str(int(stop))
+                if stopid in all_locations:
+                    locations.append(all_locations[stopid])
+                else:
+                    locations.append(all_locations[[]])
+            pred_report['locations'] = locations
             # Make sure the sequence from start to stop is in logical order
             if stop_location <= start_location:
                 if self.__debug:
@@ -150,10 +164,15 @@ class Ann:
         pred_report['startTime'] = 0
         pred_report['pairStops'] = []
         pred_report['pairArrTime'] = []
+        pred_report['locations'] = []
 
         startID = self.__startid
         endID = self.__endid
         targetTime = self.__targettime
+
+        # Open file mapping stopPointID and locations
+        latlong_json_file = '{}/stop_latlong.json'.format(self.__data_path)
+        all_locations = json.loads(open(latlong_json_file).read())
         try:
             model_file_a = self.__data_path + "/{}_a_2017_06.clf".format(line)
             model_file_b = self.__data_path + "/{}_b_2017_06.clf".format(line)
@@ -236,6 +255,16 @@ class Ann:
                 pred_report['travelTime'] = -1
             return pred_report
 
+        # Collect lat and lng for each passed stations
+        locations = []
+        for stop in stops[start_location:(stop_location+1)]:
+            stopid = str(int(stop))
+            if stopid in all_locations:
+                locations.append(all_locations[stopid])
+            else:
+                locations.append(all_locations[[]])
+        pred_report['locations'] = locations
+
         try:
             pkl_file = open(model_file, 'rb')
             new_clf = pickle.load(pkl_file)
@@ -314,9 +343,9 @@ def main():
     #my = Ann(7047, 1445,360000,0,1,DEBUG=True)
     #my = Ann(7047, 1445, 86600,0,1, DEBUG=True)
     my = Ann(1913,1660,36900,1,0, DEBUG=True)
-    print(my.get_all_prediction())
+    #print(my.get_all_prediction())
     #print(my.new_prediction('39A', '0'))
-    #print(my.prediction('39A'))
+    print(my.prediction('39A'))
     #print(my.new_prediction('39A', '0'))
     #print(my.new_prediction('39A', '1'))
 

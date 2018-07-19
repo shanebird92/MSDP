@@ -47,6 +47,7 @@ def form_input(request):
             route['starttime'] = row['startTime']
             route['pairarrtime'] = row['pairArrTime']
             route['pairstops'] = row['pairStops']
+            route['locations'] = row['locations']
             routes.append(route)
         json_routes=json.dumps(routes)
         return HttpResponse(json_routes)

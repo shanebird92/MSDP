@@ -53,7 +53,38 @@ class TestAnn(unittest.TestCase):
 
     def test_003(self):
         '''
-            test_003 assertion: input invalid target clock time and other valid values
+            test_003 assertion: Verify all keys are in returning dictionary
+        '''
+        my = ann.Ann(1913,1660,36900,1,0)
+        check_list = ['startTime',
+                      'travelTime',
+                      'line',
+                      'pairArrTime',
+                      'pairStops',
+                      'locations']
+        results = my.get_all_prediction()
+        for result in results:
+            for key in check_list:
+                self.assertTrue(key in result.keys(), \
+                    "FAIL: get_all_prediction() missing key "
+                    "from returning dictionary: {}".format(key))
+
+        all_results = {}
+        # sub_1
+        all_results['prediction()'] = my.prediction('39A')
+        # sub_2
+        all_results['new_prediction()_diction_0'] = my.new_prediction('39A', '0')
+        # sub_3
+        all_results['new_prediction()_diction_1'] = my.new_prediction('39A', '1')
+        for testid, result in all_results.items():
+            for key in check_list:
+                self.assertTrue(key in result.keys(), "FAIL: {} missing key from returning dict: {}".format(testid, key))
+
+        print("Checking all keys are in returning dictionary")
+
+    def test_006(self):
+        '''
+            test_006 assertion: input invalid target clock time and other valid values
             to expect returning startTime with -1 from ann.py
 	'''
         for t in [-10,86500]:
@@ -62,9 +93,12 @@ class TestAnn(unittest.TestCase):
             self.assertTrue(result['startTime'] == -1, "FAIL: Checking start Time with invalid "
                             "inputting target clock time ({}) in bus route list".format(t))
         print("Checking '39A' setting up Time with invalid inputting target clock time")
+
         
 
 if __name__ == '__main__':
     #unittest.main()
     suite = unittest.TestLoader().loadTestsFromTestCase(TestAnn)
+    #suite = unittest.TestSuite()
+    #suite.addTest(TestAnn("test_003"))
     unittest.TextTestRunner(verbosity=2).run(suite)
