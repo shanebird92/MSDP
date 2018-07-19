@@ -185,6 +185,29 @@ class Sqlquery:
         x.close()       
         return rows
 
+    def get_ontime_times_from_line(self, line):
+        try:
+            x = self.__conn.cursor()
+            x.execute("SELECT DayOfService, count(*) FROM SummerProject.RT_LeaveTimesTrips_2017_06 where  LineId = '{}' and PlannedTime_Arr >= ActualTime_Arr group by DayOfService order by DayOfService".format(line))
+            rows = x.fetchall()
+            x.execute("SELECT DayOfService, count(*) FROM SummerProject.RT_LeaveTimesTrips_2017_06 where  LineId = '{}' and PlannedTime_Arr < ActualTime_Arr group by DayOfService order by DayOfService".format(line))
+            rows2 = x.fetchall()
+        except Exception as e:
+            print(str(e))
+            return ''
+        count = 0
+        myrows = {}
+        for row in rows:
+            timestamp = row[0]
+            myrows[str(timestamp)] = row[1]
+        for row2 in rows2:
+            timestamp = row2[0]
+            myrows[str(timestamp)] = myrows[str(timestamp)]/(row2[1] + myrows[str(timestamp)])
+            #myrows[str(timestamp)] = row2[1]/(row2[1] + myrows[str(timestamp)])
+        self.__conn.commit()
+        x.close()       
+        return myrows
+
     def get_stoppointid_by_line(self, line, direction):
         try:
             x = self.__conn.cursor()
@@ -225,8 +248,9 @@ def main():
     #array = my.get_arrivaltime_from_tripid_and_date(5012600, '2017-06-02')
     #array = my.get_arrivaltime_from_tripid_and_date(4591857, '2017-05-12')
     #array = my.get_stoppointid_by_line('39A', 1)
-    array = my.get_stoppointid_by_line('45A', 2)
-    print(array)
+    array = my.get_ontime_times_from_line('39A')
+    #array = my.get_stoppointid_by_line('45A', 2)
+    print(sorted(array.items()))
 
 if __name__ == '__main__':
     main()

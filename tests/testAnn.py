@@ -5,8 +5,7 @@ from script import ann
 
 class TestAnn(unittest.TestCase):
     def setUp(self):
-        #print("do something before test.Prepare environment.")
-        pass
+        self.__debug = False
 
     def tearDown(self):
         #print("do something after test.Clean up.")
@@ -26,7 +25,7 @@ class TestAnn(unittest.TestCase):
                 break
         else:
                 self.assertTrue(result['line'] == '39A', "Checking '39A' is found out")
-        print("Checking multiple Lines are found out")
+        self.__debug and print("Checking multiple Lines are found out")
 
     def test_002(self):
         '''
@@ -49,7 +48,7 @@ class TestAnn(unittest.TestCase):
                                 "start and stop IDs in correct direction")
         self.assertTrue(result3['travelTime'] == 0, "FAIL: Checking '39A' with reserved "
                                 "start and stop IDs in incorrect direction")
-        print("Checking '39A' with reserved start & stop IDs")
+        self.__debug and print("Checking '39A' with reserved start & stop IDs")
 
     def test_003(self):
         '''
@@ -78,9 +77,11 @@ class TestAnn(unittest.TestCase):
         all_results['new_prediction()_diction_1'] = my.new_prediction('39A', '1')
         for testid, result in all_results.items():
             for key in check_list:
-                self.assertTrue(key in result.keys(), "FAIL: {} missing key from returning dict: {}".format(testid, key))
+                self.assertTrue(key in result.keys(),
+                                "FAIL: {} missing key from "
+                                "returning dict: {}".format(testid, key))
 
-        print("Checking all keys are in returning dictionary")
+        self.__debug and print("Checking all keys are in returning dictionary")
 
     def test_006(self):
         '''
@@ -90,9 +91,11 @@ class TestAnn(unittest.TestCase):
         for t in [-10,86500]:
             my = ann.Ann(7047, 1445,t,0,1)
             result = my.new_prediction('39A')
-            self.assertTrue(result['startTime'] == -1, "FAIL: Checking start Time with invalid "
+            self.assertTrue(result['startTime'] == -1,
+                            "FAIL: Checking start Time with invalid "
                             "inputting target clock time ({}) in bus route list".format(t))
-        print("Checking '39A' setting up Time with invalid inputting target clock time")
+        self.__debug and print("Checking '39A' setting up Time with "
+                               "invalid inputting target clock time")
 
         
 
