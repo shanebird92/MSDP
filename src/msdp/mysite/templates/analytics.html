@@ -50,59 +50,263 @@ $('#goToBottom').click(function(){
 <body>
 <div>
 <div class="header">
-<img src="{% static "data-analytics.jpg" %}" alt="Header image" style='height: 100%; width: 100%; object-fit: contain' >
 </div>
 <div style="width:1200px; height: 1000px;">
-<form method="post" action="/analytics/">
-    Month:<input type="text" name="month"/>
-    Line:<input type="text" name="lineid"/>
-<input type="image" src="{% static "search-button.png" %}" alt="Submit" align="middle" width="48" height="48">
-</form>
-    <table>
-        <tbody>
-        <tr><td>{{date}}</td></tr>
-        {% for row in rows%}
-        <tr><td>{{row.TripId}}</td></tr>
-        {% endfor %}
-        </tbody>
-    </table>
+<script>
 
-<form method="post" action="/analytics_get_lines/">
-  Month:<input type="text" name="month"/>
+        var BusLine = '';
+        var timeid = -1;
+        var month = -1;
+function populateSelect() {
+        // THE JSON ARRAY.
+        var lines = {{Lines|safe}};
+
+        var ele = document.getElementById('sel');
+        for (var i = 0; i < lines.length; i++) {
+            // POPULATE SELECT ELEMENT WITH JSON.
+            ele.innerHTML = ele.innerHTML +
+                '<option value="' + lines[i]['lineid'] + '">' + lines[i]['lineid'] + '</option>';
+        }
+    }
+
+function populateSelect2() {
+        // THE JSON ARRAY.
+        var timeInterval = [
+			{'clock': '00:00-01:00','id': 1},
+			{'clock': '01:00-02:00','id': 2},
+			{'clock': '02:00-03:00','id': 3},
+			{'clock': '03:00-04:00','id': 4},
+			{'clock': '04:00-05:00','id': 5},
+			{'clock': '05:00-06:00','id': 6},
+			{'clock': '06:00-07:00','id': 7},
+			{'clock': '07:00-08:00','id': 8},
+			{'clock': '08:00-09:00','id': 9},
+			{'clock': '09:00-10:00','id': 10},
+			{'clock': '10:00-11:00','id': 11},
+			{'clock': '11:00-12:00','id': 12},
+			{'clock': '12:00-13:00','id': 13},
+			{'clock': '13:00-14:00','id': 14},
+			{'clock': '14:00-15:00','id': 15},
+			{'clock': '15:00-16:00','id': 16},
+			{'clock': '17:00-18:00','id': 17},
+			{'clock': '18:00-19:00','id': 18},
+			{'clock': '19:00-20:00','id': 19},
+			{'clock': '20:00-21:00','id': 20},
+			{'clock': '21:00-22:00','id': 21},
+			{'clock': '22:00-23:00','id': 22},
+			{'clock': '23:00-24:00','id': 23}
+			];
+
+        var ele = document.getElementById('sel3');
+        for (var i = 0; i < timeInterval.length; i++) {
+            // POPULATE SELECT ELEMENT WITH JSON.
+            ele.innerHTML = ele.innerHTML +
+                '<option value="' + timeInterval[i]['id'] + '">' + timeInterval[i]['clock'] + '</option>';
+        }
+    }
+ function myshow(ele, id) {
+        // GET THE SELECTED VALUE FROM <select> ELEMENT AND SHOW IT.
+        var msg = document.getElementById(id);
+        if (id == 'msg'){
+            msg.innerHTML = 'Selected Bus Line: <b>' + ele.options[ele.selectedIndex].text + '</b> </br>' +
+            '</b>';
+            BusLine = ele.options[ele.selectedIndex].value;
+	} else if (id == 'msg2') {
+            msg.innerHTML = 'Selected Month: <b>' + ele.options[ele.selectedIndex].text + '</b> </br>' +
+            '</b>';
+            month = ele.options[ele.selectedIndex].value;
+	} else if (id == 'msg3') {
+            msg.innerHTML = 'Selected Time Interval: <b>' + ele.options[ele.selectedIndex].text + '</b> </br>' +
+            '</b>';
+            timeid = ele.options[ele.selectedIndex].value;
+	}
+    }
+
+function show(boxid)
+{ 
+  var box = document.getElementById(boxid); 
+  var text = box.innerHTML; 
+  var newBox = document.createElement("div"); 
+  var btn = document.createElement("a"); 
+  newBox.innerHTML = text.substring(0,20); 
+  btn.innerHTML = text.length > 20 ? "+" : ""; 
+  btn.href = "###"; 
+  btn.onclick = function(){ 
+    if(btn.innerHTML == "+")
+    { 
+      btn.innerHTML = "-"; 
+      newBox.innerHTML = text; 
+    }
+    else
+    { 
+      btn.innerHTML = "+"; 
+      newBox.innerHTML = text.substring(0,20); 
+    } 
+  } 
+  box.innerHTML = ""; 
+  box.appendChild(newBox); 
+  box.appendChild(btn); 
+} 
+window.onload=function()
+{
+  show(); 
+}
+
+$(function(){
+            $(".form1").submit(function(evt){
+                var div1=document.getElementById("form1_notice");  
+                if(div1.style.display='none') div1.style.display='block';
+                evt.preventDefault();
+                form1_sub();
+            });
+            $(".form2").submit(function(evt){
+                evt.preventDefault();
+                form2_sub();
+            });
+            $(".form3").submit(function(evt){
+                evt.preventDefault();
+                form3_sub();
+            });
+        });
+function form1_sub()
+            {
+                //var lineid=$("#sel").val();
+                var lineid = BusLine;
+                //var month=$("#sel2").val();
+                var my_month = month;
+                //var timeid=$("#sel3").val();
+                var timeInterval = timeid;
+                //alert(month + " " + lineid);
+                data_to_backend = {'LineId':lineid, 'Month': my_month, 'timeInterval': timeid}; 
+                $.post("/analytics_form_input/", data_to_backend, function(data){
+                    //alert(data);
+                    data=JSON.parse(data);
+                    str=showRoutes(data, 'form1');
+                    title = "<div><h3> Displaying Trip IDs </h3></div>";
+                    document.getElementById('box').innerHTML = title + str;
+                    //document.getElementById('box').innerHTML = data;
+                    show('box');
+                })
+                .fail(function() {
+                    alert( "Connection fail, please refresh the website." );
+                });
+                
+            }
+function form2_sub()
+            {
+                var tripid=$("#tripid").val();
+                //alert(month + " " + lineid);
+                data_to_backend = {'tripid':tripid, 'month': month}; 
+                $.post("/analytics_get_available_days/", data_to_backend, function(data){
+                    //alert(data);
+                    data=JSON.parse(data);
+                    str=showRoutes(data, 'form2');
+                    document.getElementById('box2').innerHTML = str;
+                    show('box2');
+                })
+                .fail(function() {
+                    alert( "Connection fail, please refresh the website." );
+                });
+            }
+function form3_sub()
+            {
+                var lineid=$("#lineid").val();
+                data_to_backend = {'lineid':lineid}; 
+                $.post("/analytics_get_stoppointids/", data_to_backend, function(data){
+                    //alert(data);
+                    data=JSON.parse(data);
+                    str=showRoutes(data, 'form3');
+                    document.getElementById('box3').innerHTML = str;
+                    show('box3');
+                })
+                .fail(function() {
+                    alert( "Connection fail, please refresh the website." );
+                });
+            }
+
+        function showRoutes(json, query_id){
+                var str='';
+                var findRoute=false;
+                if (query_id == 'form1'){
+                    str+="<div id='box'>"+'RES->' +'</div>'+'</div>';
+                    for (var i in json) {
+                            str+="<div id='box'>"+json[i]['TripId']+'</div>'+'</div>';
+                    }}
+                else if (query_id == 'form2'){
+                    all = json['days'];
+                    str+="<div id='box2'>"+'RES->' +'</div>'+'</div>';
+                    for (var i in all) {
+                            str+="<div id='box2'>"+all[i]+'</div>'+'</div>';
+                    }}
+                else if (query_id == 'form3'){
+                    json_a = json['direction_a'];
+                    json_b = json['direction_b'];
+                    str+="<div id='box3'>"+'RES->' +'</div>'+'</div>';
+                    str+="<div id='box3'>"+'Direction A:' +'</div>'+'</div>';
+                    for (var i in json_a) {
+                            str+="<div id='box3'>"+"&nbsp;station " + i + ": " + json_a[i]+'</div>'+'</div>';
+                    }
+                    str+="<div id='box3'>"+'Direction B:' +'</div>'+'</div>';
+                    for (var i in json_b) {
+                            str+="<div id='box3'>"+"&nbsp;station " + i + ": " + json_b[i]+'</div>'+'</div>';
+                    }}
+                return str;
+            }
+
+
+</script>
+<form class="form1">
+<!--
+<p>
+ <input type="button" 
+            style="margin:10px 0;font:14px Verdana;" 
+                onclick="populateSelect()" 
+                    value="Populate SELECT with JSON" />
+</p>
+-->
+<select id="sel" onclick="populateSelect()" onchange="myshow(this, 'msg')">
+        <option value="">-- Bus Line --</option>
+    </select>
+ <select id="sel2" onchange="myshow(this, 'msg2')">
+  <option value="1">JAN</option>
+  <option value="2">FEB</option>
+  <option value="3">MAR</option>
+  <option value="4">APR</option>
+  <option value="5">MAY</option>
+  <option value="6">JUNE</option>
+  <option selected>-- Month --</option>
+</select> 
+<select id="sel3" onclick="populateSelect2()" onchange="myshow(this, 'msg3')">
+        <option value="">-- Time Interval --</option>
+    </select>
 <input type="image" src="{% static "search-button.png" %}" alt="Submit" align="middle" width="48" height="48">
+ <p id="msg"></p>
+ <p id="msg2"></p>
+ <p id="msg3"></p>
+<div id="box">
+Display all Trip IDs with given month (1-6) and Bus Lines (39A, 46A, etc.)
+<div id="form1_notice" style="display:none"> <h3> Please wait for a moment, querying ... </h3></div>
+</div>
 </form>
-    <table>
-        <tbody>
-        <tr><td>{{my_date}}</td></tr>
-        <tr><td>{{line_rows}}</td></tr>
-        </tbody>
-    </table>
 <div>
-<form method="post" action="/analytics_get_stoppointids/">
-  LineId:<input type="text" name="lineid"/>
-<input type="image" src="{% static "search-button.png" %}" alt="Submit" align="middle" width="48" height="48">
+<form class="form2">
+  TripId:<input id="tripid" type="text" name="tripid"/>
+<input id="form2_button" type="image" src="{% static "search-button.png" %}" alt="Submit" align="middle" width="48" height="48">
+<div id="box2">
+</div>
 </form>
-    <table>
-        <tbody>
-        <tr><td>{{direction_a}}</td></tr>
-        <tr><td>{{direction_b}}</td></tr>
-        </tbody>
-    </table>
+</div>
+
+<div>
+<form class="form3">
+  LineId:<input id="lineid" type="text" name="lineid"/>
+<input id="form3_button" type="image" src="{% static "search-button.png" %}" alt="Submit" align="middle" width="48" height="48">
+<div id="box3">
+</div>
+</form>
 </div>
 
 
-<div>
-<form method="post" action="/analytics_get_available_days/">
-  TripId:<input type="text" name="tripid"/>
-<input type="image" src="{% static "search-button.png" %}" alt="Submit" align="middle" width="48" height="48">
-</form>
-    <table>
-        <tbody>
-        <tr><td>{{trip_id}}</td></tr>
-        <tr><td>{{date_rows}}</td></tr>
-        </tbody>
-    </table>
-</div>
 <HR style="border:3 double #987cb9" width="100%" color=#987cb9 SIZE=3>
 <div>
 <form method="post" action="/analytics_get_arrivaltime/">

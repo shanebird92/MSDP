@@ -38,6 +38,29 @@ class Sqlquery:
         x.close()       
         return tripIDs
 
+    def get_tripids_by_lineMonthTime(self, line, month, timeid):
+        mydate = '2017_{}'.format(str(month).zfill(2))
+        start_time = (int(timeid)-1) * 3600
+        end_time = (int(timeid)) * 3600
+        try:
+            x = self.__conn.cursor()
+            x.execute("SELECT distinct TripId FROM SummerProject.RT_LeaveTimesTrips_{} where LineId='{}' \
+                           and PlannedTime_Arr BETWEEN {} AND {} ORDER BY TripId".format(mydate, line, start_time, end_time))
+        except Exception as e:
+            print(str(e))
+            return ''
+        row = x.fetchone()
+        count = 0
+        tripIDs = []
+        while row is not None:
+            count += 1
+            tripIDs.append(row[0])
+            row = x.fetchone()
+        self.__conn.commit()
+        x.close()
+        return tripIDs
+
+
     def get_lines_by_tripid(self, tripid):
         try:
             x = self.__conn.cursor()
@@ -83,6 +106,27 @@ class Sqlquery:
             x = self.__conn.cursor()
             x.execute("SELECT distinct DayOfService FROM SummerProject.RT_LeaveTimes \
                            where TripId = {} ORDER BY DayOfService".format(tripid))
+        except Exception as e:
+            print(str(e))
+            return ''
+        row = x.fetchone()
+        count = 0
+        rows = []
+        while row is not None:
+            count += 1
+            rows.append(str(row[0]))
+            row = x.fetchone()
+        print("{} rows.".format(count))
+        self.__conn.commit()
+        x.close()       
+        return rows
+
+    def get_available_days_by_monthTripid(self, month, tripid):
+        mydate = '2017_{}'.format(str(month).zfill(2))
+        try:
+            x = self.__conn.cursor()
+            x.execute("SELECT distinct DayOfService FROM SummerProject.RT_LeaveTimesTrips_{} \
+                           where TripId = {} ORDER BY DayOfService".format(mydate, tripid))
         except Exception as e:
             print(str(e))
             return ''
@@ -238,6 +282,8 @@ def main():
     #array = my.get_lines_by_tripid('5012600')
     #array = my.get_lines_by_tripid('4335079')
     #array = my.get_lines_by_month('4')
+    #array = my.get_tripids_by_lineMonthTime('39A', 1, 13)
+    array = my.get_available_days_by_monthTripid(1, 5002343)
     #print(len(array))
     #print(len(array))
     #array = my.get_available_days_by_month(5)
@@ -248,9 +294,10 @@ def main():
     #array = my.get_arrivaltime_from_tripid_and_date(5012600, '2017-06-02')
     #array = my.get_arrivaltime_from_tripid_and_date(4591857, '2017-05-12')
     #array = my.get_stoppointid_by_line('39A', 1)
-    array = my.get_ontime_times_from_line('39A')
+    #array = my.get_ontime_times_from_line('39A')
     #array = my.get_stoppointid_by_line('45A', 2)
-    print(sorted(array.items()))
+    #print(sorted(array.items()))
+    print(array)
 
 if __name__ == '__main__':
     main()
