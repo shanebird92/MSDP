@@ -97,11 +97,25 @@ class TestAnn(unittest.TestCase):
         self.__debug and print("Checking '39A' setting up Time with "
                                "invalid inputting target clock time")
 
+    def test_007(self):
+        '''
+            test_007 assertion: input valid target clock time but not suitable for planned time
+            table for particular bug Line to expect returning startTime with -1 from ann.py
+	'''
+        t = 36000
+        my = ann.Ann(769, 776,t,0,1)
+        for line in ['145','116','7B']:
+            result = my.new_prediction(line)
+            self.assertTrue(result['travelTime'] == -1,
+                            "FAIL: Checking travel Time with non-suitable planned Time Table "
+                            "inputting target clock time ({}) in bus route {} list".format(t, line))
+        self.__debug and print("Checking bus lines setting up Time with non-suitable"
+                               " inputting target clock time")
         
 
 if __name__ == '__main__':
     #unittest.main()
     suite = unittest.TestLoader().loadTestsFromTestCase(TestAnn)
     #suite = unittest.TestSuite()
-    #suite.addTest(TestAnn("test_003"))
+    #suite.addTest(TestAnn("test_007"))
     unittest.TextTestRunner(verbosity=2).run(suite)

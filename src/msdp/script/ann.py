@@ -18,6 +18,9 @@ class Ann:
         df = df.drop(df.index[0]) 
         station_column = '{}_P'.format(str(start_location).zfill(3))
         df = df[(df[station_column] >= target_time)]
+        if df[station_column].count() == 0:
+            # There's no suitable planned time found
+            return []
         mean_array = df[(df[station_column]-target_time) == min(df[station_column]-target_time)].mean()
         '''
         mean_array = df[abs(df[station_column]-target_time) == \
@@ -97,12 +100,20 @@ class Ann:
                 return pred_report
 
             pairs = stop_location - start_location
+            # Add pair Stops array into pred_report
+            pred_report['pairStops'] = stops[start_location:(stop_location+1)]
 
             station_number = len(stops)
             # Getting the plannted Time Table arrary from first station to last station
             plannedTimeArray = self.get_mean_timetable(df,
                                                        start_location,
                                                        targetTime)
+            if len(plannedTimeArray) == 0:
+                if self.__debug:
+                    print("WARNING: No approprate planned Time Table found!")
+                pred_report['travelTime'] = -1
+                return pred_report
+                
             inputFeatures = []
             for i in range(len(df.columns)):
                 # Get all stations' planned arrival time from planned time table file
@@ -335,19 +346,19 @@ def main():
     print(my.get_all_prediction())
     print(my.prediction('39'))
     '''
-    #my = Ann(769,776,3600,1,0, DEBUG=True)
+    my = Ann(769,776,36000,1,0, DEBUG=True)
     #my = Ann(328,7162,72000, 0,1, DEBUG=True)
     #my = Ann(328,1805,72000,0,1, DEBUG=True)
     #my = Ann(7162,328,36000,0,1,DEBUG=True)
     #my = Ann(328, 7162,36000,0,1,DEBUG=True)
     #my = Ann(7047, 1445,360000,0,1,DEBUG=True)
     #my = Ann(7047, 1445, 86600,0,1, DEBUG=True)
-    my = Ann(1913,1660,36900,1,0, DEBUG=True)
+    #my = Ann(1913,1660,36900,1,0, DEBUG=True)
     #print(my.get_all_prediction())
     #print(my.new_prediction('39A', '0'))
-    print(my.prediction('39A'))
-    #print(my.new_prediction('39A', '0'))
-    #print(my.new_prediction('39A', '1'))
+    print(my.prediction('145'))
+    #print(my.new_prediction('116', '0'))
+    #print(my.new_prediction('116', '1'))
 
 if __name__ == '__main__':
     main()
