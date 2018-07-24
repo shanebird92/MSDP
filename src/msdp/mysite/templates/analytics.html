@@ -7,25 +7,45 @@
     <title>POST Params</title>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
+      function sleep(milliseconds) {
+  	var start = new Date().getTime();
+  	for (var i = 0; i < 1e7; i++) {
+    		if ((new Date().getTime() - start) > milliseconds){
+      			break;
+    			}
+  		}
+    	}
       google.charts.load('current', {'packages':['corechart']});
-      google.charts.setOnLoadCallback(drawChart);
+      var results = {{value|safe}};
+   
+      google.charts.setOnLoadCallback(function() { drawChart(results);});
 
-      var arrtime_data = {{arrtime_rows|safe}};
-      var arr_tripid = '{{arr_trip_id}}';
-      var arr_date = '{{arr_date}}';
       //window.alert(arr_date);
-      function drawChart() {
-        var data = google.visualization.arrayToDataTable(arrtime_data);
+      function drawChart(results) {
+          var i;
+          for (i = 0; i < results.length; i++) {
+              result = results[i];
+              var arrtime_data = result['arrtime_rows'];
+              var arr_tripid = result['arr_trip_id'];
+              var arr_date = result['arr_date'];
+              var id = result['chart_name'];
 
-        var options = {
-          title: 'Trip ' + arr_tripid + ' Performance on ' + arr_date + "(X:Station NO. Y:Arrival Time on seconds)",
-          curveType: 'function',
-          legend: { position: 'bottom' }
-        };
+          var data = google.visualization.arrayToDataTable(arrtime_data);
+          var options = {
+            title: 'Trip ' + arr_tripid + ' Performance on ' + arr_date,
+            curveType: 'function',
+            legend: { position: 'bottom' },
+            hAxis: {
+		title: 'Station NO.'
+		},
+            vAxis: {
+		title: 'Arrival Time (seconds)'
+		}
+          };
 
-        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-
-        chart.draw(data, options);
+          var chart = new google.visualization.LineChart(document.getElementById(id));
+          chart.draw(data, options);
+        } 
       }
     </script>
 <script src="{% static "jquery-3.3.1.min.js" %}"></script>
@@ -149,7 +169,7 @@ function show(boxid)
 } 
 window.onload=function()
 {
-  show(); 
+  show('box'); 
 }
 
 $(function(){
@@ -289,7 +309,7 @@ Display all Trip IDs with given month (1-6) and Bus Lines (39A, 46A, etc.)
 </div>
 </form>
 <div>
-<form class="form2">
+<form class="form2" style="display:none">
   TripId:<input id="tripid" type="text" name="tripid"/>
 <input id="form2_button" type="image" src="{% static "search-button.png" %}" alt="Submit" align="middle" width="48" height="48">
 <div id="box2">
@@ -298,7 +318,7 @@ Display all Trip IDs with given month (1-6) and Bus Lines (39A, 46A, etc.)
 </div>
 
 <div>
-<form class="form3">
+<form class="form3" style="display:none">
   LineId:<input id="lineid" type="text" name="lineid"/>
 <input id="form3_button" type="image" src="{% static "search-button.png" %}" alt="Submit" align="middle" width="48" height="48">
 <div id="box3">
@@ -311,15 +331,16 @@ Display all Trip IDs with given month (1-6) and Bus Lines (39A, 46A, etc.)
 <div>
 <form method="post" action="/analytics_get_arrivaltime/">
   TripId:<input type="text" name="tripid"/>
-  Date:<input type="text" name="date"/>
 <input type="image" id="goToBottom"  src="{% static "search-button.png" %}" alt="Submit" align="middle" width="48" height="48">
 </form>
     <table>
         <tbody>
-        <tr><td>{{arr_trip_id}}&nbsp;{{arr_date}}</td></tr>
-        <tr><td>{{arrtime_rows}}</td></tr>
-        <div id="curve_chart" style="width: 900px; height: 500px"> </div>
+            {% for chart_name in charts_names %}
+            	<div>{{chart_name}}</div>
+                <div id="{{chart_name}}" style="width: 900px; height: 500px"> </div>
+            {% endfor %}
         </tbody>
+        <div id="showResult">{{arr_trip_id}}&nbsp;{{arr_date}}</div>
     </table>
 </div>
 </div>

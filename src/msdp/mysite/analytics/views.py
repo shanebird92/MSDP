@@ -89,14 +89,31 @@ class Analytics(View):
     def get_arrivaltime(self, request):
         TripId = request.POST.get('tripid','')
         Date = request.POST.get('date','')
-        lines = self.__my.get_arrivaltime_from_tripid_and_date(TripId, Date)
+        dates = self.__my.get_available_days_by_monthTripid(6, TripId)
+        multipleLines = []
         columns = ['Station NO.', 'PlannedArrTime', 'ActualArrTime']
-        if len(lines) == 0:
-            return self.get(request)
-        lines.insert(0,columns)
-        test = json.dumps(lines)
+        new_dates = {}
+        chart_names = []
+        for i in range(len(dates)):
+            lines = self.__my.get_arrivaltime_from_tripid_and_date(TripId, dates[i])
+            new_dates[i] = dates[i]
+            if len(lines) == 0:
+                lines = []
+            else:
+                lines.insert(0,columns)
+            multipleLines.append(lines)
+            chart_names.append('curve_chart_{}'.format(i))
+        results = []
+        for i in range(len(multipleLines)):
+            line = {}
+            line['arrtime_rows'] = multipleLines[i]
+            line['arr_trip_id'] = TripId,
+            line['arr_date'] = dates[i]
+            line['chart_name'] = chart_names[i]
+            results.append(line)
+        callbackValue = json.dumps(results)
         return render(request, self.template_name, {
-            'arrtime_rows': test,
+            'value': callbackValue,
+            'charts_names': chart_names,
             'arr_trip_id': TripId,
-            'arr_date': Date
-        })
+            'arr_date': new_dates})
