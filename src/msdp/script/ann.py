@@ -87,10 +87,10 @@ class Ann:
             locations = []
             for stop in stops[start_location:(stop_location+1)]:
                 stopid = str(int(stop))
-                if stopid in all_locations:
+                if stopid in all_locations.keys():
                     locations.append(all_locations[stopid])
                 else:
-                    locations.append(all_locations[[]])
+                    locations.append([])
             pred_report['locations'] = locations
             # Make sure the sequence from start to stop is in logical order
             if stop_location <= start_location:
@@ -270,10 +270,10 @@ class Ann:
         locations = []
         for stop in stops[start_location:(stop_location+1)]:
             stopid = str(int(stop))
-            if stopid in all_locations:
+            if stopid in all_locations.keys():
                 locations.append(all_locations[stopid])
             else:
-                locations.append(all_locations[[]])
+                locations.append([])
         pred_report['locations'] = locations
 
         try:
@@ -346,17 +346,18 @@ def main():
     print(my.get_all_prediction())
     print(my.prediction('39'))
     '''
-    my = Ann(769,776,36000,1,0, DEBUG=True)
+    #my = Ann(769,1913,36000,1,0, DEBUG=True)
     #my = Ann(328,7162,72000, 0,1, DEBUG=True)
     #my = Ann(328,1805,72000,0,1, DEBUG=True)
     #my = Ann(7162,328,36000,0,1,DEBUG=True)
-    #my = Ann(328, 7162,36000,0,1,DEBUG=True)
-    #my = Ann(7047, 1445,360000,0,1,DEBUG=True)
+    #my = Ann(1913, 776,36000,0,1,DEBUG=True)
+    my = Ann(7047, 1445,36000,0,1,DEBUG=True)
     #my = Ann(7047, 1445, 86600,0,1, DEBUG=True)
     #my = Ann(1913,1660,36900,1,0, DEBUG=True)
-    #print(my.get_all_prediction())
+    for result in (my.get_all_prediction()):
+        print(result)
     #print(my.new_prediction('39A', '0'))
-    print(my.prediction('145'))
+    #print(my.prediction('145'))
     #print(my.new_prediction('116', '0'))
     #print(my.new_prediction('116', '1'))
 
