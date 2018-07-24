@@ -117,6 +117,7 @@
 
 
                     function calculateAndDisplayRoute(directionsService, directionsDisplay, line_id){
+                        console.log("In function for map");
                         /*Function used to calculate and display relevant routes to users
                         
                         3 inputs are direction service, display and the line id. Direction service and display are part of the maps API
@@ -124,6 +125,7 @@
                         */
                         var stops = globalJson[line_id]; //retrieve lat and longs
                         var count = stops[0]; //count used to get  destination
+                        console.log(stops);
                         var start = "lat: "+stops[1][0]+", lng: "+stops[1][1];
                         var dest = "lat: "+stops[count][0]+", lng: "+stops[count][1];
                         //for loop to extract waypoints
@@ -314,6 +316,7 @@
                         var data =  json[i]['locations'];
                         var count = 0;
                         for (item in data){ // need a count because google directions only accepts 15 waypoints
+                            count ++;
                         }
                         if(count > 15){
                             //if over 15 points on map need to divide and skip stops, not ideal but more accurate than just origin/ dest
