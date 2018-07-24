@@ -104,17 +104,66 @@
                 <div id="map"></div>
 
                     <script>
-                        // Initialize and add the map
-                        function initMap() {
-                                // The location of Dublin
-                                var Dublin = {lat: 53.3351, lng: -6.2493};
-                                // The map, centered at Dublin
-                                var map = new google.maps.Map(
-                                  document.getElementById('map'), {zoom: 10, center: Dublin});
-                              // The marker, positioned at Dublin
-                              //var marker = new google.maps.Marker({position: Dublin, map: map});
-                            }
-                    </script>
+                    var globalJson = {}; //global variable used to store the lat and longs of each route according to route id
+                    
+                    // Initialize and add the map, will not be responsible for handling the directions directly.
+                    function initMap() {
+                        // The location of Dublin
+                        var Dublin = {lat: 53.3351, lng: -6.2493};
+                        // The map, centered at Dublin
+                        var map = new google.maps.Map(
+                            document.getElementById('map'), {zoom: 10, center: Dublin});
+                    }
+
+
+                    function calculateAndDisplayRoute(directionsService, directionsDisplay, line_id){
+                        /*Function used to calculate and display relevant routes to users
+                        
+                        3 inputs are direction service, display and the line id. Direction service and display are part of the maps API
+                        Line id is used to access the global json object in order to retrieve the relevant lats and longs of the route
+                        */
+                        var stops = globalJson[line_id]; //retrieve lat and longs
+                        var count = stops[0]; //count used to get  destination
+                        var start = "lat: "+stops[1][0]+", lng: "+stops[1][1];
+                        var dest = "lat: "+stops[count][0]+", lng: "+stops[count][1];
+                        //for loop to extract waypoints
+                        var waypts = []; //empty array for all waypoints in trip i.e. stops between origin and dest
+                        
+                        for (var i = 2; i < count; i++) {
+                            //must add waypoints in specific format as shwon below
+                            waypts.push({
+                              location: {lat: stops[i][0], lng: stops[i][1]},
+                              stopover: true
+
+                            });
+                        }
+                        
+                        //part of API which determines route. Origin and dest self explanitory. Have optimise set to false as want waypoints visited in order
+                        directionsService.route({
+                          origin: {lat: stops[1][0], lng: stops[1][1]},
+                          destination: {lat: stops[count][0], lng: stops[count][1]},
+                          waypoints: waypts,
+                          optimizeWaypoints: false,
+                          travelMode: 'DRIVING'
+
+                        },
+                    
+                        function(response, status) {
+                          if (status === 'OK') {
+                            directionsDisplay.setDirections(response);
+                            var route = response.routes[0];
+                          } 
+                          else {
+                            window.alert('Directions request failed due to ' + status);
+                          }
+                        });
+                        
+                        //need to provide new map in order for directions to be rendered. Usually done in init_Map function but must be here as is called by button
+                        var Dublin = {lat: 53.3351, lng: -6.2493};
+                        directionsDisplay.setMap(new google.maps.Map(
+                            document.getElementById('map'), {zoom: 10, center: Dublin}));
+                    }
+                </script>
                     <!--Load the API from the specified URL
                     * The async attribute allows the browser to render the page while the API loads
                     * The key parameter will contain your own API key (which is not needed for this tutorial)
@@ -221,6 +270,10 @@
                 sub();
             });
         });
+            
+        /*Function responsible for taking the inputs on the page and providing them to the ann.py script. 
+
+        This in turn gives the expected travel time as well as the stops needed to get from origin to dest. Lat and long are also returned from ann.py */ 
         function sub()
             {
                 var start=$("#start").val();
@@ -243,20 +296,69 @@
             }
             
         function showRoutes(json){
+                /*
+                Function is in charge of presenting the results returned by ann.py as well as providing button for showing route on map
+                
+                ANN.py returns an estimated travel time as well as the the stops between origin and destination. This function presents the travel time to the user and 
+                also fills the globalJSON object with the lats and longs of all the stops for each route available. As ANN.py does not calculate for all routes yet, only those with
+                an estimated travle time are provided to the user. The button generated for the route also only shows for the routes with an estimated time.
+                
+                Reason for plotting all stops is because a bus route may not take the most straightforward route, therefore if origin and destination are the only waypoints then the given route will look very different to the actual route
+                */
                 var str='';
                 var findRoute=false;
-                for (var i in json) {
-                    if (parseInt(json[i]['traveltime'])>0){
-                        str+="<div class='route-div' style='border:#FFFFFF 1px ridge; margin-bottom:-14%; padding:0;'>"+"<div class='route-div-detail'><img src='/static/icon/bus.png'>"+json[i]['line']+'</div>'+'Next Bus: '+converToHour(parseInt(json[i]['pairarrtime'][0]))+'<br>'+'Time to Dest: '+Math.round(json[i]['traveltime']/60)+' min'+'</div><br>';
+                for (var i in json) { //for each of the routes returned by ann.py
+                    if (json[i]['locations']!= []){ //must ensure there are locations in order for them to be plotted
+                        var id = json[i]['line']; //route id
+                        var waypnts = []; //empty array for storing the lats and longs, will late be added to globalJSON object
+                        var data =  json[i]['locations'];
+                        var count = 0;
+                        for (item in data){ // need a count because google directions only accepts 15 waypoints
+                        }
+                        if(count > 15){
+                            //if over 15 points on map need to divide and skip stops, not ideal but more accurate than just origin/ dest
+                            var interval = Math.ceil((count-2)/13);
+                            var newcount = 0
+                            waypnts.push(data[0]); //first point
+                            for (x=interval-1; x<count; x+=interval){
+                                waypnts.push(data[x]);
+                                newcount ++;
+
+                            }
+                            waypnts.unshift(newcount); // count needs to be first for another function, unshift puts first in array
+                            waypnts.push(data[count-1]); //last stop naturally last in array
+
+                        }
+                        else{
+                            // if count not over 15 then just chuck 'em in the way they are
+                            waypnts.push(count);
+                            for (item in data){
+                                waypnts.push(data[item]);
+                            }  
+                        }
+                        var jsonObj = { 
+                            // add route id and list of stops to globalJSON obj in format below
+                            ['id'+id] : waypnts
+                        };
+                        globalJson['id'+id]=waypnts;
+
+                    }
+                    
+                    //If there is no travel time it means ann.py couldn't calculate one, these options will not be shown to user. 
+                    if (parseInt(json[i]['traveltime'])>0){ //display div with results and provide button to display route on map. Button also calls function
+                        var id = "id"+json[i]['line'];
+                        str+="<div  class='route-div' id='route-div' style='border:#FFFFFF 1px ridge; margin-bottom:-14%; padding:0;'>"+
+                        "<div class='route-div-detail' data-value = "+json[i]['line']+ "><img src='/static/icon/bus.png'>"+json[i]['line']+'</div>'+
+                        'Next Bus: '+converToHour(parseInt(json[i]['pairarrtime'][0]))+'<br>'+'Time to Dest: '+Math.round(json[i]['traveltime']/60)+' min'+'</div><br><input type = "button" value=Show onclick="calculateAndDisplayRoute(new google.maps.DirectionsService, new google.maps.DirectionsRenderer, \'' + id + '\')"/>';
                         findRoute=true;
                     }
+
                 }
-            
                 if (!findRoute)
                     str='No bus route!!'
 
                 return str;
-            }
+                }
             
         function converToHour(a){
                 var hours=parseInt(a/3600);
