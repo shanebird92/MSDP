@@ -17,3 +17,32 @@ div.ex2 {
     margin: auto;
     border: 3px solid #73AD21;
 }
+
+#largebox{
+    width:1800px;
+    height: 500px;
+    padding-top: 50px;
+    padding-left:10px;
+    padding-right:10px;
+}
+#box0 {
+    height: 400px;
+    width: 550px;
+    background-color: #FF0;
+    float:left;
+}
+
+#box1{
+    height: 400px;
+    width: 550px;
+    background-color: #0F0;
+    float:left;
+    margin-left: 25px;
+}
+#box2{
+    height: 400px;
+    width: 550px;
+    background-color: #F00;
+    float:left;
+    margin-left: 25px;
+}

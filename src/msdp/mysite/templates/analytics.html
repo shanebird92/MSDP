@@ -15,12 +15,12 @@
     			}
   		}
     	}
-      google.charts.load('current', {'packages':['corechart']});
-      var results = {{value|safe}};
-   
-      google.charts.setOnLoadCallback(function() { drawChart(results);});
-
-      //window.alert(arr_date);
+      function myFunction(tripid){
+        //alert("calling myfunction()");
+        str = '<H3>Loading data, this will take several mins, please wait...</h3>';
+        document.getElementById('box4').innerHTML = str;
+        form4_sub(tripid);
+	}
       function drawChart(results) {
           var i;
           for (i = 0; i < results.length; i++) {
@@ -49,49 +49,46 @@
       }
     </script>
 <script src="{% static "jquery-3.3.1.min.js" %}"></script>
-<script type="text/javascript">
- jQuery(document).ready(function($){
-	$('.scroll_top').click(function(){$('html,body').animate({scrollTop: '0px'}, 800);}); 
-	$('.scroll_a').click(function(){$('html,body').animate({scrollTop:$('.a').offset().top}, 800);});
-	$('.scroll_bottom').click(function(){$('html,body').animate({scrollTop:$('.bottom').offset().top}, 800);});
- });
-$('#goToBottom').click(function(){
-  var WH = $(window).height();  
-  var SH = $('body').prop("scrollHeight");
-  $('html, body').animate({
-    scrollTop: $('#endOfPage').offset().top
-  }, 1000);
-}); 
-</script>
-
-
 
 </head>
 <body>
 <div>
-<div class="header">
-</div>
-<div style="width:1200px; height: 1000px;">
+	<div class="header">
+	</div>
+	<div style="width:1200px; height: 1000px;">
 <script>
-
         var BusLine = '';
         var timeid = -1;
         var month = -1;
-function populateSelect() {
-        // THE JSON ARRAY.
-        var lines = {{Lines|safe}};
 
-        var ele = document.getElementById('sel');
-        for (var i = 0; i < lines.length; i++) {
-            // POPULATE SELECT ELEMENT WITH JSON.
-            ele.innerHTML = ele.innerHTML +
-                '<option value="' + lines[i]['lineid'] + '">' + lines[i]['lineid'] + '</option>';
-        }
-    }
-
-function populateSelect2() {
+	function populateSelect() {
         // THE JSON ARRAY.
-        var timeInterval = [
+        	var lines = {{Lines|safe}};
+
+       		var ele = document.getElementById('sel');
+        	for (var i = 0; i < lines.length; i++) {
+            		// POPULATE SELECT ELEMENT WITH JSON.
+            		ele.innerHTML = ele.innerHTML +
+                	'<option value="' + lines[i]['lineid'] + '">' + lines[i]['lineid'] + '</option>';
+        	}
+    	}
+	function populateSelect2() {
+        	var my_month = [{'value': 1, 'month':'JAN'},
+			{'value': 2, 'month':'FEB'},
+			{'value': 3, 'month':'MAR'},
+			{'value': 4, 'month':'APR'},
+			{'value': 5, 'month':'MAY'},
+			{'value': 6, 'month':'JUNE'}]
+        	var ele = document.getElementById('sel2');
+        	for (var i = 0; i < my_month.length; i++) {
+            	// POPULATE SELECT ELEMENT WITH JSON.
+            		ele.innerHTML = ele.innerHTML +
+                	'<option value="' + my_month[i]['value'] + '">' + my_month[i]['month'] + '</option>';
+        	}
+	}
+	function populateSelect3() {
+        	// THE JSON ARRAY.
+        	var timeInterval = [
 			{'clock': '00:00-01:00','id': 1},
 			{'clock': '01:00-02:00','id': 2},
 			{'clock': '02:00-03:00','id': 3},
@@ -117,127 +114,101 @@ function populateSelect2() {
 			{'clock': '23:00-24:00','id': 23}
 			];
 
-        var ele = document.getElementById('sel3');
-        for (var i = 0; i < timeInterval.length; i++) {
-            // POPULATE SELECT ELEMENT WITH JSON.
-            ele.innerHTML = ele.innerHTML +
-                '<option value="' + timeInterval[i]['id'] + '">' + timeInterval[i]['clock'] + '</option>';
-        }
-    }
- function myshow(ele, id) {
-        // GET THE SELECTED VALUE FROM <select> ELEMENT AND SHOW IT.
-        var msg = document.getElementById(id);
-        if (id == 'msg'){
-            msg.innerHTML = 'Selected Bus Line: <b>' + ele.options[ele.selectedIndex].text + '</b> </br>' +
-            '</b>';
-            BusLine = ele.options[ele.selectedIndex].value;
-	} else if (id == 'msg2') {
-            msg.innerHTML = 'Selected Month: <b>' + ele.options[ele.selectedIndex].text + '</b> </br>' +
-            '</b>';
-            month = ele.options[ele.selectedIndex].value;
-	} else if (id == 'msg3') {
-            msg.innerHTML = 'Selected Time Interval: <b>' + ele.options[ele.selectedIndex].text + '</b> </br>' +
-            '</b>';
-            timeid = ele.options[ele.selectedIndex].value;
-	}
-    }
+        	var ele = document.getElementById('sel3');
+        	for (var i = 0; i < timeInterval.length; i++) {
+            		// POPULATE SELECT ELEMENT WITH JSON.
+            		ele.innerHTML = ele.innerHTML +
+                	'<option value="' + timeInterval[i]['id'] + '">' + timeInterval[i]['clock'] + '</option>';
+        	}
+    	}
+	function myshow(ele, id) {
+        	// GET THE SELECTED VALUE FROM <select> ELEMENT AND SHOW IT.
+        	var msg = document.getElementById(id);
+        	if (id == 'msg'){
+            		msg.innerHTML = 'Selected Bus Line: <b>' + ele.options[ele.selectedIndex].text + '</b>';
+            		BusLine = ele.options[ele.selectedIndex].value;
+		} else if (id == 'msg2') {
+            		msg.innerHTML = 'Selected Month: <b>' + ele.options[ele.selectedIndex].text + '</b>';
+            		month = ele.options[ele.selectedIndex].value;
+		} else if (id == 'msg3') {
+            		msg.innerHTML = 'Selected Time Interval: <b>' + ele.options[ele.selectedIndex].text + '</b> </br>' +
+            		'</b>';
+            		timeid = ele.options[ele.selectedIndex].value;
+		}
+    	}
 
-function show(boxid)
-{ 
-  var box = document.getElementById(boxid); 
-  var text = box.innerHTML; 
-  var newBox = document.createElement("div"); 
-  var btn = document.createElement("a"); 
-  newBox.innerHTML = text.substring(0,20); 
-  btn.innerHTML = text.length > 20 ? "+" : ""; 
-  btn.href = "###"; 
-  btn.onclick = function(){ 
-    if(btn.innerHTML == "+")
-    { 
-      btn.innerHTML = "-"; 
-      newBox.innerHTML = text; 
-    }
-    else
-    { 
-      btn.innerHTML = "+"; 
-      newBox.innerHTML = text.substring(0,20); 
-    } 
-  } 
-  box.innerHTML = ""; 
-  box.appendChild(newBox); 
-  box.appendChild(btn); 
-} 
-window.onload=function()
-{
-  show('box'); 
-}
-
-$(function(){
+	var click_times = 0
+	$(function(){
             $(".form1").submit(function(evt){
                 var div1=document.getElementById("form1_notice");  
                 if(div1.style.display='none') div1.style.display='block';
                 evt.preventDefault();
                 form1_sub();
+                click_times = click_times + 1;
+                if (click_times == 1){
+                    var input_div=document.getElementById("selections");  
+                    input_div.style.display='none';
+                    var second_button=document.getElementById("second_button");  
+                    second_button.style.display='block';
+		}
             });
-            $(".form2").submit(function(evt){
+            $(".form4").submit(function(evt){
                 evt.preventDefault();
-                form2_sub();
-            });
-            $(".form3").submit(function(evt){
-                evt.preventDefault();
-                form3_sub();
+                form4_sub();
             });
         });
-function form1_sub()
+	function form1_sub()
             {
-                //var lineid=$("#sel").val();
                 var lineid = BusLine;
-                //var month=$("#sel2").val();
                 var my_month = month;
-                //var timeid=$("#sel3").val();
                 var timeInterval = timeid;
-                //alert(month + " " + lineid);
                 data_to_backend = {'LineId':lineid, 'Month': my_month, 'timeInterval': timeid}; 
                 $.post("/analytics_form_input/", data_to_backend, function(data){
                     //alert(data);
                     data=JSON.parse(data);
-                    str=showRoutes(data, 'form1');
+                    str = create_tables(data);
                     title = "<div><h3> Displaying Trip IDs </h3></div>";
                     document.getElementById('box').innerHTML = title + str;
-                    //document.getElementById('box').innerHTML = data;
                     show('box');
                 })
                 .fail(function() {
                     alert( "Connection fail, please refresh the website." );
                 });
-                
             }
-function form2_sub()
+
+	function create_tables(json){
+                    var str = '';
+                    str+="<div id='box'><table style='width:20%'>";
+                    if (json.length == 0) {
+ 			str+="No Found!";
+   		    } else {
+                    for (var i in json) {
+			    num = i % 20;
+                            if (num == 0){
+				str += "<tr>";
+				}
+                            str += "<th><button value='" + json[i] + "' onclick='myFunction(this.value); return false;' onchange='myFunction(this.value); return false;'>"+json[i]+"</button></th>";
+                            if (num == 19){
+				str += "</tr>";
+				}
+                    }}
+                    str+="</tr></table></div>";
+		    return str;
+		}
+
+	function form4_sub(tripid)
             {
-                var tripid=$("#tripid").val();
-                //alert(month + " " + lineid);
-                data_to_backend = {'tripid':tripid, 'month': month}; 
-                $.post("/analytics_get_available_days/", data_to_backend, function(data){
-                    //alert(data);
+                var my_month = month;
+                data_to_backend = {'tripid':tripid, 'month': my_month}; 
+                //alert("peng:"+tripid);
+                $.post("/analytics_get_arrivaltime/", data_to_backend, function(data){
                     data=JSON.parse(data);
-                    str=showRoutes(data, 'form2');
-                    document.getElementById('box2').innerHTML = str;
-                    show('box2');
-                })
-                .fail(function() {
-                    alert( "Connection fail, please refresh the website." );
-                });
-            }
-function form3_sub()
-            {
-                var lineid=$("#lineid").val();
-                data_to_backend = {'lineid':lineid}; 
-                $.post("/analytics_get_stoppointids/", data_to_backend, function(data){
-                    //alert(data);
-                    data=JSON.parse(data);
-                    str=showRoutes(data, 'form3');
-                    document.getElementById('box3').innerHTML = str;
-                    show('box3');
+                    results = data.value;
+                    str = showRoutes(data.chart_names, 'form4');
+                    document.getElementById('box4').innerHTML = str;
+   
+                    google.charts.load('current', {'packages':['corechart']});
+                    google.charts.setOnLoadCallback(function() { drawChart(results);});
                 })
                 .fail(function() {
                     alert( "Connection fail, please refresh the website." );
@@ -246,103 +217,57 @@ function form3_sub()
 
         function showRoutes(json, query_id){
                 var str='';
-                var findRoute=false;
                 if (query_id == 'form1'){
-                    str+="<div id='box'>"+'RES->' +'</div>'+'</div>';
+                    str+="<div id='box'>"+'</div>'+'</div>';
+                    if (json.length == 0) {
+ 			str+="No Found!";
+   		    } else {
                     for (var i in json) {
                             str+="<div id='box'>"+json[i]['TripId']+'</div>'+'</div>';
-                    }}
-                else if (query_id == 'form2'){
-                    all = json['days'];
-                    str+="<div id='box2'>"+'RES->' +'</div>'+'</div>';
-                    for (var i in all) {
-                            str+="<div id='box2'>"+all[i]+'</div>'+'</div>';
-                    }}
-                else if (query_id == 'form3'){
-                    json_a = json['direction_a'];
-                    json_b = json['direction_b'];
-                    str+="<div id='box3'>"+'RES->' +'</div>'+'</div>';
-                    str+="<div id='box3'>"+'Direction A:' +'</div>'+'</div>';
-                    for (var i in json_a) {
-                            str+="<div id='box3'>"+"&nbsp;station " + i + ": " + json_a[i]+'</div>'+'</div>';
-                    }
-                    str+="<div id='box3'>"+'Direction B:' +'</div>'+'</div>';
-                    for (var i in json_b) {
-                            str+="<div id='box3'>"+"&nbsp;station " + i + ": " + json_b[i]+'</div>'+'</div>';
-                    }}
+                    }}}
+               	    else if (query_id == 'form4'){
+			for (var i in json){
+                                var number = i % 3;
+                                if (number == 0){
+                                	str += "<div id='largebox'>";
+				}
+                                str += "<div id='box" + number + "'><div id='" + json[i] + "' style='width: 500px; height: 400px; margin-left: 25px'>" + json[i] + "</div></div>";
+				if (number == 2){
+					str += "</div>";
+				}
+			}}
                 return str;
             }
 
-
 </script>
 <form class="form1">
-<!--
-<p>
- <input type="button" 
-            style="margin:10px 0;font:14px Verdana;" 
-                onclick="populateSelect()" 
-                    value="Populate SELECT with JSON" />
-</p>
--->
-<select id="sel" onclick="populateSelect()" onchange="myshow(this, 'msg')">
-        <option value="">-- Bus Line --</option>
-    </select>
- <select id="sel2" onchange="myshow(this, 'msg2')">
-  <option value="1">JAN</option>
-  <option value="2">FEB</option>
-  <option value="3">MAR</option>
-  <option value="4">APR</option>
-  <option value="5">MAY</option>
-  <option value="6">JUNE</option>
-  <option selected>-- Month --</option>
-</select> 
-<select id="sel3" onclick="populateSelect2()" onchange="myshow(this, 'msg3')">
-        <option value="">-- Time Interval --</option>
-    </select>
-<input type="image" src="{% static "search-button.png" %}" alt="Submit" align="middle" width="48" height="48">
- <p id="msg"></p>
- <p id="msg2"></p>
- <p id="msg3"></p>
-<div id="box">
-Display all Trip IDs with given month (1-6) and Bus Lines (39A, 46A, etc.)
-<div id="form1_notice" style="display:none"> <h3> Please wait for a moment, querying ... </h3></div>
-</div>
+	<h3>Display all Trip IDs with given month (1-6) and Bus Lines (39A, 46A, etc.) </h3>
+	<div id='selections'>
+		<select id="sel" onclick="populateSelect()" onchange="myshow(this, 'msg')">
+        		<option value="">-- Bus Line --</option>
+    		</select>
+ 		<select id="sel2" onclick="populateSelect2()" onchange="myshow(this, 'msg2')">
+  			<option value="">-- Month --</option>
+		</select> 
+		<select id="sel3" onclick="populateSelect3()" onchange="myshow(this, 'msg3')">
+        		<option value="">-- Time Interval --</option>
+    		</select>
+		<input type="image" src="{% static "search-button.png" %}" alt="Submit" align="middle" width="48" height="48">
+	</div>
+	<input type="image" id="second_button" src="{% static "search-button.png" %}" alt="Submit" align="middle" width="48" height="48" style="display:none">
+ 	<div id="msg"></div>
+ 	<div id="msg2"></div>
+ 	<div id="msg3"></div>
+	<div id="box">
+		<div id="form1_notice" style="display:none"> <h3> Please wait for a moment, querying ... </h3></div>
+	</div>
 </form>
-<div>
-<form class="form2" style="display:none">
-  TripId:<input id="tripid" type="text" name="tripid"/>
-<input id="form2_button" type="image" src="{% static "search-button.png" %}" alt="Submit" align="middle" width="48" height="48">
-<div id="box2">
-</div>
-</form>
-</div>
-
-<div>
-<form class="form3" style="display:none">
-  LineId:<input id="lineid" type="text" name="lineid"/>
-<input id="form3_button" type="image" src="{% static "search-button.png" %}" alt="Submit" align="middle" width="48" height="48">
-<div id="box3">
-</div>
-</form>
-</div>
-
 
 <HR style="border:3 double #987cb9" width="100%" color=#987cb9 SIZE=3>
+<H3> Illustrate Line Charts for the bus performance in particular Trip ID </H3>
 <div>
-<form method="post" action="/analytics_get_arrivaltime/">
-  TripId:<input type="text" name="tripid"/>
-<input type="image" id="goToBottom"  src="{% static "search-button.png" %}" alt="Submit" align="middle" width="48" height="48">
-</form>
-    <table>
-        <tbody>
-            {% for chart_name in charts_names %}
-            	<div>{{chart_name}}</div>
-                <div id="{{chart_name}}" style="width: 900px; height: 500px"> </div>
-            {% endfor %}
-        </tbody>
-        <div id="showResult">{{arr_trip_id}}&nbsp;{{arr_date}}</div>
-    </table>
-</div>
+<h3 id="form4_notice"> </h3>
+<div id='box4'>
 </div>
 <div id="endOfPage">&nbsp;</div>
 </body>

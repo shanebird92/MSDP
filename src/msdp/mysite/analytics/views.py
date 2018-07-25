@@ -18,6 +18,7 @@ class Analytics(View):
         self.__users = None
         self.__my = sqlquery.Sqlquery()
         self.method = method
+        self.__month = 6
         self.__data_path = os.path.dirname(os.path.abspath(__file__)) + "/../../../../data"
 
     def get(self, request):
@@ -32,20 +33,22 @@ class Analytics(View):
             LineId = request.POST.get('LineId')
             Month = request.POST.get('Month')
             timeID = request.POST.get('timeInterval')
-
+            self.__month = Month
             #return HttpResponse([LineId, ":", Month, ":", timeInterval])
             results = self.__my.get_tripids_by_lineMonthTime(LineId, Month, timeID)
-            if len(results) == 0:
-                return self.get(request)
+            #if len(results) == 0:
+            #    return self.get(request)
             rows = []
-            count = 1
-            trips = []
+            #count = 1
+            #trips = []
+            #for result in results:
+            #    trips.append(result)
+            #    if count % 25 == 0 and count != 0:
+            #        rows.append({'TripId': trips})
+            #        trips = []
+            #    count += 1
             for result in results:
-                trips.append(result)
-                if count % 25 == 0 and count != 0:
-                    rows.append({'TripId': trips})
-                    trips = []
-                count += 1
+                rows.append(result)
             json_routes = json.dumps(rows)
             return HttpResponse(json_routes)
         elif self.method == 'get_lines':
@@ -88,8 +91,10 @@ class Analytics(View):
 
     def get_arrivaltime(self, request):
         TripId = request.POST.get('tripid','')
-        Date = request.POST.get('date','')
-        dates = self.__my.get_available_days_by_monthTripid(6, TripId)
+        Month = request.POST.get('month','')
+        #return HttpResponse([TripId, Month])
+        #Month = self.__month
+        dates = self.__my.get_available_days_by_monthTripid(Month, TripId)
         multipleLines = []
         columns = ['Station NO.', 'PlannedArrTime', 'ActualArrTime']
         new_dates = {}
@@ -111,9 +116,7 @@ class Analytics(View):
             line['arr_date'] = dates[i]
             line['chart_name'] = chart_names[i]
             results.append(line)
-        callbackValue = json.dumps(results)
-        return render(request, self.template_name, {
-            'value': callbackValue,
-            'charts_names': chart_names,
-            'arr_trip_id': TripId,
-            'arr_date': new_dates})
+        #callbackDict = [chart_names, TripId, new_dates, results]
+        callbackDict = {'chart_names': chart_names, 'arr_trip_id':TripId, 'arr_date':  new_dates, 'value': results}
+        json_data = json.dumps(callbackDict)
+        return HttpResponse(json_data)
