@@ -26,6 +26,10 @@
         
         <!-- Bootstrap CDN for JQuery, found on getbootstrap.com  -->    
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        
+        <link rel="stylesheet" href="//apps.bdimg.com/libs/jqueryui/1.10.4/css/jquery-ui.min.css">
+        <script src="//apps.bdimg.com/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script src="//apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
             
     </head>
     
@@ -197,7 +201,7 @@
                         <div class="form-group p-2">
                             <label for="date" class="text-white blockquote">Date:</label>
                             <span style="display:inline-block; width:2rem;"></span>
-                            <input type="date" id = "date"  class="float-none text-dark form-control">
+                            <input type="text" id = "datepicker"  class="float-none text-dark form-control">
                         </div> 
                            
                            
@@ -267,7 +271,7 @@
     <!-- Script Variables need to change or script will not work, class needs to change (maybe id or name?) @Dan Zhu -->
         <script>
         $(function(){
-            $(".bg-infoml-5").submit(function(evt){
+            $(".bg-infoml-2").submit(function(evt){
                 evt.preventDefault();
                 sub();
             });
@@ -280,7 +284,7 @@
             {
                 var start=$("#start").val();
                 var end=$("#destination").val();
-                var date=$("#date").val();
+                var date=$("#datepicker").val();
                 var time=$("#time").val();
                 var timenumber=time.split(":");
                 var seconds=Number(timenumber[0])*60*60 + Number(timenumber[1])*60;
@@ -364,6 +368,9 @@
                 }
             
         function converToHour(a){
+            
+                //Convert seconds to hours and minutes
+            
                 var hours=parseInt(a/3600);
                 var mins=parseInt((a-hours*3600)/60);
                 var time='';
@@ -376,9 +383,14 @@
                 return time;
         }
             
-        $(function(){    
-            $("#route-div-detail").bind("click",function(){
-                alert("Yes");
+            
+        $(function() {
+            
+            // Attributes of date time picker
+            
+            $( "#datepicker" ).datepicker({
+                changeMonth: true,
+                changeYear: true
             });
         });
 

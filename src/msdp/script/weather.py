@@ -25,7 +25,8 @@ class Weather:
         if len(forecastdate) == 0:
             return 0
         # calculate the time interval
-        y2,m2,d2 = forecastdate.split('-')
+        m2,d2,y2 = forecastdate.split('/')
+        print(y2,m2,d2)
         y1 = datetime.datetime.now().year
         m1 = datetime.datetime.now().month
         d1 = datetime.datetime.now().day
