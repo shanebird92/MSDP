@@ -3,6 +3,15 @@ body {
     background-size: cover;
 }
 
+#endOfPage {
+    background-color:black;
+    color:white;
+    clear:both;
+    text-align:center;
+    width:1700px;
+    padding:5px;
+}
+
 img {
     max-width: 100%;
     max-height: 100%;
@@ -51,3 +60,4 @@ div.ex2 {
     float:left;
     margin-left: 25px;
 }
+
