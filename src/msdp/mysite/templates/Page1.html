@@ -89,6 +89,22 @@
                     </ul>
                 
                 </div>
+                
+                <!-- Log in -->
+                <form class="log-in-form">
+                    <div class="log-in-div">
+                        <!-- Username -->
+                        <label for="Username"><font color="white">Username:</font></label>
+                        <input id="username" type = "text">
+                        
+                        <!-- Password -->
+                        <label for="Password"><font color="white">Password:</font></label>
+                        <input id="password" type = "password">
+                        
+                        <!-- Submit -->
+                        <button id="submitlog" value="Submit">Submit</button>
+                    </div>
+                </form>
             </div>
             
         </nav>
@@ -394,6 +410,40 @@
             });
         });
 
+            
+        $(function(){
+            
+            //Log in function for the button
+            
+            $(".log-in-form").submit(function(evt){
+                evt.preventDefault();
+                trylogin();
+            });
+        });
+            
+        function trylogin()
+            
+            //Check the username and the password, if ok, change to the second page;else alert wrong password
+            
+            {
+                var username=$("#username").val();
+                var password=$("#password").val();
+                data_to_backend = {'Username':username,'Password':password}; 
+
+                
+                $.post("/dublinbus/login/", data_to_backend, function(data){
+                    data=JSON.parse(data);
+                    if (data['info']=="Successful")
+                        window.location.href="/analytics";
+                    else
+                        alert(data['info']);
+
+                })
+                .fail(function() {
+                    alert( "Connection fail, please refresh the website." );
+                });
+                
+            }
         </script>
         
         <!-- Bootstrap CDN for Javascript, found on getbootstrap.com -->

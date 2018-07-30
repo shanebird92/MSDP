@@ -1,5 +1,6 @@
 from django.shortcuts import render, render_to_response
 from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 import requests, json
 
 # Create your views here.
@@ -53,6 +54,30 @@ def form_input(request):
         json_routes = json.dumps(routes)
         return HttpResponse(json_routes)
         #return render(request,'Page1.html',{'Routes':json.dumps(routes)})
+    else:
+        return 1
+
+@csrf_exempt
+def login(request): 
+    if request.method == 'POST':
+        username = request.POST.get('Username')
+        password = request.POST.get('Password')
+        res={}
+        if username=='MSDP' and password=='MSDP':
+            res['info']='Successful'
+        elif username!='MSDP':
+            res['info']='Wrong Username'
+        else:
+            res['info']='Wrong Password'
+           
+        json_res=json.dumps(res)
+        return HttpResponse(json_res)
+            
+        '''
+        json_routes = json.dumps(username)
+        return render(request,'analytics.html')
+        #return render(request,'Page1.html',{'Routes':json.dumps(routes)})
+        '''
     else:
         return 1
 
