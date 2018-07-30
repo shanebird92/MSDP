@@ -16,7 +16,8 @@ class Ann:
     @staticmethod
     def get_mean_timetable(df, start_location, target_time):
         df = df.drop(df.index[0]) 
-        station_column = '{}_P'.format(str(start_location).zfill(3))
+        # We need to use start_location+1 to map columns starting from 001_P to ...
+        station_column = '{}_P'.format(str(start_location+1).zfill(3))
         df = df[(df[station_column] >= target_time)]
         if df[station_column].count() == 0:
             # There's no suitable planned time found
@@ -78,8 +79,11 @@ class Ann:
                 stop_location = stops.index(endID)
             else:
                 return pred_report
+
+            # Get the list location of stop point ID in the stop list (starting from 0 to length-1)
             if startID in stops:
                 start_location = stops.index(startID)
+                #print("startID:{}, start_location:{}".format(startID, start_location))
             else:
                 return pred_report
 
@@ -351,7 +355,7 @@ def main():
     #my = Ann(328,1805,72000,0,1, DEBUG=True)
     #my = Ann(7162,328,36000,0,1,DEBUG=True)
     #my = Ann(1913, 776,36000,0,1,DEBUG=True)
-    my = Ann(7047, 1445,36000,0,1,DEBUG=True)
+    my = Ann(2007, 747,36000,0,1,DEBUG=True)
     #my = Ann(7047, 1445, 86600,0,1, DEBUG=True)
     #my = Ann(1913,1660,36900,1,0, DEBUG=True)
     for result in (my.get_all_prediction()):

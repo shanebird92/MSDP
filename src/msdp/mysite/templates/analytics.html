@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 {% load static %}
-<head>
+<head style="width:1800px">
+<img src="{% static "DataAnalyticsHeader.png" %}" alt="header" width="1800px" height="100px">
 <link rel="stylesheet" type="text/css" href="{% static "analytics.css" %}">
     <meta charset="UTF-8">
     <title>POST Params</title>
@@ -17,7 +18,7 @@
     	}
       function myFunction(tripid){
         //alert("calling myfunction()");
-        str = '<H3>Loading data, this will take several mins, please wait...</h3>';
+        str = '<h3 style="background-color: yellow;border-style: double; width:1800px">Loading data, this will take several mins, please wait...</h3>';
         document.getElementById('box4').innerHTML = str;
         form4_sub(tripid);
 	}
@@ -69,7 +70,7 @@
         	for (var i = 0; i < lines.length; i++) {
             		// POPULATE SELECT ELEMENT WITH JSON.
             		ele.innerHTML = ele.innerHTML +
-                	'<option value="' + lines[i]['lineid'] + '">' + lines[i]['lineid'] + '</option>';
+                	'<option style="font-size:40px" value="' + lines[i]['lineid'] + '">' + lines[i]['lineid'] + '</option>';
         	}
     	}
 	function populateSelect2() {
@@ -187,7 +188,7 @@
                             if (num == 0){
 				str += "<tr>";
 				}
-                            str += "<th><button value='" + json[i] + "' onclick='myFunction(this.value); return false;' onchange='myFunction(this.value); return false;'>"+json[i]+"</button></th>";
+                            str += "<th><button style='background-color: green;color: white' value='" + json[i] + "' onclick='myFunction(this.value); return false;' onchange='myFunction(this.value); return false;'>"+json[i]+"</button></th>";
                             if (num == 19){
 				str += "</tr>";
 				}
@@ -240,16 +241,16 @@
             }
 
 </script>
-<form class="form1">
-	<h3>Display all Trip IDs with given month (1-6) and Bus Lines (39A, 46A, etc.) </h3>
-	<div id='selections'>
-		<select id="sel" onclick="populateSelect()" onchange="myshow(this, 'msg')">
+<form style="background-color: yellow;border-style: double; width:1800px" class="form1">
+	<h3>&nbsp; Display all Trip IDs with given month (1-6) and Bus Lines (39A, 46A, etc.) </h3>
+	<div id='selections'> &nbsp;
+		<select  style="height:50px;font:inherit" id="sel" onclick="populateSelect()" onchange="myshow(this, 'msg')">
         		<option value="">-- Bus Line --</option>
     		</select>
- 		<select id="sel2" onclick="populateSelect2()" onchange="myshow(this, 'msg2')">
+ 		<select style="height:50px;font:inherit" id="sel2" onclick="populateSelect2()" onchange="myshow(this, 'msg2')">
   			<option value="">-- Month --</option>
 		</select> 
-		<select id="sel3" onclick="populateSelect3()" onchange="myshow(this, 'msg3')">
+		<select style="height:50px;font:inherit" id="sel3" onclick="populateSelect3()" onchange="myshow(this, 'msg3')">
         		<option value="">-- Time Interval --</option>
     		</select>
 		<input type="image" src="{% static "search-button.png" %}" alt="Submit" align="middle" width="48" height="48">
@@ -263,8 +264,12 @@
 	</div>
 </form>
 
+<div style="background-color: yellow;border-style: double; width:1800px">
+<!--
 <HR style="border:3 double #987cb9" width="100%" color=#987cb9 SIZE=3>
-<H3> Illustrate Line Charts for the bus performance in particular Trip ID </H3>
+-->
+<H3>&nbsp; Illustrate Line Charts for the bus performance in particular Trip ID </H3>
+</div>
 <div>
 <h3 id="form4_notice"> </h3>
 <div id='box4'>
