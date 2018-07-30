@@ -292,6 +292,13 @@
                 sub();
             });
         });
+           
+        //Show the default date: today
+        var today=new Date();
+        var submitTime=(today.getMonth()+1)+'/'+today.getDate()+'/'+today.getFullYear(); 
+        var mytime=today.getHours()+':'+today.getMinutes();
+        $("#datepicker").attr('value',submitTime)
+        $("#time").attr('value',mytime)
             
         /*Function responsible for taking the inputs on the page and providing them to the ann.py script. 
 
