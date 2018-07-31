@@ -2,7 +2,7 @@
 <html lang="en">
 {% load static %}
 <head style="width:1700px">
-<img src="{% static "DataAnalyticsHeader.png" %}" alt="header" width="1700px" height="100px">
+<img src="{% static "DataAnalyticsHeader.png" %}" style="border-style: double; border-color: yellow" alt="header" width="1700px" height="100px">
 <link rel="stylesheet" type="text/css" href="{% static "analytics.css" %}">
     <meta charset="UTF-8">
     <title>POST Params</title>
@@ -18,7 +18,7 @@
     	}
       function myFunction(tripid){
         //alert("calling myfunction()");
-        str = '<h3 style="background-color: lightyellow;border-style: double; width:1700px">&nbsp;Loading data, this will take several mins, please wait...</h3>';
+        str = '<h3 style="background-color: yellow;border-style: double; width:1700px">&nbsp;Loading data, this will take several mins, please wait...</h3>';
         document.getElementById('box4').innerHTML = str;
         form4_sub(tripid);
 	}
@@ -132,7 +132,7 @@
             		msg.innerHTML = '&nbsp;Selected Month: <b>' + ele.options[ele.selectedIndex].text + '</b>';
             		month = ele.options[ele.selectedIndex].value;
 		} else if (id == 'msg3') {
-            		msg.innerHTML = '&nbsp;Selected Time Interval: <b>' + ele.options[ele.selectedIndex].text + '</b> </br>' +
+            		msg.innerHTML = '&nbsp;Selected Time Interval: <b>' + ele.options[ele.selectedIndex].text + '</b></br>' +
             		'</b>';
             		timeid = ele.options[ele.selectedIndex].value;
 		}
@@ -168,7 +168,7 @@
                     //alert(data);
                     data=JSON.parse(data);
                     str = create_tables(data);
-                    title = "<div><h3> &nbsp;Displaying Trip IDs </h3></div>";
+                    title = "<div><h3 style='color:white'> &nbsp;Displaying Trip IDs </h3></div>";
                     document.getElementById('box').innerHTML = title + str;
                     show('box');
                 })
@@ -241,8 +241,8 @@
             }
 
 </script>
-<form style="background-color: yellow;border-style: double; width:1700px" class="form1">
-	<h3>&nbsp; Display all Trip IDs with given month (1-6) and Bus Lines (39A, 46A, etc.) </h3>
+<form style="background-color: blue;border-style: double; border-color: yellow; width:1700px" class="form1">
+	<h3 style="color:white">&nbsp; Display all Trip IDs with given month (1-6) and Bus Lines (39A, 46A, etc.) </h3>
 	<div id='selections'> &nbsp;
 		<select  style="height:50px;font:inherit" id="sel" onclick="populateSelect()" onchange="myshow(this, 'msg')">
         		<option value="">-- Bus Line --</option>
@@ -256,11 +256,11 @@
 		<input type="image" src="{% static "search-button.png" %}" alt="Submit" align="middle" width="48" height="48">
 	</div>
 	<input type="image" id="second_button" src="{% static "search-button.png" %}" alt="Submit" align="middle" width="48" height="48" style="display:none">
- 	<div id="msg"></div>
- 	<div id="msg2"></div>
- 	<div id="msg3"></div>
+ 	<div style="color:white" id="msg"></div>
+ 	<div style="color:white" id="msg2"></div>
+ 	<div style="color:white" id="msg3"></div>
 	<div id="box">
-		<div id="form1_notice" style="display:none"> <h3> Please wait for a moment, querying ... </h3></div>
+		<div id="form1_notice" style="display:none; color:white"> <h3> &nbsp;Please wait for a moment, querying ... </h3></div>
 	</div>
 </form>
 
