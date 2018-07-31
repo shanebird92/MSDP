@@ -7,6 +7,12 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'Page1.css' %}" />
 
+<link href="{% static 'easy-autocomplete/dist/easy-autocomplete.min.css'%}" rel="stylesheet" type="text/css">
+<script src="{% static 'easy-autocomplete/lib/jquery-1.11.2.min.js'%}"></script>
+<script src="{% static 'easy-autocomplete/dist/jquery.easy-autocomplete.min.js'%}" type="text/javascript" ></script>
+    <script>
+        var autoComp = jQuery.noConflict();
+    </script>
 
     <head>
         
@@ -206,12 +212,53 @@
                             <label for="start" class="text-white blockquote">Start:</label>
                             <input id="start" type="text" class="float-none text-dark form-control" placeholder="Start Bus Stop ID">
                         </div>
+                         
+                         <script>
+
+                            var options = {
+                                url: "{% static 'AutoComp.json' %}",
+
+                                getValue: "name",
+
+                                list: {
+                                    match: {
+                                        enabled: true
+                                    }
+                                }
+                            };
+
+                            autoComp("#start").easyAutocomplete(options);
+
+                        </script>
+                         
+                         
                                 
                         <!-- Destination -->
                         <div class="form-group p-2">
                             <label for="destination" class="text-white blockquote" >Destination:</label>
                             <input id="destination" type = "text" class="float-none text-dark form-control" placeholder="Destination Bus Stop ID">
                         </div>
+                         <script>
+
+                            var options = {
+                                url: "{% static 'AutoComp.json' %}",
+
+                                getValue: "name",
+
+                                list: {
+                                    match: {
+                                        enabled: true
+                                    }
+                                }
+                            };
+
+
+                            autoComp("#destination").easyAutocomplete(options);
+
+                        </script>
+                         
+                         
+                         
                                
                         <!-- Date -->
                         <div class="form-group p-2">
@@ -305,8 +352,10 @@
         This in turn gives the expected travel time as well as the stops needed to get from origin to dest. Lat and long are also returned from ann.py */ 
         function sub()
             {
-                var start=$("#start").val();
-                var end=$("#destination").val();
+                var name = $('#start').val();
+                var start = name.substring(0,name.indexOf(":"));
+                var dest = $('#destination').val();
+                var end = dest.substring(0,dest.indexOf(":"));
                 var date=$("#datepicker").val();
                 var time=$("#time").val();
                 var timenumber=time.split(":");
