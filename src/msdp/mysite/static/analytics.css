@@ -3,12 +3,18 @@ body {
     background-size: cover;
 }
 
+div.relative {
+    position: relative;
+    left: 100px;
+    border: 3px solid #73AD21;
+}
+
 #endOfPage {
     background-color:black;
     color:white;
     clear:both;
     text-align:center;
-    width:1700px;
+    width: 1000px;
     padding:5px;
 }
 
@@ -33,30 +39,27 @@ div.ex2 {
 }
 
 #largebox{
-    width:1800px;
-    height: 500px;
+    width:950px;
+    height: 315px;
     padding-top: 50px;
     padding-left:10px;
     padding-right:10px;
 }
 #box0 {
-    height: 400px;
-    width: 550px;
-    background-color: #FF0;
+    height: 310px;
+    width: 410px;
     float:left;
 }
 
 #box1{
-    height: 400px;
-    width: 550px;
-    background-color: #0F0;
+    height: 310px;
+    width: 410px;
     float:left;
     margin-left: 25px;
 }
 #box2{
-    height: 400px;
-    width: 550px;
-    background-color: #F00;
+    height: 310px;
+    width: 410px;
     float:left;
     margin-left: 25px;
 }

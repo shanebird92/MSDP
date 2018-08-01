@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 {% load static %}
-<head style="width:1700px">
-<img src="{% static "DataAnalyticsHeader.png" %}" style="border-style: double; border-color: yellow" alt="header" width="1700px" height="100px">
+<head style="width:1050px">
+<!--
+<img src="{% static "DataAnalyticsHeader.png" %}" style="border-style: double; border-color: yellow" alt="header" width="1050px" height="100px">
+-->
 <link rel="stylesheet" type="text/css" href="{% static "analytics.css" %}">
+<link href="{% static 'easy-autocomplete/dist/easy-autocomplete.min.css'%}" rel="stylesheet" type="text/css">
     <meta charset="UTF-8">
     <title>POST Params</title>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -18,7 +21,7 @@
     	}
       function myFunction(tripid){
         //alert("calling myfunction()");
-        str = '<h3 style="background-color: yellow;border-style: double; width:1700px">&nbsp;Loading data, this will take several mins, please wait...</h3>';
+        str = '<h3 style="background-color: blue;color: white; width:1050px">&nbsp;Loading data, this will take several mins, please wait...</h3>';
         document.getElementById('box4').innerHTML = str;
         form4_sub(tripid);
 	}
@@ -56,7 +59,7 @@
 <div>
 	<div class="header">
 	</div>
-	<div style="width:1200px; height: 1000px;">
+	<div style="width:1050px; height: 1050px;">
 <script>
         var BusLine = '';
         var timeid = -1;
@@ -184,12 +187,12 @@
  			str+="No Found!";
    		    } else {
                     for (var i in json) {
-			    num = i % 20;
+			    num = i % 14;
                             if (num == 0){
 				str += "<tr>";
 				}
                             str += "<th><button style='background-color: green;color: white' value='" + json[i] + "' onclick='myFunction(this.value); return false;' onchange='myFunction(this.value); return false;'>"+json[i]+"</button></th>";
-                            if (num == 19){
+                            if (num == 14){
 				str += "</tr>";
 				}
                     }}
@@ -228,12 +231,12 @@
                     }}}
                	    else if (query_id == 'form4'){
 			for (var i in json){
-                                var number = i % 3;
+                                var number = i % 2;
                                 if (number == 0){
                                 	str += "<div id='largebox'>";
 				}
-                                str += "<div id='box" + number + "'><div id='" + json[i] + "' style='width: 500px; height: 400px; margin-left: 25px; border-style: double'>" + json[i] + "</div></div>";
-				if (number == 2){
+                                str += "<div id='box" + number + "'><div id='" + json[i] + "' style='height: 300px; width:420px; margin-left: 5px; border-style: double'>" + json[i] + "</div></div>";
+				if (number == 1){
 					str += "</div>";
 				}
 			}}
@@ -241,7 +244,8 @@
             }
 
 </script>
-<form style="background-color: blue;border-style: double; border-color: yellow; width:1700px" class="form1">
+<div class="relative" align="center">
+<form style="background-color: blue;border-style: double; border-color: yellow; width:1050px" class="form1">
 	<h3 style="color:white">&nbsp; Display all Trip IDs with given month (1-6) and Bus Lines (39A, 46A, etc.) </h3>
 	<div id='selections'> &nbsp;
 		<select  style="height:50px;font:inherit" id="sel" onclick="populateSelect()" onchange="myshow(this, 'msg')">
@@ -264,16 +268,13 @@
 	</div>
 </form>
 
-<div style="background-color: yellow;border-style: double; width:1700px">
+<div id='box4' style="background-color: blue;border-style: double; border-color: yellow; width:1050px">
 <!--
 <HR style="border:3 double #987cb9" width="100%" color=#987cb9 SIZE=3>
 -->
-<H3>&nbsp; Illustrate Line Charts for the bus performance in particular Trip ID </H3>
+<H3 style="color: white">&nbsp; Illustrate Line Charts for the bus performance in particular Trip ID </H3>
 </div>
-<div>
-<div id='box4'>
 </div>
 </body>
-<div id="endOfPage">&nbsp; Copyright © uceconnect.ie</div>
 
 </html>
