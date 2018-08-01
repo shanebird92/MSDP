@@ -17,13 +17,16 @@ from django.contrib import admin
 from django.urls import path, re_path
 from django.conf.urls import include, url
 import analytics.views as AnalyticsViews
+from django.views.generic.base import TemplateView
 
 urlpatterns = [
+    path('', TemplateView.as_view(template_name='home.html'), name='home'),
     path('admin/', admin.site.urls),
     path('dublinbus/', include('dublinbus.urls')),
-    path('analytics/', AnalyticsViews.Analytics.as_view()),
+    path('analytics/', AnalyticsViews.Analytics.as_view(), name='analytics'),
     path('analytics_form_input/', AnalyticsViews.Analytics.as_view(method='form_input')),
     path('analytics_get_available_days/', AnalyticsViews.Analytics.as_view(method='get_days')),
     path('analytics_get_arrivaltime/', AnalyticsViews.Analytics.as_view(method='get_arrivaltime')),
     path('analytics_get_stoppointids/', AnalyticsViews.Analytics.as_view(method='get_stoppointids')),
+    path('accounts/', include('django.contrib.auth.urls')),
 ]

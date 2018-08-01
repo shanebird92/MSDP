@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static "analytics.css" %}">
+<link href="{% static 'easy-autocomplete/dist/easy-autocomplete.min.css'%}" rel="stylesheet" type="text/css">
+<body>
+<div class="relative" align="center" style="background-color: blue; color: white; width: 450px; border-style:double; border-color:yellow">
+<h2>Login</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button class="btn btn-primary text-light" type="submit"><strong>Login</strong></button>
+</form>
+</div>
+</body>
+{% endblock %}

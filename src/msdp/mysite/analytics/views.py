@@ -8,6 +8,7 @@ from msdp.script import sqlquery
 import simplejson as json
 from django.views.decorators.csrf import csrf_exempt,csrf_protect
 import os
+from django.conf import settings
 
 # Create your views here.
 class Analytics(View):
@@ -20,13 +21,17 @@ class Analytics(View):
         self.method = method
         self.__month = 6
         self.__data_path = os.path.dirname(os.path.abspath(__file__)) + "/../../../../data"
+        settings.SESSION_SAVE_EVERY_REQUEST = True
 
     def get(self, request):
         lines_json = "{}/lines.json".format(self.__data_path)
         json_data=open(lines_json).read()
         lines = json.loads(json_data)
 
-        return render(request, self.template_name, {'Lines': json.dumps(lines)})
+        if request.user.is_authenticated:
+            return render(request, self.template_name, {'Lines': json.dumps(lines)})
+        else:
+            return render(request, "Quatro10/demo1.html")
 
     def post(self, request):
         if self.method == 'form_input':
