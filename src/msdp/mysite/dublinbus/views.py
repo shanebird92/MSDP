@@ -57,27 +57,28 @@ def form_input(request):
     else:
         return 1
 
-@csrf_exempt
-def login(request): 
-    if request.method == 'POST':
-        username = request.POST.get('Username')
-        password = request.POST.get('Password')
-        res={}
-        if username=='MSDP' and password=='MSDP':
-            res['info']='Successful'
-        elif username!='MSDP':
-            res['info']='Wrong Username'
-        else:
-            res['info']='Wrong Password'
+# Comment it at the morment bacause we don't need it any more
+#@csrf_exempt
+#def login(request): 
+#    if request.method == 'POST':
+#        username = request.POST.get('Username')
+#        password = request.POST.get('Password')
+#        res={}
+#        if username=='MSDP' and password=='MSDP':
+#            res['info']='Successful'
+#        elif username!='MSDP':
+#            res['info']='Wrong Username'
+#        else:
+#            res['info']='Wrong Password'
            
-        json_res=json.dumps(res)
-        return HttpResponse(json_res)
+#        json_res=json.dumps(res)
+#        return HttpResponse(json_res)
             
         '''
         json_routes = json.dumps(username)
         return render(request,'analytics.html')
         #return render(request,'Page1.html',{'Routes':json.dumps(routes)})
         '''
-    else:
-        return 1
+#    else:
+#        return 1
 

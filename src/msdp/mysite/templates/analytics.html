@@ -11,6 +11,7 @@
     <title>POST Params</title>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
+      // sleep function
       function sleep(milliseconds) {
   	var start = new Date().getTime();
   	for (var i = 0; i < 1e7; i++) {
@@ -19,12 +20,15 @@
     			}
   		}
     	}
+      // this function will be involved by trip ID buttons
+      // and it will call form4_sub()
       function myFunction(tripid){
         //alert("calling myfunction()");
         str = '<h3 style="background-color: blue;color: white; width:1050px">&nbsp;Loading data, this will take several mins, please wait...</h3>';
         document.getElementById('box4').innerHTML = str;
         form4_sub(tripid);
 	}
+      // This function is to draw charts with the given results
       function drawChart(results) {
           var i;
           for (i = 0; i < results.length; i++) {
@@ -56,15 +60,62 @@
 
 </head>
 <body>
+        <!-- Navigation Bar -->
+        <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+            
+            <div class="container">
+            
+               <a style="color:white" href="http://137.43.49.51:8000/dublinbus/" class="navbar-brand"><h1>DublinBus</h1></a> 
+                
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                
+                    <ul class=navbar-nav ml-auto>
+                    
+                        <li id="plemx-root" class="nav-item">
+                         
+                            
+                            <a href="http://www.theweathernetwork.com">The Weather Network</a>
+                            <script type="text/javascript"> 
+
+                              var _plm = _plm || [];
+                              _plm.push(['_btn', 82501]); 
+                              _plm.push(['_loc','eixx0014']);
+                              _plm.push(['location', document.location.host ]);
+                               (function(d,e,i) {
+                              if (d.getElementById(i)) return;
+                              var px = d.createElement(e);
+                              px.type = 'text/javascript';
+                              px.async = true;
+                              px.id = i;
+                              px.src = ('https:' == d.location.protocol ? 'https:' : 'http:') + '//widget.twnmm.com/js/btn/pelm.js?orig=en_ca';
+                              var s = d.getElementsByTagName('script')[0];
+
+                              var py = d.createElement('link');
+                              py.rel = 'stylesheet'
+                              py.href = ('https:' == d.location.protocol ? 'https:' : 'http:') + '//widget.twnmm.com/styles/btn/styles.css'
+
+                              s.parentNode.insertBefore(px, s);
+                              s.parentNode.insertBefore(py, s);
+                            })(document, 'script', 'plmxbtn');
+                            
+                            </script>
+
+                        
+                        </li>
+                    
+                    </ul>
+                
+                </div>
+</nav>
+                
 <div>
-	<div class="header">
-	</div>
-	<div style="width:1050px; height: 1050px;">
-<script>
+<div style="width:1050px; height: 1050px;">
+    <script>
         var BusLine = '';
         var timeid = -1;
         var month = -1;
 
+        // First selection for bus line
 	function populateSelect() {
         // THE JSON ARRAY.
         	var lines = {{Lines|safe}};
@@ -76,6 +127,7 @@
                 	'<option style="font-size:40px" value="' + lines[i]['lineid'] + '">' + lines[i]['lineid'] + '</option>';
         	}
     	}
+        // Second selection for month
 	function populateSelect2() {
         	var my_month = [{'value': 1, 'month':'JAN'},
 			{'value': 2, 'month':'FEB'},
@@ -90,6 +142,7 @@
                 	'<option value="' + my_month[i]['value'] + '">' + my_month[i]['month'] + '</option>';
         	}
 	}
+        // Third selection for time interval
 	function populateSelect3() {
         	// THE JSON ARRAY.
         	var timeInterval = [
@@ -125,6 +178,7 @@
                 	'<option value="' + timeInterval[i]['id'] + '">' + timeInterval[i]['clock'] + '</option>';
         	}
     	}
+        // Display the selected items from selections
 	function myshow(ele, id) {
         	// GET THE SELECTED VALUE FROM <select> ELEMENT AND SHOW IT.
         	var msg = document.getElementById(id);
@@ -142,6 +196,7 @@
     	}
 
 	var click_times = 0
+        // listen action events
 	$(function(){
             $(".form1").submit(function(evt){
                 var div1=document.getElementById("form1_notice");  
@@ -149,6 +204,7 @@
                 evt.preventDefault();
                 form1_sub();
                 click_times = click_times + 1;
+                // Hide some information on the page after first clicking on searching button
                 if (click_times == 1){
                     var input_div=document.getElementById("selections");  
                     input_div.style.display='none';
@@ -161,6 +217,7 @@
                 form4_sub();
             });
         });
+        // display message on form1
 	function form1_sub()
             {
                 var lineid = BusLine;
@@ -179,7 +236,7 @@
                     alert( "Connection fail, please refresh the website." );
                 });
             }
-
+        // Create trip IDs click buttons after querying from Mysql DB
 	function create_tables(json){
                     var str = '';
                     str+="<div id='box'><table style='width:20%'>";
@@ -199,7 +256,7 @@
                     str+="</tr></table></div>";
 		    return str;
 		}
-
+        // Get query information of arrival times and call drawChart() to draw charts
 	function form4_sub(tripid)
             {
                 var my_month = month;
@@ -208,7 +265,7 @@
                 $.post("/analytics_get_arrivaltime/", data_to_backend, function(data){
                     data=JSON.parse(data);
                     results = data.value;
-                    str = showRoutes(data.chart_names, 'form4');
+                    str = showForms(data.chart_names, 'form4');
                     document.getElementById('box4').innerHTML = str;
    
                     google.charts.load('current', {'packages':['corechart']});
@@ -218,8 +275,8 @@
                     alert( "Connection fail, please refresh the website." );
                 });
             }
-
-        function showRoutes(json, query_id){
+        // show contents on forms
+        function showForms(json, query_id){
                 var str='';
                 if (query_id == 'form1'){
                     str+="<div id='box'>"+'</div>'+'</div>';
