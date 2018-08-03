@@ -41,6 +41,7 @@
           var data = google.visualization.arrayToDataTable(arrtime_data);
           var options = {
             title: 'Trip ' + arr_tripid + ' Performance on ' + arr_date,
+            //backgroundColor: 'deepskyblue',
             curveType: 'function',
             legend: { position: 'bottom' },
             hAxis: {
@@ -124,7 +125,7 @@
         	for (var i = 0; i < lines.length; i++) {
             		// POPULATE SELECT ELEMENT WITH JSON.
             		ele.innerHTML = ele.innerHTML +
-                	'<option style="font-size:40px" value="' + lines[i]['lineid'] + '">' + lines[i]['lineid'] + '</option>';
+                	'<option value="' + lines[i]['lineid'] + '">' + lines[i]['lineid'] + '</option>';
         	}
     	}
         // Second selection for month
@@ -248,7 +249,7 @@
                             if (num == 0){
 				str += "<tr>";
 				}
-                            str += "<th><button style='background-color: green;color: white' value='" + json[i] + "' onclick='myFunction(this.value); return false;' onchange='myFunction(this.value); return false;'>"+json[i]+"</button></th>";
+                            str += "<th><button style='background-color: darkblue;color: white' value='" + json[i] + "' onclick='myFunction(this.value); return false;' onchange='myFunction(this.value); return false;'>"+json[i]+"</button></th>";
                             if (num == 14){
 				str += "</tr>";
 				}
@@ -305,13 +306,13 @@
 <form style="background-color: blue;border-style: double; border-color: yellow; width:1050px" class="form1">
 	<h3 style="color:white">&nbsp; Display all Trip IDs with given month (1-6) and Bus Lines (39A, 46A, etc.) </h3>
 	<div id='selections'> &nbsp;
-		<select  style="height:50px;font:inherit" id="sel" onclick="populateSelect()" onchange="myshow(this, 'msg')">
+		<select  style="height:50px;font:inherit; font-size:20px; padding: 5px;" id="sel" onclick="populateSelect()" onchange="myshow(this, 'msg')">
         		<option value="">-- Bus Line --</option>
     		</select>
- 		<select style="height:50px;font:inherit" id="sel2" onclick="populateSelect2()" onchange="myshow(this, 'msg2')">
+ 		<select style="height:50px;font:inherit; font-size:20px; padding: 5px;" id="sel2" onclick="populateSelect2()" onchange="myshow(this, 'msg2')">
   			<option value="">-- Month --</option>
 		</select> 
-		<select style="height:50px;font:inherit" id="sel3" onclick="populateSelect3()" onchange="myshow(this, 'msg3')">
+		<select style="height:50px;font:inherit; font-size:20px; padding: 5px;" id="sel3" onclick="populateSelect3()" onchange="myshow(this, 'msg3')">
         		<option value="">-- Time Interval --</option>
     		</select>
 		<input type="image" src="{% static "search-button.png" %}" alt="Submit" align="middle" width="48" height="48">
