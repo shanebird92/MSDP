@@ -4,7 +4,7 @@ sys.path.append('../src/msdp/')
 from script import sqlquery
 
 class TestSqlquery(unittest.TestCase):
-    __skips = [4,5]
+    __skips = []
     def setUp(self):
         #print("do something before test.Prepare environment.")
         self.__my = sqlquery.Sqlquery()

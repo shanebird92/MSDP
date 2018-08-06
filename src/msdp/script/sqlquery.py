@@ -116,7 +116,6 @@ class Sqlquery:
             count += 1
             rows.append(str(row[0]))
             row = x.fetchone()
-        print("{} rows.".format(count))
         self.__conn.commit()
         x.close()       
         return rows
@@ -137,7 +136,6 @@ class Sqlquery:
             count += 1
             rows.append(str(row[0]))
             row = x.fetchone()
-        print("{} rows.".format(count))
         self.__conn.commit()
         x.close()       
         return rows
@@ -282,18 +280,19 @@ def main():
     #array = my.get_lines_by_tripid('5012600')
     #array = my.get_lines_by_tripid('4335079')
     #array = my.get_lines_by_month('6')
-    #array = my.get_tripids_by_lineMonthTime('39A', 1, 13)
+    array = my.get_tripids_by_lineMonthTime('116', 2, 10)
     #array = my.get_available_days_by_monthTripid(1, 5002343)
     #print(len(array))
     #print(len(array))
     #array = my.get_available_days_by_month(5)
-    array = my.get_available_days_by_line_and_month('39A', 6)
+    #array = my.get_available_days_by_line_and_month('39A', 6)
     #array = my.get_available_days_by_tripid_and_month('5012600', 6)
     #array = my.get_available_days_by_tripid('5012600')
     #my.get_data_from_tripid_and_date(5117245, '2017-06-01')
     #array = my.get_arrivaltime_from_tripid_and_date(5012600, '2017-06-02')
     #array = my.get_arrivaltime_from_tripid_and_date(4591857, '2017-05-12')
-    #array = my.get_stoppointid_by_line('39A', 1)
+    #array = my.get_stoppointid_by_line('145', 1)
+    array = my.get_stoppointid_by_line('39A', 1)
     #array = my.get_ontime_times_from_line('39A')
     #array = my.get_stoppointid_by_line('45A', 2)
     #print(sorted(array.items()))

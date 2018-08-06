@@ -9,24 +9,24 @@ class TestWeather(unittest.TestCase):
     def setUp(self):
         #print("do something before test.Prepare environment.")
         yesterday = datetime.today() + timedelta(-1)
-        y_date = str(yesterday.year) + '-' + \
-                     str(yesterday.month).zfill(2) + '-' + \
-                         str(yesterday.day).zfill(2)
+        y_date = str(yesterday.month).zfill(2) + '/' + \
+                     str(yesterday.day).zfill(2) + '/' + \
+                         str(yesterday.year)
 
         today = datetime.today()
-        tod_date = str(today.year) + '-' + \
-                       str(today.month).zfill(2) + '-' + \
-                           str(today.day).zfill(2)
+        tod_date = str(today.month).zfill(2) + '/' + \
+                       str(today.day).zfill(2) + '/' + \
+                           str(today.year)
 
         tomorrow = datetime.today() + timedelta(+1)
-        tom_date = str(tomorrow.year) + '-' + \
-                       str(tomorrow.month).zfill(2) + '-' + \
-                           str(tomorrow.day).zfill(2)
+        tom_date = str(tomorrow.month).zfill(2) + '/' + \
+                       str(tomorrow.day).zfill(2) + '/' + \
+                           str(tomorrow.year)
 
         weeks_later = datetime.today() + timedelta(+7)
-        w_date = str(weeks_later.year) + '-' + \
-                     str(weeks_later.month).zfill(2) + '-' + \
-                         str(weeks_later.day).zfill(2)
+        w_date = str(weeks_later.month).zfill(2) + '/' + \
+                     str(weeks_later.day).zfill(2) + '/' + \
+                         str(weeks_later.year)
 
         self.test_list = {-1:y_date,
                            0:tod_date,

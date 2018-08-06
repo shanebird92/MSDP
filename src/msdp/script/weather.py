@@ -26,7 +26,6 @@ class Weather:
             return 0
         # calculate the time interval
         m2,d2,y2 = forecastdate.split('/')
-        print(y2,m2,d2)
         y1 = datetime.datetime.now().year
         m1 = datetime.datetime.now().month
         d1 = datetime.datetime.now().day
@@ -67,7 +66,7 @@ class Weather:
 def main():
     # Temporary testing
     my = Weather(DEBUG=True)
-    for mydate in ['2018-07-19', '2018-07-20','2018-07-21','2018-07-22', '2018-07-23']:
+    for mydate in ['07/19/2018', '07/20/2018','07/21/2018','07/22/2018', '07/23/2018']:
         weather = my.get_weather_info(mydate)
         print("day {}: rain: {}, sun:{}".format(mydate, weather[0], weather[1]))
 

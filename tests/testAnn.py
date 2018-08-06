@@ -83,9 +83,9 @@ class TestAnn(unittest.TestCase):
 
         self.__debug and print("Checking all keys are in returning dictionary")
 
-    def test_006(self):
+    def test_004(self):
         '''
-            test_006 assertion: input invalid target clock time and other valid values
+            test_004 assertion: input invalid target clock time and other valid values
             to expect returning startTime with -1 from ann.py
 	'''
         for t in [-10,86500]:
@@ -97,9 +97,9 @@ class TestAnn(unittest.TestCase):
         self.__debug and print("Checking '39A' setting up Time with "
                                "invalid inputting target clock time")
 
-    def test_007(self):
+    def test_005(self):
         '''
-            test_007 assertion: input valid target clock time but not suitable for planned time
+            test_005 assertion: input valid target clock time but not suitable for planned time
             table for particular bug Line to expect returning startTime with -1 from ann.py
 	'''
         t = 36000
