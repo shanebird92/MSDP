@@ -31,7 +31,7 @@ class Analytics(View):
         if request.user.is_authenticated:
             return render(request, self.template_name, {'Lines': json.dumps(lines)})
         else:
-            return render(request, "Quatro10/demo1.html")
+            return render(request, "404.html")
 
     def post(self, request):
         if self.method == 'form_input':

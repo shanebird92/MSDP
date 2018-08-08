@@ -1,12 +1,12 @@
 body {
     background-image: url(./img/backgroundimg.jpg);
+    background-color: #24ff24;
     background-size: cover;
 }
 
 div.relative {
     position: relative;
-    left: 100px;
-    border: 3px solid #73AD21;
+    left: 120px;
 }
 
 #endOfPage {
@@ -19,6 +19,8 @@ div.relative {
 }
 
 img {
+    opacity:0.5;
+    filter:alpha(opacity=50); /* 针对 IE8 以及更早的版本 */
     max-width: 100%;
     max-height: 100%;
 }
