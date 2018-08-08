@@ -97,7 +97,7 @@ class Ann:
                     locations.append([])
             pred_report['locations'] = locations
             # Make sure the sequence from start to stop is in logical order
-            if stop_location <= start_location:
+            if stop_location < start_location:
                 if self.__debug:
                     print("WARNING: Reversed sequence from A to B in line {}".format(line))
                 pred_report['travelTime'] = -1
@@ -115,7 +115,7 @@ class Ann:
             if len(plannedTimeArray) == 0:
                 if self.__debug:
                     print("WARNING: No approprate planned Time Table found!")
-                pred_report['travelTime'] = -1
+                pred_report['travelTime'] = -2
                 return pred_report
                 
             inputFeatures = []
@@ -351,11 +351,12 @@ def main():
     print(my.prediction('39'))
     '''
     #my = Ann(769,1913,36000,1,0, DEBUG=True)
+    my = Ann(1913,1913,36000,1,0, DEBUG=True)
     #my = Ann(328,7162,72000, 0,1, DEBUG=True)
     #my = Ann(328,1805,72000,0,1, DEBUG=True)
     #my = Ann(7162,328,36000,0,1,DEBUG=True)
     #my = Ann(1913, 776,36000,0,1,DEBUG=True)
-    my = Ann(2007, 747,36000,0,1,DEBUG=True)
+    #my = Ann(2007, 747,36000,0,1,DEBUG=True)
     #my = Ann(7047, 1445, 86600,0,1, DEBUG=True)
     #my = Ann(1913,1660,36900,1,0, DEBUG=True)
     for result in (my.get_all_prediction()):
