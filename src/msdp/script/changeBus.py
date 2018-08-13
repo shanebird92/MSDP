@@ -3,7 +3,7 @@ import csv, json
 import pandas as pd
 import requests
 import urllib
-from ann import Ann
+from msdp.script import ann, weather
 
 
 class ChangeBus:
@@ -230,7 +230,7 @@ class ChangeBus:
         targettime = self.__targettime
         rain = self.__rain
         sun = self.__sun
-        my = Ann(int(startID),int(stopID),targettime,rain,sun, DEBUG=self.__debug)
+        my = ann.Ann(int(startID),int(stopID),targettime,rain,sun, DEBUG=self.__debug)
         solutions = my.get_all_prediction()
         if len(solutions) == 0:
             return False
@@ -244,7 +244,7 @@ class ChangeBus:
         rain = self.__rain
         sun = self.__sun
         isAvailable = False
-        my1 = Ann(int(startID),int(stopID),targettime,rain,sun, DEBUG=self.__debug)
+        my1 = ann.Ann(int(startID),int(stopID),targettime,rain,sun, DEBUG=self.__debug)
         solution1 = my1.get_all_prediction()
         if len(solution1) == 0:
             return False
@@ -253,7 +253,7 @@ class ChangeBus:
                 if solution['travelTime'] > 0:
                     isAvailable = True
                     break
-        my2 = Ann(int(secondStartID),int(secondStopID),targettime,rain,sun, DEBUG=self.__debug)
+        my2 = ann.Ann(int(secondStartID),int(secondStopID),targettime,rain,sun, DEBUG=self.__debug)
         solution2 = my1.get_all_prediction()
         if len(solution2) == 0:
             return False
@@ -373,7 +373,7 @@ class ChangeBus:
                 continue
             # First Line
             solution['firstLineTransferStop'] = int(first_endID)
-            my1 = Ann(int(first_startID),int(first_endID),targettime,rain,sun, DEBUG=self.__debug)
+            my1 = ann.Ann(int(first_startID),int(first_endID),targettime,rain,sun, DEBUG=self.__debug)
             my1_results = my1.get_all_prediction()
             solution['firstLines'] = []
             for result in my1_results:
@@ -386,7 +386,7 @@ class ChangeBus:
       
             # Second Line
             solution['secondLineTransferStop'] = int(second_startID)
-            my2 = Ann(int(second_startID),int(second_endID),targettime,rain,sun, DEBUG=self.__debug)
+            my2 = ann.Ann(int(second_startID),int(second_endID),targettime,rain,sun, DEBUG=self.__debug)
             my2_results = my2.get_all_prediction()
             solution['secondLines'] = []
             for result in my2_results:
@@ -425,7 +425,7 @@ class ChangeBus:
         solution = {}
         # First Line
         solution['firstLineTransferStop'] = int(first_endID)
-        my1 = Ann(int(first_startID),int(first_endID),targettime,rain,sun, DEBUG=self.__debug)
+        my1 = ann.Ann(int(first_startID),int(first_endID),targettime,rain,sun, DEBUG=self.__debug)
         my1_results = my1.get_all_prediction()
         solution['firstLines'] = []
         for result in my1_results:
@@ -436,7 +436,7 @@ class ChangeBus:
         
         # Second Line
         solution['secondLineTransferStop'] = int(second_startID)
-        my2 = Ann(int(second_startID),int(second_endID),targettime,rain,sun, DEBUG=self.__debug)
+        my2 = ann.Ann(int(second_startID),int(second_endID),targettime,rain,sun, DEBUG=self.__debug)
         my2_results = my2.get_all_prediction()
         solution['secondLines'] = []
         for result in my2_results:
@@ -465,6 +465,32 @@ class ChangeBus:
                 return False
         return True
         
+
+    def getFinalRoute(self):
+        '''
+            Return the possible solution routes, which will search routes based on
+            following strategy:
+            1. Walk from station A to somewhere (assume station B)
+            2. Take a bus from station B and get off on somewhere (assume station C)
+            3. Walk from station C to somewhere (assume station D)
+            4. Take the second bus from station D and get off on somewhere (assume station E)
+            5. Walk from station E to station F
+        '''
+        startID = self.__startid
+        endID = self.__endid
+        #route = [[1913,1908,335,7591,1751,1728],0.038,0.229,0.029]
+        pairedStations = "{},{}".format(startID, endID)
+        if pairedStations in self.__solutionRoutes:
+            route = self.__solutionRoutes[pairedStations]
+            startTime = time.time()
+            solutions = self.dataSearchRoute(route)
+            stopTime = time.time()
+        else:
+            # Enhanced algorithm
+            startTime = time.time()
+            solutions = self.getCloserRoute()
+            stopTime = time.time()
+        return solutions[0]
 
     def showRoute(self):
         '''
@@ -503,28 +529,29 @@ class ChangeBus:
             print("*** Walk {} KM from {} to {} to arrive dest".format(solution[6], solution[4], solution[5]))
             print("====="*5)
         print("Algorithm 2 Running Time: {} seconds".format(round(stopTime-startTime,3)))
-        print("======="*5)
-        print(solutions)
+        #print("======="*5)
+        #print(solutions)
         
 def main():
     # failed: 2,6
-    # passed: 1,3,4,5,7,8,9,10,12,13
-    test_id = 11
-    testplate = [[342,1913],
-                 [768,4056],
-                 [877,7612],
+    # passed: 1,3,4,5,7,8,9,10,11,12,13,14
+    test_id = 15
+    testplate = [[342, 1913],
+                 [768, 4056],
+                 [877, 7612],
                  [2048, 4978],
                  [1913, 1728],
                  [1913, 187],
-                 [877,7612],
-                 [768,4550],
-                 [768,7266],
-                 [768,37],
-                 [768,3665],
+                 [877, 7612],
+                 [768, 4550],
+                 [768, 7266],
+                 [768, 37],
+                 [768, 3665],
                  [768, 7149],
-                 [768,2557],
+                 [768, 2557],
                  [1642, 3198],
-                 [4568, 1018]]
+                 [4568, 1018],
+                 [776,3898]]
 
     # mode can be 'fast' or 'normal'
     mode = 'fast'

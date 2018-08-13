@@ -38,7 +38,6 @@ def form_input(request):
         my = weather.Weather()
         [rain, sun] = my.get_weather_info(forecastdate)
 
-        # testcase: start = 1913, end = 1660
         my = ann.Ann(start, end, mytime, rain, sun)
         results = my.get_all_prediction()
         routes = []
@@ -57,28 +56,34 @@ def form_input(request):
     else:
         return 1
 
-# Comment it at the morment bacause we don't need it any more
-#@csrf_exempt
-#def login(request): 
-#    if request.method == 'POST':
-#        username = request.POST.get('Username')
-#        password = request.POST.get('Password')
-#        res={}
-#        if username=='MSDP' and password=='MSDP':
-#            res['info']='Successful'
-#        elif username!='MSDP':
-#            res['info']='Wrong Username'
-#        else:
-#            res['info']='Wrong Password'
-           
-#        json_res=json.dumps(res)
-#        return HttpResponse(json_res)
-            
-        '''
-        json_routes = json.dumps(username)
-        return render(request,'analytics.html')
-        #return render(request,'Page1.html',{'Routes':json.dumps(routes)})
-        '''
-#    else:
-#        return 1
+@csrf_exempt
+def transfer_form_input(request): 
+    if request.method == 'POST':
+        start = int(request.POST.get('Start'))
+        end = int(request.POST.get('End'))
+        mytime = int(request.POST.get('Time'))
+        forecastdate = request.POST.get('Date')
+        
+        # By default: rain is 0, sun is 0 
+        my = weather.Weather()
+        [rain, sun] = my.get_weather_info(forecastdate)
+        # Get solution for transferring-buses
+        my = changeBus.ChangeBus(start, end, mytime, rain, sun)
+        solution = my.getFinalRoute()
+        route = {}
+        route['walk1_startID'] = solution[0]
+        route['walk1_endID'] = solution[1]
+        route['walk1_distance'] = solution[2]
+        route['lineA'] = solution[3][0]
+        route['middle_walk_startID'] = solution[3][0]['firstLineTransferStop']
+        route['middle_walk_endID'] = solution[3][0]['secondLineTransferStop']
+        route['middle_walk_distance'] = solution[3][0]['transferDistance']
+        route['lineB'] = solution[3][0]['secondLines']
+        route['walk2_startID'] = solution[4]
+        route['walk2_endID'] = solution[5]
+        route['walk2_distance'] = solution[6]
 
+        json_routes = json.dumps(routes)
+        return HttpResponse(json_routes)
+    else:
+        return 1
