@@ -7,7 +7,7 @@ from msdp.script import ann, weather
 
 
 class ChangeBus:
-    def __init__(self, startID, endID, targetTime, rain, sun, DEBUG=False, MODE='fast', SN=3):
+    def __init__(self, startID, endID, targetTime, rain, sun, DEBUG=False, MODE='fast', SN=1):
         self.__data_path = os.path.dirname(os.path.abspath(__file__)) + "/../../../data"
         self.__startid = startID
         self.__endid = endID
