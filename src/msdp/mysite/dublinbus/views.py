@@ -83,7 +83,7 @@ def transfer_form_input(request):
         route['walk2_endID'] = solution[5]
         route['walk2_distance'] = solution[6]
 
-        json_routes = json.dumps(routes)
-        return HttpResponse(json_routes)
+        json_route = json.dumps(route)
+        return HttpResponse(json_route)
     else:
         return 1
