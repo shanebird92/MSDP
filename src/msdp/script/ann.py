@@ -40,6 +40,7 @@ class Ann:
         pred_report['pairStops'] = []
         pred_report['pairArrTime'] = []
         pred_report['locations'] = []
+        pred_report['isFileExist'] = True
 
         startID = self.__startid
         endID = self.__endid
@@ -68,6 +69,7 @@ class Ann:
             except Exception as e:
                 if self.__debug:
                     print("WARNING: Line {} {}".format(line, str(e)))
+                pred_report['isFileExist'] = False
                 return pred_report
 
             stops = []
@@ -139,6 +141,7 @@ class Ann:
         except Exception as e:
             if self.__debug:
                 print("WARNING: Line {} {}".format(line, str(e)))
+            pred_report['isFileExist'] = False
             return pred_report
         inputFeatures.append(self.__sun)
         inputFeatures.append(self.__rain)
@@ -180,6 +183,7 @@ class Ann:
         pred_report['pairStops'] = []
         pred_report['pairArrTime'] = []
         pred_report['locations'] = []
+        pred_report['isFileExist'] = True
 
         startID = self.__startid
         endID = self.__endid
@@ -201,6 +205,7 @@ class Ann:
         except Exception as e:
             if self.__debug:
                 print("WARNING: Line {} {}".format(line, str(e)))
+            pred_report['isFileExist'] = False
             return 0
 
         stops_a = []
@@ -286,6 +291,7 @@ class Ann:
         except Exception as e:
             if self.__debug:
                 print("WARNING: Line {} {}".format(line, str(e)))
+            pred_report['isFileExist'] = False
             return pred_report
         inputFeatures = []
         for i in range(station_number):
@@ -359,6 +365,8 @@ def main():
     #my = Ann(2007, 747,36000,0,1,DEBUG=True)
     #my = Ann(7047, 1445, 86600,0,1, DEBUG=True)
     #my = Ann(1913,1660,36900,1,0, DEBUG=True)
+    print(my.get_all_prediction())
+    print()
     for result in (my.get_all_prediction()):
         print(result)
     #print(my.new_prediction('39A', '0'))
