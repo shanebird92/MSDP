@@ -333,7 +333,7 @@ class ChangeBus:
                               int(sorted_end_stops[j]),
                               int(sorted_end_stops[0])],
                               round(sorted_start_distance[i],3),
-                              solutions[0]['transferDistance'],
+                              round(solutions[0]['transferDistance'],3),
                               round(sorted_end_distance[j],3)]
                   
                     ret = self.updateData(key, value)
@@ -518,6 +518,7 @@ class ChangeBus:
             stopTime = time.time()
 
         for solution in solutions:
+            print("====="*5)
             print("*** Walk {} KM from {} to {} to get Line A".format(solution[2], solution[0], solution[1]))
             print("Line A:")
             print("\t {}".format(solution[3][0]['firstLines']))
@@ -527,14 +528,11 @@ class ChangeBus:
             print("Line B:")
             print("\t {}".format(solution[3][0]['secondLines']))
             print("*** Walk {} KM from {} to {} to arrive dest".format(solution[6], solution[4], solution[5]))
-            print("====="*5)
         print("Algorithm 2 Running Time: {} seconds".format(round(stopTime-startTime,3)))
-        #print("======="*5)
-        #print(solutions)
         
 def main():
     # failed: 2,6
-    # passed: 1,3,4,5,7,8,9,10,11,12,13,14
+    # passed: 0, 1,3,4,5,7,8,9,10,11,12,13,14
     test_id = 15
     testplate = [[342, 1913],
                  [768, 4056],
@@ -561,8 +559,9 @@ def main():
     # Maxinum number of solutions
     sn = 1
 
-    my = ChangeBus(testplate[test_id][0], testplate[test_id][1], 36000, 1, 0, DEBUG=debug, MODE=mode, SN=sn)
-    my.showRoute()
+    for i in [0,1,3,4,5,7,8,9,10,11,12,13,14,15]:
+        my = ChangeBus(testplate[i][0], testplate[i][1], 36000, 1, 0, DEBUG=debug, MODE=mode, SN=sn)
+        my.showRoute()
     #print(my.findOppositeLine())
     #print(my.getRoute())
     #print(my.getRoute2())
