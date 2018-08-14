@@ -345,21 +345,16 @@
         var mytime=today.getHours()+':'+today.getMinutes();
         $("#datepicker").attr('value',submitTime)
         $("#time").attr('value',mytime)
+ 
             
         /*Function responsible for taking the inputs on the page and providing them to the ann.py script. 
 
         This in turn gives the expected travel time as well as the stops needed to get from origin to dest. Lat and long are also returned from ann.py */ 
         function sub()
             {
-                var name = $('#start').val();
-                var start = name.substring(0,name.indexOf(":"));
-                var dest = $('#destination').val();
-                var end = dest.substring(0,dest.indexOf(":"));
-                var date=$("#datepicker").val();
-                var time=$("#time").val();
-                var timenumber=time.split(":");
-                var seconds=Number(timenumber[0])*60*60 + Number(timenumber[1])*60;
-                data_to_backend = {'Start':start,'End':end,'Time':seconds,'Date':date}; 
+                //Send the user input to the backend
+                
+                data_to_backend=getInput(); 
 
                 $.post("/dublinbus/form_input/", data_to_backend, function(data){
                     data=JSON.parse(data);
@@ -371,6 +366,22 @@
                 });
                 
             }
+            
+        function getInput(){
+            
+                //Function which collect the user input
+            
+                var name = $('#start').val();
+                var start = name.substring(0,name.indexOf(":"))
+                var dest = $('#destination').val();
+                var end = dest.substring(0,dest.indexOf(":"));
+                var date=$("#datepicker").val();
+                var time=$("#time").val();
+                var timenumber=time.split(":");
+                var seconds=Number(timenumber[0])*60*60 + Number(timenumber[1])*60;
+                var data_to_backend = {'Start':start,'End':end,'Time':seconds,'Date':date};
+                return data_to_backend;
+        }
             
         function showRoutes(json){
                 /*
@@ -432,12 +443,39 @@
                     }
 
                 }
+            
+                // If there is no direct route, ask users if they need transfer plan
                 if (!findRoute)
-                    str='No bus route!!'
+                    str='No direct bus route.'+'<br>'+"<a onclick='getTransfer();'><u>Try Transfer</u></a>";
 
                 return str;
                 }
+        
+        function getTransfer(){
             
+            // Call transfer algorithm to give transfer plan
+
+                data_to_backend=getInput();
+
+                $.post("/dublinbus/transfer_form_input/", data_to_backend, function(data){
+                    data=JSON.stringify(data);
+                    str=showTransfer(data);
+                    document.getElementById('routes').innerHTML = str;
+                })
+                .fail(function() {
+                    alert( "Connection fail, please refresh the website." );
+                });
+                
+            }
+
+        
+        function showTransfer(json){
+            
+            //Show transfer results
+            var str=json;
+            return str;
+        }
+
         function converToHour(a){
             
                 //Convert seconds to hours and minutes
@@ -466,15 +504,6 @@
         });
 
             
-        $(function(){
-            
-            //Log in function for the button
-            
-            $(".log-in-form").submit(function(evt){
-                evt.preventDefault();
-                trylogin();
-            });
-        });
             
 	//Comment it because we don't need it any more
         //function trylogin()
