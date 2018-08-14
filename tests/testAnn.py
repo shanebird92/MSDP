@@ -8,13 +8,16 @@ class TestAnn(unittest.TestCase):
         self.__debug = False
 
     def tearDown(self):
-        #print("do something after test.Clean up.")
         pass
 
     def test_001(self):
         '''
             test_001 assertion: input valid start&stop IDs, clocktime, rain, sun
             to expect the return values from ann.py
+	    Scenario:
+		1. input startPoint=328, stopPoint=7162, targetTime=72000, rain=0
+                   and sun=1
+                2. Verify '39A' is found as a route line
         '''
         my = ann.Ann(328,7162,72000, 0,1)
         result_list = my.get_all_prediction()      
@@ -31,6 +34,9 @@ class TestAnn(unittest.TestCase):
         '''
             test_002 assertion: input reserved start&stop IDs and other valid values
             to expect returning travelTime with -1 from ann.py
+            Scenario:
+                1. input startPoint=7047, stopPoint=1445, targetTime=36000, rain=0 and sun=1
+                2. Verify travelTime is -1,which represents that this is a reserved line of 39A
         '''
         my = ann.Ann(7047, 1445, 36000,0,1)
         result_list = my.get_all_prediction()
@@ -53,6 +59,15 @@ class TestAnn(unittest.TestCase):
     def test_003(self):
         '''
             test_003 assertion: Verify all keys are in returning dictionary
+            Scenario:
+		1. input startPoint=1913, endStops = 1660, targetTime=36900, rain=1 and sun=0
+                2. Verify return dictionary include the following keys:
+			- startTime
+			- line
+			- pairArrTime
+			- pairStops
+			- locations
+			- isFileExist
         '''
         my = ann.Ann(1913,1660,36900,1,0)
         check_list = ['startTime',
@@ -60,7 +75,7 @@ class TestAnn(unittest.TestCase):
                       'line',
                       'pairArrTime',
                       'pairStops',
-                      'locations']
+                      'locations', 'isFileExist']
         results = my.get_all_prediction()
         for result in results:
             for key in check_list:
@@ -87,6 +102,10 @@ class TestAnn(unittest.TestCase):
         '''
             test_004 assertion: input invalid target clock time and other valid values
             to expect returning startTime with -1 from ann.py
+            Scenario:
+		1. input targetTime with -10 and 86500
+                2. Verify returned 'startTime' = -1, which represents the targetTime is out
+                   range of a day (0 - 86400)
 	'''
         for t in [-10,86500]:
             my = ann.Ann(7047, 1445,t,0,1)
@@ -100,13 +119,17 @@ class TestAnn(unittest.TestCase):
     def test_005(self):
         '''
             test_005 assertion: input valid target clock time but not suitable for planned time
-            table for particular bug Line to expect returning startTime with -1 from ann.py
+            table for particular bus Line to expect returning startTime with -2 from ann.py
+            Scenario:
+                1. input startPoint=769, endPoint=776, targetTime=36000, rain=0 and sun=1
+		2. Check line 145,116 and 7B have returned 'travelTime' = -2, which represent that
+                   they don't have available travel time table
 	'''
         t = 36000
         my = ann.Ann(769, 776,t,0,1)
         for line in ['145','116','7B']:
             result = my.new_prediction(line)
-            self.assertTrue(result['travelTime'] == -1,
+            self.assertTrue(result['travelTime'] == -2,
                             "FAIL: Checking travel Time with non-suitable planned Time Table "
                             "inputting target clock time ({}) in bus route {} list".format(t, line))
         self.__debug and print("Checking bus lines setting up Time with non-suitable"
@@ -114,8 +137,12 @@ class TestAnn(unittest.TestCase):
         
 
 if __name__ == '__main__':
-    #unittest.main()
+    # Select whole test cases into test plate
     suite = unittest.TestLoader().loadTestsFromTestCase(TestAnn)
+
+    # Select particular single test case into test plate
     #suite = unittest.TestSuite()
-    #suite.addTest(TestAnn("test_007"))
+    #suite.addTest(TestAnn("test_003"))
+
+    # Start to run test cases
     unittest.TextTestRunner(verbosity=2).run(suite)

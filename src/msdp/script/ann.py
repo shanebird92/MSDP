@@ -246,7 +246,7 @@ class Ann:
                 if self.__debug:
                     print("WARNING: Can not get mean planned "
                           "arrival time convering all stations from time table!")
-                pred_report['travelTime'] = -1
+                pred_report['travelTime'] = -2
                 return pred_report
 
         elif sequence_b > sequence_a and sequence_b > 0:
@@ -267,7 +267,7 @@ class Ann:
                 if self.__debug:
                     print("WARNING: Can not get mean planned "
                           "arrival time convering all stations from time table!")
-                pred_report['travelTime'] = -1
+                pred_report['travelTime'] = -2
                 return pred_report
 
         else:

@@ -279,9 +279,12 @@ def main():
     #array = my.get_tripids_by_line('39A', '1')
     #array = my.get_lines_by_tripid('5012600')
     #array = my.get_lines_by_tripid('4335079')
-    #array = my.get_lines_by_month('6')
-    array = my.get_tripids_by_lineMonthTime('116', 2, 10)
-    #array = my.get_available_days_by_monthTripid(1, 5002343)
+    #for i in range(1,7):
+    #    array = my.get_lines_by_month(str(i))
+    #    print(array)
+    #array = my.get_tripids_by_lineMonthTime('116', 2, 10)
+    array = my.get_available_days_by_monthTripid(1, 5002343)
+    print(array)
     #print(len(array))
     #print(len(array))
     #array = my.get_available_days_by_month(5)
@@ -292,11 +295,10 @@ def main():
     #array = my.get_arrivaltime_from_tripid_and_date(5012600, '2017-06-02')
     #array = my.get_arrivaltime_from_tripid_and_date(4591857, '2017-05-12')
     #array = my.get_stoppointid_by_line('145', 1)
-    array = my.get_stoppointid_by_line('39A', 1)
+    #array = my.get_stoppointid_by_line('39A', 1)
     #array = my.get_ontime_times_from_line('39A')
     #array = my.get_stoppointid_by_line('45A', 2)
     #print(sorted(array.items()))
-    print(array)
 
 if __name__ == '__main__':
     main()

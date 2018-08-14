@@ -7,7 +7,6 @@ from script import weather
 
 class TestWeather(unittest.TestCase):
     def setUp(self):
-        #print("do something before test.Prepare environment.")
         yesterday = datetime.today() + timedelta(-1)
         y_date = str(yesterday.month).zfill(2) + '/' + \
                      str(yesterday.day).zfill(2) + '/' + \
@@ -35,12 +34,16 @@ class TestWeather(unittest.TestCase):
         self.__debug = False
 
     def tearDown(self):
-        #print("do something after test.Clean up.")
         pass
 
     def test_001(self):
         '''
-            test_001 assertion: verify get_difference()
+            test_001 assertion: verify get_difference() with input date
+            expect the return value is the exact integer, comparing with the
+            current day
+            Scenario:
+                1. Input the date of yesterday, today, tomorrow and 1 week later  
+                2. Verify the returned values are -1, 0, 1, 7
         '''
         for day, test_date in self.test_list.items():
             result = weather.Weather.get_difference(test_date)      
@@ -52,6 +55,10 @@ class TestWeather(unittest.TestCase):
     def test_002(self):
         '''
             test_002 assertion: Verify get_weather_info() does work well
+            Scenario:
+		1. Input the date of yesterday, today, tomorrow and 1 week later
+                2. Verify the return list has 2 elements, where both of them are
+                   either 0 or 1
         '''
         my = weather.Weather()
         for day, test_date in self.test_list.items():
@@ -68,8 +75,12 @@ class TestWeather(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    #unittest.main()
+    # Select all test cases into testplate
     suite = unittest.TestLoader().loadTestsFromTestCase(TestWeather)
+
+    # Select particular single test case into testplate
     #suite = unittest.TestSuite()
     #suite.addTest(TestWeather("test_001"))
+
+    # Start to run tests
     unittest.TextTestRunner(verbosity=2).run(suite)
