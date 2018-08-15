@@ -458,7 +458,7 @@
                 data_to_backend=getInput();
 
                 $.post("/dublinbus/transfer_form_input/", data_to_backend, function(data){
-                    data=JSON.stringify(data);
+                    data=JSON.parse(data);
                     str=showTransfer(data);
                     document.getElementById('routes').innerHTML = str;
                 })
@@ -472,7 +472,14 @@
         function showTransfer(json){
             
             //Show transfer results
-            var str=json;
+            var str="<img src='/static/icon/bus.png'>"+json['lineA'][0]['line']+"<br>"+
+                    'Next Bus: '+converToHour(parseInt(json['lineA'][0]['startTime']))+'<br>'+
+                    'Time to Dest: '+Math.round(json['lineA'][0]['travelTime']/60)+' min'+'<br>'+
+                    "<br><img src='/static/icon/walk1.png'>"+json['middle_walk_distance']+'km'+"<br><br>"+
+                    "<img src='/static/icon/bus.png'>"+json['lineB'][0]['line']+'<br>'+
+                    'Next Bus: '+converToHour(parseInt(json['lineB'][0]['startTime']))+'<br>'+
+                    'Time to Dest: '+Math.round(json['lineB'][0]['travelTime']/60)+' min'+'<br>'
+                ;
             return str;
         }
 
