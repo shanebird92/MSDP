@@ -20,7 +20,7 @@ class TestSqlquery(unittest.TestCase):
 
     def test_001(self):
         '''
-            Verify get_tripids_by_line() with valid input months(1-6), expect
+            test_001 assertion: Verify get_tripids_by_line() with valid input months(1-6), expect
             getting a group of tripIDs
             Scenario:
 		1. input month from 1 to 6
@@ -38,7 +38,7 @@ class TestSqlquery(unittest.TestCase):
 
     def test_002(self):
         '''
-            Verify get_lines_by_tripid() with valid input tripid, expect getting
+            test_002 assertion: Verify get_lines_by_tripid() with valid input tripid, expect getting
             the exact bus line
 	    Scenario:
 		1. Input 2 tripds picking from Line 27 and Line 39A
@@ -54,7 +54,7 @@ class TestSqlquery(unittest.TestCase):
 
     def test_003(self):
         '''
-	    Verify get_lines_by_month() with valid input month, expect getting
+	    test_003 assertion: Verify get_lines_by_month() with valid input month, expect getting
             more than 120 lines as the query result
 	    Scenario:
 		1. Input months from 1 to 6 (one by one)
@@ -73,7 +73,7 @@ class TestSqlquery(unittest.TestCase):
                      "test_004 needs more than 5 minutes to run")
     def test_004(self):
         '''
-            Verify get_available_days_by_tripid() with a valid input tripid, expect
+            test_004 sertion: Verify get_available_days_by_tripid() with a valid input tripid, expect
             getting several available days (date time)
             Scenario:
                 1. Select an example tripid (5012600) as input value
@@ -89,7 +89,7 @@ class TestSqlquery(unittest.TestCase):
                      "test_005 needs more than 2 minutes to run")
     def test_005(self):
         '''
-            Verify get_available_days_by_month() with a particular month, expect
+            test_005 assertion: Verify get_available_days_by_month() with a particular month, expect
             getting serveral available days
             Scenario:
                 1. Input month from 1 to 6 (one by one)
@@ -107,7 +107,7 @@ class TestSqlquery(unittest.TestCase):
 
     def test_006(self):
         '''
-            verify get_available_days_by_tripid_and_month() with input month and tripid,
+            test_006 assertion: Verify get_available_days_by_tripid_and_month() with input month and tripid,
             expect getting available days list (date time)
 	    Scenario:
                 1. Input a particular tripID and month (from 1 to 6)
@@ -133,7 +133,7 @@ class TestSqlquery(unittest.TestCase):
 
     def test_007(self):
         '''
-            verify get_available_days_by_line_and_month() with input line and month,
+            test_007 assertion: Verify get_available_days_by_line_and_month() with input line and month,
             expect getting available days list (date time)
             Scenario:
                 1. Input a particular line and months from 1 to 6 (one by one)
@@ -156,7 +156,7 @@ class TestSqlquery(unittest.TestCase):
 
     def test_008(self):
         '''
-            verify get_arrivaltime_from_tripid_and_date() with input tripid and
+            test_008 assertion: Verify get_arrivaltime_from_tripid_and_date() with input tripid and
             particular data time, expect getting a list of arrival time
             Scenario:
                 1. Input particular tripID and a date
@@ -176,7 +176,7 @@ class TestSqlquery(unittest.TestCase):
 
     def test_009(self):
         '''
-            verify get_stoppointid_by_line() with input line, expect getting more than 
+            test_009 assertion: Verify get_stoppointid_by_line() with input line, expect getting more than 
             or equal available stops
             Scenario:
                 1. Input a set of lines
