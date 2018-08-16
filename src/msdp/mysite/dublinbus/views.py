@@ -9,7 +9,7 @@ from django.db import connections, transaction
 from django.views.decorators.csrf import csrf_exempt,csrf_protect
 
 # Import python modules
-from msdp.script import ann, weather
+from msdp.script import ann, weather, changeBus
 
 def myflush():
     # This works as advertised on the memcached cache:
@@ -74,7 +74,7 @@ def transfer_form_input(request):
         route['walk1_startID'] = solution[0]
         route['walk1_endID'] = solution[1]
         route['walk1_distance'] = solution[2]
-        route['lineA'] = solution[3][0]
+        route['lineA'] = solution[3][0]['firstLines']
         route['middle_walk_startID'] = solution[3][0]['firstLineTransferStop']
         route['middle_walk_endID'] = solution[3][0]['secondLineTransferStop']
         route['middle_walk_distance'] = solution[3][0]['transferDistance']
