@@ -36,6 +36,11 @@
         <link rel="stylesheet" href="//apps.bdimg.com/libs/jqueryui/1.10.4/css/jquery-ui.min.css">
         <script src="//apps.bdimg.com/libs/jquery/1.10.2/jquery.min.js"></script>
         <script src="//apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+        
+        
+        <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+	    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
             
     </head>
     
@@ -112,9 +117,9 @@
 		-->
             
                <a href="http://137.43.49.51:8000/accounts/login/" class="navbar-brand"> <strong>Data Analytics</strong> </a> 
+            </div>
+        
         </nav>
-        
-        
         
         <!-- Container -->
         <div id="containsAll" class="mt-5 pt-5">
@@ -323,11 +328,11 @@
     
             </div>
         
+          
         
         
+     
         
-        
-                
    <!-- End of Body, Script area -->         
     
     <!-- Script Variables need to change or script will not work, class needs to change (maybe id or name?) @Dan Zhu -->
@@ -446,7 +451,7 @@
             
                 // If there is no direct route, ask users if they need transfer plan
                 if (!findRoute)
-                    str='No direct bus route.'+'<br>'+"<a onclick='getTransfer();'><u>Try Transfer</u></a>";
+                    str='No direct bus route.'+'<br>'+"<a style='cursor:hand' onclick='getTransfer();'><u>Try Transfer</u></a>";
 
                 return str;
                 }
@@ -472,13 +477,15 @@
         function showTransfer(json){
             
             //Show transfer results
-            var str="<img src='/static/icon/bus.png'>"+json['lineA'][0]['line']+"<br>"+
+            var str='<div style="cursor:hand" onclick="isHidden(&quot;expand1&quot;)"><img src="/static/icon/bus.png">'+json['lineA'][0]['line']+'</div>'+
                     'Next Bus: '+converToHour(parseInt(json['lineA'][0]['startTime']))+'<br>'+
                     'Time to Dest: '+Math.round(json['lineA'][0]['travelTime']/60)+' min'+'<br>'+
+                    '<div id="expand1" style="display:none">隐藏的内容</div>'+
                     "<br><img src='/static/icon/walk1.png'>"+json['middle_walk_distance']+'km'+"<br><br>"+
-                    "<img src='/static/icon/bus.png'>"+json['lineB'][0]['line']+'<br>'+
+                    '<div style="cursor:hand" onclick="isHidden(&quot;div1&quot;)"><img src="/static/icon/bus.png">'+json['lineB'][0]['line']+'</div>'+
                     'Next Bus: '+converToHour(parseInt(json['lineB'][0]['startTime']))+'<br>'+
-                    'Time to Dest: '+Math.round(json['lineB'][0]['travelTime']/60)+' min'+'<br>'
+                    'Time to Dest: '+Math.round(json['lineB'][0]['travelTime']/60)+' min'+'<br>'           				
+
                 ;
             return str;
         }
@@ -536,6 +543,10 @@
             //    });
                 
             //}
+        function isHidden(oDiv){
+            var vDiv = document.getElementById(oDiv);
+            vDiv.style.display = (vDiv.style.display == 'none')?'block':'none';
+        }
         </script>
         
         <!-- Bootstrap CDN for Javascript, found on getbootstrap.com -->
