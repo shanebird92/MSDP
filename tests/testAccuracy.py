@@ -8,12 +8,13 @@ import random
 
 debug = False
 caseNumber = 300 
+line = '70'
 
 reports = []
 for direction in ['a','b']:
     data_path = os.path.dirname(os.path.abspath(__file__)) + "/test_data/"
-    sample_df = pd.read_csv("{}/39A_{}_WEATHER_JUN.csv".format(data_path,direction),index_col=0)
-    timeTable = pd.read_csv("{}/39A_{}_timeTable.csv".format(data_path, direction),index_col=0)
+    sample_df = pd.read_csv("{}/{}_{}_WEATHER_JUN.csv".format(data_path,line,direction),index_col=0)
+    timeTable = pd.read_csv("{}/{}_{}_timeTable.csv".format(data_path,line,direction),index_col=0)
     df = sample_df.copy()
     sub_report = []
     # test method 1
@@ -51,7 +52,7 @@ for direction in ['a','b']:
         rain = testCase['Rain']
         sun = testCase['Sun']
         my = ann.Ann(start_station, stop_station, targetTime,rain,sun)
-        result = my.prediction('39A')
+        result = my.prediction(line)
         pred_travel_time = int(result['travelTime'])
         if debug:
             print("{} -> {}".format(start_station, stop_station),
