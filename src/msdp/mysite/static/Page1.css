@@ -1,9 +1,10 @@
+
 #map {
     width: 40%;
     height: 35rem; 
     margin-left: 6.3rem;
     margin-right: 2rem;
-    border:10px double gold;
+    border:10px double yellow;
     -moz-box-sizing:border-box;
     -webkit-box-sizing:border-box;
     box-sizing:border-box;
@@ -11,7 +12,7 @@
 }
 
 body {
-    background-image: url(./img/backgroundimg.jpg);
+    background-image: url(./img/backgroundimg6.jpg);
     background-size: cover;
 }
 .aw-widget-current {
@@ -22,4 +23,16 @@ body {
     margin-left: 5rem;
     margin-right: 5rem;
     
+}
+
+#text-area1{
+    background-color: #4171a5d9;
+}
+
+#text-area2{
+    background-color: #4171a5d9;
+}
+
+.transport-div{
+    border-left: 1;
 }

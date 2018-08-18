@@ -33,13 +33,10 @@
         <!-- Bootstrap CDN for JQuery, found on getbootstrap.com  -->    
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         
-        <link rel="stylesheet" href="//apps.bdimg.com/libs/jqueryui/1.10.4/css/jquery-ui.min.css">
-        <script src="//apps.bdimg.com/libs/jquery/1.10.2/jquery.min.js"></script>
-        <script src="//apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+          <link rel="stylesheet" href="//apps.bdimg.com/libs/jqueryui/1.10.4/css/jquery-ui.min.css">
+          <script src="//apps.bdimg.com/libs/jquery/1.10.2/jquery.min.js"></script>
+          <script src="//apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
         
-        
-        <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
-	    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
             
     </head>
@@ -206,7 +203,7 @@
                     </script>
                     
                     <!-- Jumbotron to hold the form -->
-                    <div class="jumbotron bg-primary border border-white pt-1 pb-1 ml-5">
+                    <div class="jumbotron border border-white pt-1 pb-1 ml-5" id="text-area1">
                     
                      <!-- The FORM -->
                      <form class="bg-infoml-2">
@@ -293,7 +290,7 @@
                     </div>
                     
                     <!-- Jumbotron to hold Search Results and Details -->
-                    <div class="jumbotron bg-primary pt-1 pb-1 border border-white">
+                    <div class="jumbotron pt-1 pb-1 border border-white" id="text-area2">
                     
                         <div id='routes' class="text-light"><strong>Result area</strong></div>
                                 
@@ -476,17 +473,35 @@
         
         function showTransfer(json){
             
-            //Show transfer results
-            var str='<div style="cursor:hand" onclick="isHidden(&quot;expand1&quot;)"><img src="/static/icon/bus.png">'+json['lineA'][0]['line']+'</div>'+
-                    'Next Bus: '+converToHour(parseInt(json['lineA'][0]['startTime']))+'<br>'+
-                    'Time to Dest: '+Math.round(json['lineA'][0]['travelTime']/60)+' min'+'<br>'+
-                    '<div id="expand1" style="display:none">隐藏的内容</div>'+
-                    "<br><img src='/static/icon/walk1.png'>"+json['middle_walk_distance']+'km'+"<br><br>"+
-                    '<div style="cursor:hand" onclick="isHidden(&quot;div1&quot;)"><img src="/static/icon/bus.png">'+json['lineB'][0]['line']+'</div>'+
-                    'Next Bus: '+converToHour(parseInt(json['lineB'][0]['startTime']))+'<br>'+
-                    'Time to Dest: '+Math.round(json['lineB'][0]['travelTime']/60)+' min'+'<br>'           				
+            document.getElementById("routes").innerHTML="<img src='/static/icon/bus.gif'>"+"<br>"+"Finding...";
 
-                ;
+            //Show transfer results
+            
+            var str='';
+            if (json['walk1_distance']!='0')
+                str+='<font size="4" color="white">'+json['walk1_startID']+', '+json['walk1_start_station']+"</font><br>"+
+                     "<div class='transport-div'>"+"<img src='/static/icon/walk1.png'>"+'<font size="3" color="black">'+(parseFloat(json['walk1_distance'])*1000).toFixed(0)+'m'+"</font><br></div>";
+                
+            str+='<font size="4" color="white">'+json['walk1_endID']+', '+json['walk1_end_station']+"</font><br>";
+
+            str+="<br>"+'<img src="/static/icon/bus.png">'+'<font size="3" color="black">'+json['lineA'][0]['line']+'</div>'+
+                    ' '+Math.round(json['lineA'][0]['travelTime']/60)+' min'+'</font><br><br>';
+
+                
+            if (json['middle_walk_distance']!='0')
+                str+='<font size="4" color="white">'+json['middle_walk_startID']+', '+json['middle_walk_start_station']+"</font><br>"+
+                     "<br>"+"<img src='/static/icon/walk1.png'>"+'<font size="3" color="black">'+(parseFloat(json['middle_walk_distance'])*1000).toFixed(0)+'m'+"</font><br><br>";
+                     
+            str+='<font size="4" color="white">'+json['middle_walk_endID']+', '+json['middle_walk_end_station']+"</font><br>";
+            
+            str+='<font size="3" color="black">'+"<br>"+'<img src="/static/icon/bus.png">'+json['lineB'][0]['line']+
+                    ' '+Math.round(json['lineB'][0]['travelTime']/60)+' min'+'</font><br><br>';
+            
+            if (json['walk2_distance']!='0')
+                str+='<font size="4" color="white">'+json['walk2_startID']+', '+json['walk2_start_station']+"</font><br>"+
+                     '<font size="3" color="black">'+"<br>"+"<img src='/static/icon/walk1.png'>"+(parseFloat(json['walk2_distance'])*1000).toFixed(0)+'m'+"</font><br><br>"
+            
+            str+='<font size="4" color="white">'+json['walk2_endID']+', '+json['walk2_end_station']+"</font><br>";
             return str;
         }
 
