@@ -145,7 +145,6 @@
 
                     function calculateAndDisplayRoute(directionsService, directionsDisplay, line_id){
                         var map = new google.maps.Map(	document.getElementById('map'), {zoom: 10, center: Dublin});
-                        console.log("In function for map");
                         /*Function used to calculate and display relevant routes to users
                         
                         3 inputs are direction service, display and the line id. Direction service and display are part of the maps API
@@ -153,7 +152,7 @@
                         */
                         var stops = globalJson[line_id]; //retrieve lat and longs
                         var count = stops[0]; //count used to get  destination
-                        console.log(stops);
+                        
                         var start = "lat: "+stops[1][0]+", lng: "+stops[1][1];
                         var dest = "lat: "+stops[count][0]+", lng: "+stops[count][1];
                         //for loop to extract waypoints
@@ -224,16 +223,16 @@
                     function multiLegDisplay(directionsService, directionsDisplay, line_id){
                     var map = new google.maps.Map(
                         document.getElementById('map'), {zoom: 10, center: Dublin});
-                    console.log("Line Id: " + line_id);
+                        
                     /*Function used to calculate and display relevant routes to users
 
                     3 inputs are direction service, display and the line id. Direction service and display are part of the maps API
                     line id is used to access the global json object in order to retrieve the relevant lats and longs of the route
                     */
-                    console.log(multiLegGlobal[line_id]);
+                        
                     var stops = multiLegGlobal[line_id]['latlng']; //retrieve lat and longs
                     var count = stops.length; //count used to get  destination
-                    console.log(stops);
+                        
                     var start = "lat: "+stops[0][0]+", lng: "+stops[0][1];
                     var dest = "lat: "+stops[count-1][0]+", lng: "+stops[count-1][1];
                     //for loop to extract waypoints
@@ -247,8 +246,6 @@
 
                         });
                     }
-
-                    console.log("Waypoints:  "+waypts)
                     //part of API which determines route. Origin and dest self explanitory. Have optimise set to false as want waypoints visited in order
                     directionsService.route({
                       origin: {lat: stops[0][0], lng: stops[0][1]},
@@ -288,15 +285,13 @@
                     console.log("Markers :"+ multiLegGlobal[line_id]['markers'])
                     var features = [];
                     for (var item in multiLegGlobal[line_id]['markers']){
-                        console.log('Counting: '+ item)
                         var info = {
                             position:new google.maps.LatLng(multiLegGlobal[line_id]['markers'][item][0][0], multiLegGlobal[line_id]['markers'][item][0][1]),
                             type: multiLegGlobal[line_id]['markers'][item][1]
                         }
                         features.push(info);
                     };
-                    
-                    console.log(features);
+                        
 
                     features.forEach(function(feature){
                         var marker = new google.maps.Marker({
@@ -607,14 +602,28 @@
                 markers['bus1']=[json['lineA'][0]['locations'][0],'bus'];
                 
                 for (var stop = interval; stop<countA; stop+=interval){
-                    latlng.push(json['lineA'][0]['locations'][stop]);
+                    var id =json['lineA'][0]['locations'][stop];
+                    
+                    if (id.length ==0){
+                        latlng.push(json['lineA'][0]['locations'][stop+1]);
+                    }
+                    else{
+                        latlng.push(json['lineA'][0]['locations'][stop]);
+                    }
                 }
             }
             else{
                 markers['bus1']=[json['lineA'][0]['locations'][0],'bus'];
                 latlng.push(json['lineA'][0]['locations'][0]);
                 for (var stop = interval; stop<countA; stop+=interval){
-                    latlng.push(json['lineA'][0]['locations'][stop]);
+                    var id =json['lineA'][0]['locations'][stop];
+                    
+                    if (id.length ==0){
+                        latlng.push(json['lineA'][0]['locations'][stop+1]);
+                    }
+                    else{
+                        latlng.push(json['lineA'][0]['locations'][stop]);
+                    }
                 }
             }
             
@@ -623,14 +632,29 @@
                 markers['bus2']=[json['lineB'][0]['locations'][0],'bus'];
                 latlng.push(json['lineA'][0]['locations'][countA-1]);
                 latlng.push(json['lineB'][0]['locations'][0]);
+                console.log(json['lineB'][0]['locations'][0]);
+                console.log((json['lineB'][0]['locations'][3]))
                 for (var stop = interval; stop<countB; stop+=interval){
-                    latlng.push(json['lineB'][0]['locations'][stop]);
+                    id =json['lineB'][0]['locations'][stop];
+                    console.log(stop);
+                    if (id.length ==0){
+                        latlng.push(json['lineB'][0]['locations'][stop+1]);
+                    }
+                    else{
+                        latlng.push(json['lineB'][0]['locations'][stop]);
+                    }
                 }
             }
             else{
                 markers['bus2']=j[son['lineB'][0]['locations'][0],'bus']; 
                 for (var stop = interval-1; stop<countB; stop+=interval){
-                    latlng.push(json['lineB'][0]['locations'][stop]);
+                    id =json['lineB'][0]['locations'][stop];
+                    if (id.length ==0){
+                        latlng.push(json['lineB'][0]['locations'][stop+1]);
+                    }
+                    else{
+                        latlng.push(json['lineB'][0]['locations'][stop]);
+                    }
                 }
             }
             
@@ -650,10 +674,11 @@
             multiLegGlobal["id:"+id] = {markers, latlng};
             console.log(multiLegGlobal);
             
+            document.getElementById("routes").innerHTML="<img src='/static/icon/bus.gif'>"+"<br>"+"Finding...";
             
             multiLegDisplay(new google.maps.DirectionsService(), new google.maps.DirectionsRenderer({suppressMarkers : true}), "id:"+id)
             
-            document.getElementById("routes").innerHTML="<img src='/static/icon/bus.gif'>"+"<br>"+"Finding...";
+            
 
             //Show transfer results
             
