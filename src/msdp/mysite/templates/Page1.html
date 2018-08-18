@@ -132,7 +132,7 @@
 
                     <script>
                     var globalJson = {}; //global variable used to store the lat and longs of each route according to route id
-                    
+                    var multiLegGlobal = {};
                     // Initialize and add the map, will not be responsible for handling the directions directly.
                     function initMap() {
                         // The location of Dublin
@@ -144,6 +144,7 @@
 
 
                     function calculateAndDisplayRoute(directionsService, directionsDisplay, line_id){
+                        var map = new google.maps.Map(	document.getElementById('map'), {zoom: 10, center: Dublin});
                         console.log("In function for map");
                         /*Function used to calculate and display relevant routes to users
                         
@@ -158,7 +159,7 @@
                         //for loop to extract waypoints
                         var waypts = []; //empty array for all waypoints in trip i.e. stops between origin and dest
                         
-                        for (var i = 2; i < count; i++) {
+                        for (var i = 2; i <= count; i++) {
                             //must add waypoints in specific format as shwon below
                             waypts.push({
                               location: {lat: stops[i][0], lng: stops[i][1]},
@@ -189,9 +190,123 @@
                         
                         //need to provide new map in order for directions to be rendered. Usually done in init_Map function but must be here as is called by button
                         var Dublin = {lat: 53.3351, lng: -6.2493};
-                        directionsDisplay.setMap(new google.maps.Map(
-                            document.getElementById('map'), {zoom: 10, center: Dublin}));
+                        directionsDisplay.setMap(map);
+                    var icons = {
+                            bus: {
+                                icon: "{% static "icon/BusMarker.png"%}"
+                            },
+                            destGoal: {
+                                icon:"{% static "icon/GreenMarker.png"%}"
+                            }
+                        
+                            
+                        };
+                        var features = [
+                            {
+                                position: new google.maps.LatLng(stops[1][0], stops[1][1]),
+                                type: 'bus'
+                            },
+                            {
+                                position: new google.maps.LatLng(stops[count][0], stops[count][1]),
+                                type: 'destGoal'
+                            }
+                        ];
+                        features.forEach(function(feature){
+                            var marker = new google.maps.Marker({
+                                position: feature.position,
+                                icon: icons[feature.type].icon,
+                                map: map
+                            });
+                        });
                     }
+                        
+                        
+                    function multiLegDisplay(directionsService, directionsDisplay, line_id){
+                    var map = new google.maps.Map(
+                        document.getElementById('map'), {zoom: 10, center: Dublin});
+                    console.log("Line Id: " + line_id);
+                    /*Function used to calculate and display relevant routes to users
+
+                    3 inputs are direction service, display and the line id. Direction service and display are part of the maps API
+                    line id is used to access the global json object in order to retrieve the relevant lats and longs of the route
+                    */
+                    console.log(multiLegGlobal[line_id]);
+                    var stops = multiLegGlobal[line_id]['latlng']; //retrieve lat and longs
+                    var count = stops.length; //count used to get  destination
+                    console.log(stops);
+                    var start = "lat: "+stops[0][0]+", lng: "+stops[0][1];
+                    var dest = "lat: "+stops[count-1][0]+", lng: "+stops[count-1][1];
+                    //for loop to extract waypoints
+                    var waypts = []; //empty array for all waypoints in trip i.e. stops between origin and dest
+
+                    for (var i = 2; i < count; i++) {
+                        //must add waypoints in specific format as shwon below
+                        waypts.push({
+                          location: {lat: stops[i][0], lng: stops[i][1]},
+                          stopover: true
+
+                        });
+                    }
+
+                    console.log("Waypoints:  "+waypts)
+                    //part of API which determines route. Origin and dest self explanitory. Have optimise set to false as want waypoints visited in order
+                    directionsService.route({
+                      origin: {lat: stops[0][0], lng: stops[0][1]},
+                      destination: {lat: stops[count-1][0], lng: stops[count-1][1]},
+                      waypoints: waypts,
+                      optimizeWaypoints: false,
+                      travelMode: 'DRIVING'
+
+                    },
+
+                    function(response, status) {
+                      if (status === 'OK') {
+                        directionsDisplay.setDirections(response);
+                        var route = response.routes[0];
+                      } 
+                      else {
+                        window.alert('Directions request failed due to ' + status);
+                      }
+                    });
+
+                    //need to provide new map in order for directions to be rendered. Usually done in init_Map function but must be here as is called by button
+                    var Dublin = {lat: 53.3351, lng: -6.2493};
+                    directionsDisplay.setMap(map);
+                    var icons = {
+                        bus: {
+                            icon: "{% static "icon/BusMarker.png"%}"
+                        },
+                        destGoal: {
+                            icon:"{% static "icon/GreenMarker.png"%}"
+                        },
+                        walk: {
+                            icon: "{% static "icon/Walking.png"%}"
+                        }
+
+
+                    };
+                    console.log("Markers :"+ multiLegGlobal[line_id]['markers'])
+                    var features = [];
+                    for (var item in multiLegGlobal[line_id]['markers']){
+                        console.log('Counting: '+ item)
+                        var info = {
+                            position:new google.maps.LatLng(multiLegGlobal[line_id]['markers'][item][0][0], multiLegGlobal[line_id]['markers'][item][0][1]),
+                            type: multiLegGlobal[line_id]['markers'][item][1]
+                        }
+                        features.push(info);
+                    };
+                    
+                    console.log(features);
+
+                    features.forEach(function(feature){
+                        var marker = new google.maps.Marker({
+                            position: feature.position,
+                            icon: icons[feature.type].icon,
+                            map: map
+
+                        });
+                    });
+                }
                 </script>
                     <!--Load the API from the specified URL
                     * The async attribute allows the browser to render the page while the API loads
@@ -406,7 +521,7 @@
                         for (item in data){ // need a count because google directions only accepts 15 waypoints
                             count ++;
                         }
-                        if(count > 15){
+                        if(count > 20){
                             //if over 15 points on map need to divide and skip stops, not ideal but more accurate than just origin/ dest
                             var interval = Math.ceil((count-2)/13);
                             var newcount = 0
@@ -440,7 +555,7 @@
                         var id = "id"+json[i]['line'];
                         str+="<div  class='route-div' id='route-div' style='border:#FFFFFF 1px ridge; margin-bottom:-14%; padding:0;'>"+
                         "<div class='route-div-detail' data-value = "+json[i]['line']+ "><img src='/static/icon/bus.png'>"+json[i]['line']+'</div>'+
-                        'Next Bus: '+converToHour(parseInt(json[i]['pairarrtime'][0]))+'<br>'+'Time to Dest: '+Math.round(json[i]['traveltime']/60)+' min'+'</div><br><input type = "button" value=Show onclick="calculateAndDisplayRoute(new google.maps.DirectionsService, new google.maps.DirectionsRenderer, \'' + id + '\')"/>';
+                        'Next Bus: '+converToHour(parseInt(json[i]['pairarrtime'][0]))+'<br>'+'Time to Dest: '+Math.round(json[i]['traveltime']/60)+' min'+'</div><br><input type = "button" value=Show onclick="calculateAndDisplayRoute(new google.maps.DirectionsService, new google.maps.DirectionsRenderer({suppressMarkers: true}), \'' + id + '\')"/>';
                         findRoute=true;
                     }
 
@@ -472,6 +587,71 @@
 
         
         function showTransfer(json){
+             var markers = {};
+            var latlng = [];
+            var countA = 0;
+            var countB = 0;
+            
+            for (var x in json['lineA'][0]['locations']){
+                countA ++;
+            }
+            for (var y in json['lineB'][0]['locations']){
+                countB ++;
+            }
+            var total = countA + countB;
+            var interval = Math.ceil(total/15);
+            if (json['walk1_distance']>0){
+                latlng.push(json['first_stop_location']);
+                markers['walk1']=[json['first_stop_location'],'walk'];
+                total ++;
+                markers['bus1']=[json['lineA'][0]['locations'][0],'bus'];
+                
+                for (var stop = interval; stop<countA; stop+=interval){
+                    latlng.push(json['lineA'][0]['locations'][stop]);
+                }
+            }
+            else{
+                markers['bus1']=[json['lineA'][0]['locations'][0],'bus'];
+                latlng.push(json['lineA'][0]['locations'][0]);
+                for (var stop = interval; stop<countA; stop+=interval){
+                    latlng.push(json['lineA'][0]['locations'][stop]);
+                }
+            }
+            
+            if(json['middle_walk_distance']>0){
+                markers['walk2']=[json['lineA'][0]['locations'][countA-1],'walk'];
+                markers['bus2']=[json['lineB'][0]['locations'][0],'bus'];
+                latlng.push(json['lineA'][0]['locations'][countA-1]);
+                latlng.push(json['lineB'][0]['locations'][0]);
+                for (var stop = interval; stop<countB; stop+=interval){
+                    latlng.push(json['lineB'][0]['locations'][stop]);
+                }
+            }
+            else{
+                markers['bus2']=j[son['lineB'][0]['locations'][0],'bus']; 
+                for (var stop = interval-1; stop<countB; stop+=interval){
+                    latlng.push(json['lineB'][0]['locations'][stop]);
+                }
+            }
+            
+            if (json['walk2_distance']>0){
+                markers['walk3']=[json['lineB'][0]['locations'][countB-1],'walk'];
+                markers['destGoal']=json['last_stop_location'];
+                latlng.push(json['last_stop_location']);
+                total ++;
+            }
+            else{
+                markers['destGoal']=[json['lineB'][0]['locations'][countB-1],'destGoal'];
+                latlng.push(json['lineB'][0]['locations'][countB-1]);
+            }
+            
+            var id = json['lineA'][0]['line']+","+json['lineB'][0]['line'];
+            
+            multiLegGlobal["id:"+id] = {markers, latlng};
+            console.log(multiLegGlobal);
+            
+            
+            multiLegDisplay(new google.maps.DirectionsService(), new google.maps.DirectionsRenderer({suppressMarkers : true}), "id:"+id)
             
             document.getElementById("routes").innerHTML="<img src='/static/icon/bus.gif'>"+"<br>"+"Finding...";
 
