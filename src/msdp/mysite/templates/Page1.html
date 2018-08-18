@@ -37,7 +37,11 @@
           <script src="//apps.bdimg.com/libs/jquery/1.10.2/jquery.min.js"></script>
           <script src="//apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
         
+        <!-- import Vue.js -->
+<script src="//vuejs.org/js/vue.min.js"></script>
 
+<!-- import iView -->
+<script src="//unpkg.com/iview/dist/iview.min.js"></script>
             
     </head>
     
@@ -321,7 +325,7 @@
                         <!-- Start -->
                         <div class="form-group p-2">
                             <label for="start" class="text-white blockquote">Start:</label>
-                            <input id="start" type="text" class="float-none text-dark form-control" placeholder="Start Bus Stop ID">
+                            <input id="start" required type="text" class="float-none text-dark form-control" placeholder="Start Bus Stop ID">
                         </div>
                          
                          <script>
@@ -347,7 +351,7 @@
                         <!-- Destination -->
                         <div class="form-group p-2">
                             <label for="destination" class="text-white blockquote" >Destination:</label>
-                            <input id="destination" type = "text" class="float-none text-dark form-control" placeholder="Destination Bus Stop ID">
+                            <input id="destination" required type = "text" class="float-none text-dark form-control" placeholder="Destination Bus Stop ID">
                         </div>
                          <script>
 
@@ -375,7 +379,7 @@
                         <div class="form-group p-2">
                             <label for="date" class="text-white blockquote">Date:</label>
                             <span style="display:inline-block; width:2rem;"></span>
-                            <input type="text" id = "datepicker"  class="float-none text-dark form-control">
+                            <input type="text" id = "datepicker" required class="float-none text-dark form-control">
                         </div> 
                            
                            
@@ -386,8 +390,7 @@
                             <input type ="time" id="time" class="float-none text-dark form-control">
                         </div>
                             
-                        
-                                
+                                                  
                         <!-- Submit -->
                         <div class="form-group p-2">
                             <span style="display:inline-block; width:3rem;"></span>
@@ -444,6 +447,7 @@
     
     <!-- Script Variables need to change or script will not work, class needs to change (maybe id or name?) @Dan Zhu -->
         <script>
+                     
         $(function(){
             $(".bg-infoml-2").submit(function(evt){
                 evt.preventDefault();
@@ -454,7 +458,13 @@
         //Show the default date: today
         var today=new Date();
         var submitTime=(today.getMonth()+1)+'/'+today.getDate()+'/'+today.getFullYear(); 
-        var mytime=today.getHours()+':'+today.getMinutes();
+        var mytime='';
+        if (today.getHours()<10)
+            mytime+='0';
+        mytime+=today.getHours()+':';
+        if (today.getMinutes()<10)
+            mytime+='0';
+        mytime+=today.getMinutes();
         $("#datepicker").attr('value',submitTime)
         $("#time").attr('value',mytime)
  
@@ -566,7 +576,6 @@
         function getTransfer(){
             
             // Call transfer algorithm to give transfer plan
-
                 data_to_backend=getInput();
 
                 $.post("/dublinbus/transfer_form_input/", data_to_backend, function(data){
@@ -582,7 +591,9 @@
 
         
         function showTransfer(json){
-             var markers = {};
+                        
+            document.getElementById("routes").innerHTML="<img src='/static/icon/bus.gif'>"+"<br>"+"Finding...";
+            var markers = {};
             var latlng = [];
             var countA = 0;
             var countB = 0;
@@ -673,9 +684,7 @@
             
             multiLegGlobal["id:"+id] = {markers, latlng};
             console.log(multiLegGlobal);
-            
-            document.getElementById("routes").innerHTML="<img src='/static/icon/bus.gif'>"+"<br>"+"Finding...";
-            
+                        
             multiLegDisplay(new google.maps.DirectionsService(), new google.maps.DirectionsRenderer({suppressMarkers : true}), "id:"+id)
             
             
@@ -684,29 +693,37 @@
             
             var str='';
             if (json['walk1_distance']!='0')
-                str+='<font size="4" color="white">'+json['walk1_startID']+', '+json['walk1_start_station']+"</font><br>"+
-                     "<div class='transport-div'>"+"<img src='/static/icon/walk1.png'>"+'<font size="3" color="black">'+(parseFloat(json['walk1_distance'])*1000).toFixed(0)+'m'+"</font><br></div>";
+                str+='<font size="4">'+json['walk1_startID']+', '+json['walk1_start_station']+"</font><br><br>"+
+                     "<div class='transport-div'>"+"<div class='route-div-detail' style='border-left:#FFFFFF 2px dashed;'>"+
+                     "<img src='/static/icon/walk1.png'>"+'<font size="3" color="black">'+(parseFloat(json['walk1_distance'])*1000).toFixed(0)+'m'+
+                     "</font></div>"+"<br></div>";
                 
-            str+='<font size="4" color="white">'+json['walk1_endID']+', '+json['walk1_end_station']+"</font><br>";
+            str+='<font size="4">'+json['walk1_endID']+', '+json['walk1_end_station']+"</font><br>";
 
-            str+="<br>"+'<img src="/static/icon/bus.png">'+'<font size="3" color="black">'+json['lineA'][0]['line']+'</div>'+
-                    ' '+Math.round(json['lineA'][0]['travelTime']/60)+' min'+'</font><br><br>';
+            str+="<br>"+"<div class='transport-div'>"+"<div class='route-div-detail' style='border-left:#FFFFFF 2px double;'>"+
+                 '<img src="/static/icon/bus.png">'+'<font size="3" color="black">'+json['lineA'][0]['line']+' '+
+                  Math.round(json['lineA'][0]['travelTime']/60)+' min'+'</font></div></div><br>';
 
                 
             if (json['middle_walk_distance']!='0')
-                str+='<font size="4" color="white">'+json['middle_walk_startID']+', '+json['middle_walk_start_station']+"</font><br>"+
-                     "<br>"+"<img src='/static/icon/walk1.png'>"+'<font size="3" color="black">'+(parseFloat(json['middle_walk_distance'])*1000).toFixed(0)+'m'+"</font><br><br>";
+                str+='<font size="4">'+json['middle_walk_startID']+', '+json['middle_walk_start_station']+"</font><br><br>"+
+                     "<div class='transport-div'>"+"<div class='route-div-detail' style='border-left:#FFFFFF 2px dashed;'>"+
+                     "<img src='/static/icon/walk1.png'>"+'<font size="3" color="black">'+(parseFloat(json['middle_walk_distance'])*1000).toFixed(0)+'m'+
+                     "</font></div>"+"<br></div>";
                      
-            str+='<font size="4" color="white">'+json['middle_walk_endID']+', '+json['middle_walk_end_station']+"</font><br>";
+            str+='<font size="4">'+json['middle_walk_endID']+', '+json['middle_walk_end_station']+"</font><br>";
             
-            str+='<font size="3" color="black">'+"<br>"+'<img src="/static/icon/bus.png">'+json['lineB'][0]['line']+
-                    ' '+Math.round(json['lineB'][0]['travelTime']/60)+' min'+'</font><br><br>';
+            str+="<br>"+"<div class='transport-div'>"+"<div class='route-div-detail' style='border-left:#FFFFFF 2px double;'>"+
+                 '<img src="/static/icon/bus.png">'+'<font size="3" color="black">'+json['lineB'][0]['line']+' '+
+                  Math.round(json['lineB'][0]['travelTime']/60)+' min'+'</font></div></div><br>';
             
             if (json['walk2_distance']!='0')
-                str+='<font size="4" color="white">'+json['walk2_startID']+', '+json['walk2_start_station']+"</font><br>"+
-                     '<font size="3" color="black">'+"<br>"+"<img src='/static/icon/walk1.png'>"+(parseFloat(json['walk2_distance'])*1000).toFixed(0)+'m'+"</font><br><br>"
+                str+='<font size="4">'+json['walk2_startID']+', '+json['walk2_start_station']+"</font><br><br>"+
+                     "<div class='transport-div'>"+"<div class='route-div-detail' style='border-left:#FFFFFF 2px dashed;'>"+
+                     "<img src='/static/icon/walk1.png'>"+'<font size="3" color="black">'+(parseFloat(json['walk2_distance'])*1000).toFixed(0)+'m'+
+                     "</font></div>"+"<br></div>";
             
-            str+='<font size="4" color="white">'+json['walk2_endID']+', '+json['walk2_end_station']+"</font><br>";
+            str+='<font size="4">'+json['walk2_endID']+', '+json['walk2_end_station']+"</font><br>";
             return str;
         }
 
