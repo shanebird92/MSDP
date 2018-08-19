@@ -606,7 +606,7 @@
             }
             var total = countA + countB;
             var interval = Math.ceil(total/15);
-            if (json['walk1_distance']>0){
+            if (json['walk1_distance']!='0'){
                 latlng.push(json['first_stop_location']);
                 markers['walk1']=[json['first_stop_location'],'walk'];
                 total ++;
@@ -638,7 +638,7 @@
                 }
             }
             
-            if(json['middle_walk_distance']>0){
+            if(json['middle_walk_distance']!='0'){
                 markers['walk2']=[json['lineA'][0]['locations'][countA-1],'walk'];
                 markers['bus2']=[json['lineB'][0]['locations'][0],'bus'];
                 latlng.push(json['lineA'][0]['locations'][countA-1]);
@@ -657,7 +657,7 @@
                 }
             }
             else{
-                markers['bus2']=j[son['lineB'][0]['locations'][0],'bus']; 
+                markers['bus2']=[json['lineB'][0]['locations'][0],'bus']; 
                 for (var stop = interval-1; stop<countB; stop+=interval){
                     id =json['lineB'][0]['locations'][stop];
                     if (id.length ==0){
@@ -669,7 +669,7 @@
                 }
             }
             
-            if (json['walk2_distance']>0){
+            if (json['walk2_distance']!='0'){
                 markers['walk3']=[json['lineB'][0]['locations'][countB-1],'walk'];
                 markers['destGoal']=[json['last_stop_location'],'destGoal'];
                 latlng.push(json['last_stop_location']);
