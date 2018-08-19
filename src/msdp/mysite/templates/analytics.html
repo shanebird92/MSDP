@@ -24,7 +24,7 @@
       // and it will call form4_sub()
       function myFunction(tripid){
         //alert("calling myfunction()");
-        str = '<h3 style="background-color: #e6e6e6;color: black; width:1050px">&nbsp;Loading data, this will take several mins, please wait...</h3>';
+        str = '<h3 style="background-color: #4171a5d9;color: white; width:1050px">&nbsp;Loading data, this will take several mins, please wait...</h3>';
         document.getElementById('box4').innerHTML = str;
         form4_sub(tripid);
 	}
@@ -193,7 +193,7 @@
                     //alert(data);
                     data=JSON.parse(data);
                     str = create_tables(data);
-                    title = "<div><h3 style='color:black'> &nbsp;Displaying Trip IDs </h3></div>";
+                    title = "<div><h3 style='color:white'> &nbsp;Displaying Trip IDs </h3></div>";
                     document.getElementById('box').innerHTML = title + str;
                     show('box');
                 })
@@ -213,7 +213,7 @@
                             if (num == 0){
 				str += "<tr>";
 				}
-                            str += "<th><button style='border-style: double; border-color: black; background-color: #b3b3b3;color: black' value='" + json[i] + "' onclick='myFunction(this.value); return false;' onchange='myFunction(this.value); return false;'>"+json[i]+"</button></th>";
+                            str += "<th><button style='border-style: double; border-color: black; background-color: #4171a5d9;color: white' value='" + json[i] + "' onclick='myFunction(this.value); return false;' onchange='myFunction(this.value); return false;'>"+json[i]+"</button></th>";
                             if (num == 14){
 				str += "</tr>";
 				}
@@ -267,8 +267,8 @@
 
 </script>
 <div class="relative" align="center">
-<form style="background-color: #e6e6e6;border-style: double; border-color: black; width:1050px" class="form1">
-	<h3 style="color:black">&nbsp; Display all Trip IDs with given month (1-6) and Bus Lines (39A, 46A, etc.) </h3>
+<form style="background-color: #4171a5d9;border-style: double; border-color: black; width:1050px" class="form1">
+	<h3 style="color:white">&nbsp; Display all Trip IDs with given month (1-6) and Bus Lines (39A, 46A, etc.) </h3>
 	<div id='selections'> &nbsp;
 		<select  style="height:50px;font:inherit; font-size:20px; padding: 5px;" id="sel" onclick="populateSelect()" onchange="myshow(this, 'msg')">
         		<option value="">-- Bus Line --</option>
@@ -282,19 +282,16 @@
 		<input type="image" src="{% static "search-button.png" %}" alt="Submit" align="middle" width="48" height="48">
 	</div>
 	<input type="image" id="second_button" src="{% static "search-button.png" %}" alt="Submit" align="middle" width="48" height="48" style="display:none">
- 	<div style="color:black" id="msg"></div>
- 	<div style="color:black" id="msg2"></div>
- 	<div style="color:black" id="msg3"></div>
+ 	<div style="color:white" id="msg"></div>
+ 	<div style="color:white" id="msg2"></div>
+ 	<div style="color:white" id="msg3"></div>
 	<div id="box">
-		<div id="form1_notice" style="display:none; color:black"> <h3> &nbsp;Please wait for a moment, querying ... </h3></div>
+		<div id="form1_notice" style="display:none; color:white"> <h3> &nbsp;Please wait for a moment, querying ... </h3></div>
 	</div>
 </form>
 
-<div id='box4' style="background-color: #e6e6e6;border-style: double; border-color: black; width:1050px">
-<!--
-<HR style="border:3 double #987cb9" width="100%" color=#987cb9 SIZE=3>
--->
-<H3 style="color: black">&nbsp; Illustrate Line Charts for the bus performance in particular Trip ID </H3>
+<div id='box4' style="background-color: #4171a5d9;border-style: double; border-color: black; width:1050px">
+<H3 style="color: white">&nbsp; Illustrate Line Charts for the bus performance in particular Trip ID </H3>
 </div>
 </div>
 </body>
