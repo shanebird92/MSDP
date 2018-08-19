@@ -324,10 +324,10 @@ class ChangeBus:
                 solutions = self.getRoute(startID=sorted_start_stops[i], endID=sorted_end_stops[j], startWalkTime=startWalkTime, endWalkTime=endWalkTime)    
               
                 if len(solutions) > 0:
-                    other_solutions.append([sorted_start_stops[0], sorted_start_stops[i], round(sorted_start_distance[i],3), solutions, sorted_end_stops[j], sorted_end_stops[0], round(sorted_end_distance[j],3)])
+                    other_solutions.append([startID, sorted_start_stops[i], round(sorted_start_distance[i],3), solutions, sorted_end_stops[j], sorted_end_stops[0], round(sorted_end_distance[j],3)])
                     # Update routes Data file with the first calculation
                     key = "{},{}".format(startID, endID)
-                    value = [[int(sorted_start_stops[0]), int(sorted_start_stops[i]),
+                    value = [[int(startID), int(sorted_start_stops[i]),
                               int(solutions[0]['firstLineTransferStop']),
                               int(solutions[0]['secondLineTransferStop']),
                               int(sorted_end_stops[j]),
@@ -351,7 +351,6 @@ class ChangeBus:
 
     def getRoute(self, startID='', endID='', startWalkTime=0, endWalkTime=0):
         candidateLines = self.findLine(startID=startID, endID=endID)
-        #print("candidateLines:{}".format(candidateLines))
         isSolutionAvailable = False
         min_distance = float("inf")
         targettime = self.__targettime + startWalkTime
@@ -478,7 +477,6 @@ class ChangeBus:
         '''
         startID = self.__startid
         endID = self.__endid
-        #route = [[1913,1908,335,7591,1751,1728],0.038,0.229,0.029]
         pairedStations = "{},{}".format(startID, endID)
         if pairedStations in self.__solutionRoutes:
             route = self.__solutionRoutes[pairedStations]
@@ -559,9 +557,16 @@ def main():
     # Maxinum number of solutions
     sn = 1
 
+    '''
     for i in [0,1,3,4,5,7,8,9,10,11,12,13,14,15]:
         my = ChangeBus(testplate[i][0], testplate[i][1], 36000, 1, 0, DEBUG=debug, MODE=mode, SN=sn)
         my.showRoute()
+    '''
+    i = 15
+    my = ChangeBus(testplate[i][0], testplate[i][1], 36000, 1, 0, DEBUG=debug, MODE=mode, SN=sn)
+    my.showRoute()
+    #my.getFinalRoute()
+    
     #print(my.findOppositeLine())
     #print(my.getRoute())
     #print(my.getRoute2())
