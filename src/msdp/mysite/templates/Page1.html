@@ -671,7 +671,7 @@
             
             if (json['walk2_distance']>0){
                 markers['walk3']=[json['lineB'][0]['locations'][countB-1],'walk'];
-                markers['destGoal']=json['last_stop_location'];
+                markers['destGoal']=[json['last_stop_location'],'destGoal'];
                 latlng.push(json['last_stop_location']);
                 total ++;
             }
