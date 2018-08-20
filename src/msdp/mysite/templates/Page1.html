@@ -577,6 +577,7 @@
             
             // Call transfer algorithm to give transfer plan
                 data_to_backend=getInput();
+                document.getElementById("routes").innerHTML="<img src='/static/icon/bus.gif'>"+"<br>"+"Finding...";
 
                 $.post("/dublinbus/transfer_form_input/", data_to_backend, function(data){
                     data=JSON.parse(data);
@@ -592,7 +593,6 @@
         
         function showTransfer(json){
                         
-            document.getElementById("routes").innerHTML="<img src='/static/icon/bus.gif'>"+"<br>"+"Finding...";
             var markers = {};
             var latlng = [];
             var countA = 0;
