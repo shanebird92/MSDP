@@ -547,7 +547,8 @@ def main():
                  [768, 2557],
                  [1642, 3198],
                  [4568, 1018],
-                 [776,3898]]
+                 [776,3898],
+                 [342,1946]]
 
     # mode can be 'fast' or 'normal'
     mode = 'fast'
@@ -562,7 +563,7 @@ def main():
         my = ChangeBus(testplate[i][0], testplate[i][1], 36000, 1, 0, DEBUG=debug, MODE=mode, SN=sn)
         my.showRoute()
     '''
-    i = 15
+    i = 16
     my = ChangeBus(testplate[i][0], testplate[i][1], 36000, 1, 0, DEBUG=debug, MODE=mode, SN=sn)
     my.showRoute()
     #my.getFinalRoute()
