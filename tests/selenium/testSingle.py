@@ -31,7 +31,8 @@ def singleOpen(pid):
     options = Options()
     #options.add_argument("--headless")
     driver = webdriver.Firefox(firefox_options=options)
-    start, end = randomSelection(stations)
+    #start, end = randomSelection(stations)
+    start, end = 395, 2314
 
 
     # go to the google home page
@@ -93,9 +94,9 @@ def singleOpen(pid):
         #print("value:", input.get_attribute('text'))
         #print("value:", input)
         try:
-            WebDriverWait(driver, 10).until(EC.text_to_be_present_in_element((By.ID, "routes"), 'No bus route!!')
+            WebDriverWait(driver, 10).until(EC.text_to_be_present_in_element((By.ID, "routes"), 'No direct bus route.')
         )
-            message += "| Find out the No bus route page! | Done"
+            message += "| Find out the No direct bus route | Done"
             tag = True
         except Exception as e:
             print("{}: {}".format(pid, str(e)))
