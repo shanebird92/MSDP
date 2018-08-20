@@ -324,14 +324,14 @@ class ChangeBus:
                 solutions = self.getRoute(startID=sorted_start_stops[i], endID=sorted_end_stops[j], startWalkTime=startWalkTime, endWalkTime=endWalkTime)    
               
                 if len(solutions) > 0:
-                    other_solutions.append([startID, sorted_start_stops[i], round(sorted_start_distance[i],3), solutions, sorted_end_stops[j], sorted_end_stops[0], round(sorted_end_distance[j],3)])
+                    other_solutions.append([startID, sorted_start_stops[i], round(sorted_start_distance[i],3), solutions, sorted_end_stops[j], endID, round(sorted_end_distance[j],3)])
                     # Update routes Data file with the first calculation
                     key = "{},{}".format(startID, endID)
                     value = [[int(startID), int(sorted_start_stops[i]),
                               int(solutions[0]['firstLineTransferStop']),
                               int(solutions[0]['secondLineTransferStop']),
                               int(sorted_end_stops[j]),
-                              int(sorted_end_stops[0])],
+                              int(endID)],
                               round(sorted_start_distance[i],3),
                               round(solutions[0]['transferDistance'],3),
                               round(sorted_end_distance[j],3)]
@@ -529,16 +529,13 @@ class ChangeBus:
         print("Algorithm 2 Running Time: {} seconds".format(round(stopTime-startTime,3)))
         
 def main():
-    # failed: 2,6
-    # passed: 0, 1,3,4,5,7,8,9,10,11,12,13,14
-    test_id = 15
+    # passed: 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14
+    test_id = 14
     testplate = [[342, 1913],
                  [768, 4056],
-                 [877, 7612],
                  [2048, 4978],
                  [1913, 1728],
                  [1913, 187],
-                 [877, 7612],
                  [768, 4550],
                  [768, 7266],
                  [768, 37],
@@ -559,11 +556,11 @@ def main():
     sn = 1
 
     '''
-    for i in [0,1,3,4,5,7,8,9,10,11,12,13,14,15]:
+    for i in [0,1,3,4,5,7,8,9,10,11,12,13,14]:
         my = ChangeBus(testplate[i][0], testplate[i][1], 36000, 1, 0, DEBUG=debug, MODE=mode, SN=sn)
         my.showRoute()
     '''
-    i = 16
+    i = 14
     my = ChangeBus(testplate[i][0], testplate[i][1], 36000, 1, 0, DEBUG=debug, MODE=mode, SN=sn)
     my.showRoute()
     #my.getFinalRoute()
