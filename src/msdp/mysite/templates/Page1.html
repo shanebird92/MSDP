@@ -285,7 +285,6 @@
 
 
                     };
-                    console.log("Markers :"+ multiLegGlobal[line_id]['markers'])
                     var features = [];
                     for (var item in multiLegGlobal[line_id]['markers']){
                         var info = {
@@ -642,11 +641,10 @@
                 markers['bus2']=[json['lineB'][0]['locations'][0],'bus'];
                 latlng.push(json['lineA'][0]['locations'][countA-1]);
                 latlng.push(json['lineB'][0]['locations'][0]);
-                console.log(json['lineB'][0]['locations'][0]);
-                console.log((json['lineB'][0]['locations'][3]))
+
                 for (var stop = interval; stop<countB; stop+=interval){
                     id =json['lineB'][0]['locations'][stop];
-                    console.log(stop);
+  
                     if (id.length ==0){
                         latlng.push(json['lineB'][0]['locations'][stop+1]);
                     }
@@ -682,8 +680,7 @@
             var id = json['lineA'][0]['line']+","+json['lineB'][0]['line'];
             
             multiLegGlobal["id:"+id] = {markers, latlng};
-            console.log(multiLegGlobal);
-                        
+
             multiLegDisplay(new google.maps.DirectionsService(), new google.maps.DirectionsRenderer({suppressMarkers : true}), "id:"+id)
             
             
