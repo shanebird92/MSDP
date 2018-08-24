@@ -4,7 +4,8 @@
 <!--- Google API Key = AIzaSyBS6Ca0PFx3eydXjgD17aQogUFe8jeOfqg -->
 <!-- AccuWeather API Key = em8jLMl8jkAqrLiuJM0BCBQEoxHfJAJq -->
 {% load static %}
-
+	
+<!-- easy autocomplete library taken from easyautocomplete.com -->
 <link rel="stylesheet" type="text/css" href="{% static 'Page1.css' %}" />
 
 <link href="{% static 'easy-autocomplete/dist/easy-autocomplete.min.css'%}" rel="stylesheet" type="text/css">
@@ -145,7 +146,7 @@
                             document.getElementById('map'), {zoom: 10, center: Dublin});
                     }
 
-
+		    // waypoint information taken from https://developers.google.com/maps/documentation/javascript/examples/directions-waypoints
                     function calculateAndDisplayRoute(directionsService, directionsDisplay, line_id){
                         var map = new google.maps.Map(	document.getElementById('map'), {zoom: 10, center: Dublin});
                         /*Function used to calculate and display relevant routes to users
@@ -171,7 +172,8 @@
                         }
                         
                         //part of API which determines route. Origin and dest self explanitory. Have optimise set to false as want waypoints visited in order
-                        directionsService.route({
+                        //taken from https://developers.google.com/maps/documentation/javascript/examples/directions-waypoints
+			    directionsService.route({
                           origin: {lat: stops[1][0], lng: stops[1][1]},
                           destination: {lat: stops[count][0], lng: stops[count][1]},
                           waypoints: waypts,
@@ -285,7 +287,6 @@
 
 
                     };
-                    console.log("Markers :"+ multiLegGlobal[line_id]['markers'])
                     var features = [];
                     for (var item in multiLegGlobal[line_id]['markers']){
                         var info = {
@@ -642,11 +643,10 @@
                 markers['bus2']=[json['lineB'][0]['locations'][0],'bus'];
                 latlng.push(json['lineA'][0]['locations'][countA-1]);
                 latlng.push(json['lineB'][0]['locations'][0]);
-                console.log(json['lineB'][0]['locations'][0]);
-                console.log((json['lineB'][0]['locations'][3]))
+
                 for (var stop = interval; stop<countB; stop+=interval){
                     id =json['lineB'][0]['locations'][stop];
-                    console.log(stop);
+  
                     if (id.length ==0){
                         latlng.push(json['lineB'][0]['locations'][stop+1]);
                     }
@@ -682,8 +682,7 @@
             var id = json['lineA'][0]['line']+","+json['lineB'][0]['line'];
             
             multiLegGlobal["id:"+id] = {markers, latlng};
-            console.log(multiLegGlobal);
-                        
+
             multiLegDisplay(new google.maps.DirectionsService(), new google.maps.DirectionsRenderer({suppressMarkers : true}), "id:"+id)
             
             
